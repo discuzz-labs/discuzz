@@ -3,5 +3,15 @@
 @tailwind utilities;
 
 @layer utilities {
+  body {
+    box-sizing: border-box;
+    height: 100vh;
+    width: 100vw;
+    margin: 0px;
+    padding: 0px;
+  }
 
+  p h1 h2 h3 h4 h5 h6 span div {
+    @apply p-0 m-0;
+  }
 }
