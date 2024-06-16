@@ -8,7 +8,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { useTheme } from "next-themes";
-import { Sun, Moon } from "lucide-react";
+import { Sun, Moon, Monitor } from "lucide-react";
 import { useEffect, useState } from "react";
 
 export default function ThemeSwitch() {
@@ -36,7 +36,9 @@ export default function ThemeSwitch() {
               onClick={() => {
                 setTheme("light");
               }}
+              className="FLEX items-center gap-2"
             >
+              <Sun />
               Light
             </DropdownMenuCheckboxItem>
             <DropdownMenuCheckboxItem
@@ -44,7 +46,9 @@ export default function ThemeSwitch() {
               onClick={() => {
                 setTheme("dark");
               }}
+              className="FLEX items-center gap-2"
             >
+              <Moon />
               Dark
             </DropdownMenuCheckboxItem>
             <DropdownMenuCheckboxItem
@@ -52,7 +56,9 @@ export default function ThemeSwitch() {
               onClick={() => {
                 setTheme("system");
               }}
+              className="FLEX items-center gap-2"
             >
+              <Monitor />
               System
             </DropdownMenuCheckboxItem>
           </DropdownMenuContent>
