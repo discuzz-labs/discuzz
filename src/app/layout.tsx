@@ -23,21 +23,27 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" suppressHydrationWarning>
-      <head>
-        <link rel="icon" href={config.metadata.logo} sizes="any" />
-        <link rel="apple-touch-icon" href={config.metadata.logo} sizes="any" />
-      </head>
-      <body
-        className={`${inter.className}
+    <ClerkProvider>
+      <html lang="en" suppressHydrationWarning>
+        <head>
+          <link rel="icon" href={config.metadata.logo} sizes="any" />
+          <link
+            rel="apple-touch-icon"
+            href={config.metadata.logo}
+            sizes="any"
+          />
+        </head>
+        <body
+          className={`${inter.className}
             bg-white
            dark:bg-black`}
-      >
-        <ThemeProvider>
-          <Navbar />
-          {children}
-        </ThemeProvider>
-      </body>
-    </html>
+        >
+          <ThemeProvider>
+            <Navbar />
+            {children}
+          </ThemeProvider>
+        </body>
+      </html>
+    </ClerkProvider>
   );
 }
