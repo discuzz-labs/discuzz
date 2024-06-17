@@ -1,8 +1,9 @@
 "use client";
 
 import Image from "next/image";
-import ThemeSwitch from "@/components/ThemeSwitch";
+import ThemeSwitch from "./ThemeSwitch";
 import { useTheme } from "next-themes";
+import config from "@/lib/config";
 
 export default function Navbar() {
   const { resolvedTheme } = useTheme();
@@ -12,10 +13,10 @@ export default function Navbar() {
         <Image
           src={
             resolvedTheme == "light"
-              ? (process.env.NEXT_PUBLIC_SITE_LIGHT_LOGO as string)
-              : (process.env.NEXT_PUBLIC_SITE_DARK_LOGO as string)
+              ? (config.theme.lightLogo as string)
+              : (config.theme.darkLogo as string)
           }
-          alt={`${process.env.NEXT_PUBLIC_METADATA_NAME} - ${process.env.NEXT_PUBLIC_METADATA_LOGO}`}
+          alt={`${config.metadata.name} - ${config.metadata.logo}`}
           width={0}
           height={0}
           className="w-[100px] h-full "
