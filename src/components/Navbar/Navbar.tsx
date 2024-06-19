@@ -10,7 +10,7 @@ import UserActions from "./UserActions";
 export default function Navbar() {
   const { resolvedTheme } = useTheme();
   return (
-    <div className="z-20 backdrop-blur-md bg-white/50 dark:bg-black/50 px-2 py-2 items-center flex sticky top-0 h-[10vh]">
+    <div className="z-20 backdrop-blur-md bg-white/50 dark:bg-black/50 px-5 py-2 items-center flex sticky top-0 h-[10vh]">
       <div className="flex gap-5 items-center">
         <Link href="/">
           <Image

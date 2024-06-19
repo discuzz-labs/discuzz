@@ -15,7 +15,6 @@ export default function SignUpPage() {
           layout: {
             socialButtonsPlacement: config.clerk.socialButtonsPlacement,
             socialButtonsVariant: config.clerk.socialButtonsVariant,
-            termsPageUrl: "/terms",
           },
         }}
       />
