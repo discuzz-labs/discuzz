@@ -13,8 +13,60 @@ const inter = Roboto({
 });
 
 export const metadata: Metadata = {
-  title: config.metadata.name,
+  title: {
+    template: `%s | ${config.metadata.title as string}`,
+    default: config.metadata.name as string,
+  },
   description: config.metadata.description,
+  generator: "Blendify",
+  applicationName: config.metadata.name,
+  referrer: "origin-when-cross-origin",
+  keywords: ["blog", "forum", "blendify"],
+  alternates: {
+    canonical: "/",
+  },
+  openGraph: {
+    images: config.metadata.og.images,
+    title: config.metadata.og.title,
+    description: config.metadata.og.description,
+    siteName: config.metadata.og.siteName,
+    locale: config.metadata.og.locale,
+    type: "website",
+  },
+  formatDetection: {
+    email: true,
+    address: true,
+    telephone: true,
+  },
+  robots: {
+    index: false,
+    follow: true,
+    nocache: true,
+    googleBot: {
+      index: true,
+      follow: false,
+      noimageindex: true,
+      "max-video-preview": -1,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+    },
+  },
+  icons: {
+    icon: config.metadata.logo,
+    apple: config.metadata.logo,
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: config.metadata.title,
+    description: config.metadata.description,
+    images: [],
+  },
+  verification: {
+    google: "google",
+    yandex: "yandex",
+    yahoo: "yahoo",
+  },
+  category: config.metadata.category,
 };
 
 export default function RootLayout({
@@ -25,14 +77,6 @@ export default function RootLayout({
   return (
     <ClerkProvider>
       <html lang="en" suppressHydrationWarning>
-        <head>
-          <link rel="icon" href={config.metadata.logo} sizes="any" />
-          <link
-            rel="apple-touch-icon"
-            href={config.metadata.logo}
-            sizes="any"
-          />
-        </head>
         <body
           className={`${inter.className}
             bg-white
