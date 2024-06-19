@@ -5,7 +5,7 @@ import { SignIn } from "@clerk/nextjs";
 import { dark } from "@clerk/themes";
 import { useTheme } from "next-themes";
 
-export default function Page() {
+export default function SignInPage() {
   const { resolvedTheme } = useTheme();
   return (
     <div className="flex items-center justify-center w-[100vw] h-full">
