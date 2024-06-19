@@ -8,7 +8,7 @@ import config from "@/lib/config";
 export default function Navbar() {
   const { resolvedTheme } = useTheme();
   return (
-    <div className="px-2 py-2 items-center flex">
+    <div className="px-2 py-2 items-center flex sticky top-0 h-[10vh]">
       <div className="flex gap-5 items-center">
         <Image
           src={
@@ -19,7 +19,7 @@ export default function Navbar() {
           alt={`${config.metadata.name} - ${config.metadata.logo}`}
           width={0}
           height={0}
-          className="w-[100px] h-full "
+          className="min-w-[100px]"
           priority
         />
       </div>
