@@ -8,7 +8,7 @@ import { useTheme } from "next-themes";
 export default function SignInPage() {
   const { resolvedTheme } = useTheme();
   return (
-    <div className="flex items-center justify-center w-[100vw] h-full">
+    <div className="py-10 flex items-center justify-center w-[100vw] h-full">
       <SignIn
         appearance={{
           baseTheme: resolvedTheme === "dark" ? dark : undefined,

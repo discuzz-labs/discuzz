@@ -8,7 +8,7 @@ import { useTheme } from "next-themes";
 export default function SignUpPage() {
   const { resolvedTheme } = useTheme();
   return (
-    <div className="pb-10 flex items-center justify-center w-[100vw] h-full">
+    <div className="py-10 flex items-center justify-center w-[100vw] h-full">
       <SignUp
         appearance={{
           baseTheme: resolvedTheme === "dark" ? dark : undefined,
