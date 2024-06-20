@@ -22,7 +22,7 @@ export const metadata: Metadata = {
   generator: "Blendify",
   applicationName: config.metadata.name,
   referrer: "origin-when-cross-origin",
-  keywords: ["blog", "forum", "blendify"],
+  keywords: config.metadata.keywords,
   alternates: {
     canonical: "/",
   },

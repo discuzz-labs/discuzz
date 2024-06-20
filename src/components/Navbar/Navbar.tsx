@@ -20,7 +20,7 @@ export default function Navbar() {
                 : (config.theme.darkLogo as string)) ||
               (config.metadata.logo as string)
             }
-            alt={`${config.metadata.name}`}
+            alt={`${config.metadata.title}`}
             width={0}
             height={0}
             className="min-w-[100px]"

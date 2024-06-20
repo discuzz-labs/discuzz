@@ -4,6 +4,7 @@ type SocialButtonsPlacement = "top" | "bottom" | undefined;
 
 interface Config {
   metadata: {
+    keywords: string[] | undefined;
     name: string | undefined;
     description: string | undefined;
     logo: string | undefined;
@@ -31,6 +32,14 @@ interface Config {
 
 const config: Config = {
   metadata: {
+    keywords: (process.env.NEXT_PUBLIC_METADATA_KEYWORDS?.split(
+      ","
+    ) as string[]) || [
+      "blendify",
+      "blog",
+      "forrum",
+      process.env.NEXT_PUBLIC_METADATA_NAME,
+    ],
     name: process.env.NEXT_PUBLIC_METADATA_NAME || "Blendify",
     description:
       process.env.NEXT_PUBLIC_METADATA_DESCRIPTION ||
@@ -39,7 +48,7 @@ const config: Config = {
     title: process.env.NEXT_PUBLIC_METADATA_TITLE || "Blendify",
     category: process.env.NEXT_PUBLIC_METADATA_CATEGORY || "Blog, Forum",
     og: {
-      url: process.env.EXT_PUBLIC_METADATA_SITEURL || "",
+      url: process.env.NEXT_PUBLIC_METADATA_SITEURL || "http://localhost:3000",
       images: process.env.NEXT_PUBLIC_METADATA_OG_IMAGE || "logos/logo.svg",
       title: process.env.NEXT_PUBLIC_METADATA_OG_TITLE || "Blendify",
       description:
