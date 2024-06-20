@@ -13,6 +13,7 @@ const inter = Roboto({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL(config.metadata.og.url as string),
   title: {
     template: `%s | ${config.metadata.title as string}`,
     default: config.metadata.name as string,
@@ -59,7 +60,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: config.metadata.title,
     description: config.metadata.description,
-    images: [],
+    images: config.metadata.og.images,
   },
   verification: {
     google: "google",

@@ -10,6 +10,7 @@ interface Config {
     title: string | undefined;
     category: string | undefined;
     og: {
+      url: string | undefined;
       title: string | undefined;
       locale: string | undefined;
       description: string | undefined;
@@ -38,6 +39,7 @@ const config: Config = {
     title: process.env.NEXT_PUBLIC_METADATA_TITLE || "Blendify",
     category: process.env.NEXT_PUBLIC_METADATA_CATEGORY || "Blog, Forum",
     og: {
+      url: process.env.EXT_PUBLIC_METADATA_SITEURL || "",
       images: process.env.NEXT_PUBLIC_METADATA_OG_IMAGE || "logos/logo.svg",
       title: process.env.NEXT_PUBLIC_METADATA_OG_TITLE || "Blendify",
       description:
