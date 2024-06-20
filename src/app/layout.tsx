@@ -3,9 +3,10 @@ import { Roboto } from "next/font/google";
 
 import { ThemeProvider } from "@/components/providers/theme-provider";
 import { ClerkProvider } from "@clerk/nextjs";
-import Navbar from "@/components/Navbar/Navbar";
+import Navbar from "@/components/Navbar";
 import config from "@/lib/config";
-import "./globals.css";
+import "../styles/globals.css";
+import "../styles/theme.css";
 
 const inter = Roboto({
   subsets: ["latin"],
