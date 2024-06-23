@@ -40,7 +40,7 @@ export function DatePicker({
                 <Button
                   variant="default"
                   className={cn(
-                    "dark:bg-bgDark bg-bgLight text-white border-2 border-[#e0e0e1] dark:border-[#313135] pl-3 text-left font-normal",
+                    "pl-3 text-left font-normal border-input border",
                     !field.value && "text-muted-foreground"
                   )}
                 >

@@ -15,7 +15,7 @@ import { useForm } from "react-hook-form";
 import { Input } from "@/components/ui/input";
 import formSchema from "@/lib/validations/validation";
 import config from "@/lib/config";
-import { DatePicker } from "@/components/onboarding/form/DatePicker";
+import { DatePicker } from "./DatePicker";
 import ProfileImage from "./ProfileImage";
 import { Textarea } from "@/components/ui/textarea";
 
@@ -48,11 +48,7 @@ export default function OnboardingForm() {
             <FormItem>
               <FormLabel>Fullname</FormLabel>
               <FormControl>
-                <Input
-                  placeholder="Name"
-                  className="dark:bg-[#26262b] border-[#e0e0e1] border-2 bg-white dark:border-[#313135]"
-                  {...field}
-                />
+                <Input placeholder="Name" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -66,17 +62,13 @@ export default function OnboardingForm() {
             <FormItem>
               <FormLabel>Bio</FormLabel>
               <FormControl>
-                <Textarea
-                  placeholder="Bio"
-                  className="dark:bg-[#26262b] border-2 bg-white border-[#e0e0e1] dark:border-[#313135]"
-                  {...field}
-                />
+                <Textarea placeholder="Bio" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
           )}
         />
-        <Button type="submit" className="w-full bg-[#26262b] dark:bg-[#e0e0e1]">
+        <Button type="submit" className="dark:bg-white">
           Continue
         </Button>
       </form>
