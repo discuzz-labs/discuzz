@@ -8,7 +8,7 @@ export default function ProfileImage() {
   const { user } = useUser();
   return (
     <div className="flex items-center justify-center w-full">
-      <Avatar>
+      <Avatar className="border-4 border-input">
         <AvatarImage src={user?.imageUrl as string | undefined} />
         <AvatarFallback>
           <ImgIcon size={40} />
