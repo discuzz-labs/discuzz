@@ -11,3 +11,5 @@ const createUser = async (userData: User) => {
     },
   });
 };
+
+export default createUser;

@@ -31,14 +31,14 @@ export default function OnboardingForm() {
     resolver: zodResolver(formSchema),
   });
 
-  function onSubmit(values: z.infer<typeof formSchema>) {
+  const onSubmit = (values: z.infer<typeof formSchema>) => {
     setFormSubmitted(true);
     toast({
       title: "Account created successfully...",
       description: `Hello in ${config.metadata.title} family`,
       variant: "success",
     });
-  }
+  };
 
   return (
     <Form {...form}>
