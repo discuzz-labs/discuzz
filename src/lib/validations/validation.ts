@@ -1,7 +1,7 @@
 import { z } from "zod";
 
 const formSchema = z.object({
-  profile_photo: z.string().url().optional(),
+  profile_photo: z.string().optional(),
   fullname: z.string().min(2, {
     message: "Fullname must be at least 2 characters.",
   }),

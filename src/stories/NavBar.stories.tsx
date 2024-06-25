@@ -20,7 +20,7 @@ const meta: Meta<typeof NavBar> = {
 
 export default meta;
 
-type Story = StoryObj<typeof NavBar>;
+type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
   args: {},

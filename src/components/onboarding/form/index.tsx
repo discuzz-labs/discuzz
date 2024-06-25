@@ -68,7 +68,7 @@ export default function OnboardingForm() {
             </FormItem>
           )}
         />
-        <Button type="submit" className="dark:bg-white">
+        <Button type="submit" variant="submit">
           Continue
         </Button>
       </form>
