@@ -1,0 +1,68 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model Issue {
+  id       String    @id @default(auto()) @map("_id") @db.ObjectId
+  label    String   
+  assignees String   
+  date    DateTime   
+  comments Int
+  status   String
+  edited   Boolean
+  title    String
+  body     String
+  user   User      @relation(fields: [userId], references: [id])
+  userId String    @db.ObjectId
+}
+
+model Report {
+  id       String    @id @default(auto()) @map("_id") @db.ObjectId
+  user   User      @relation(fields: [userId], references: [id])
+  reason   String
+  date     DateTime
+  level    Int // from 1 to 5
+  accepted Boolean
+  userId   String @db.ObjectId
+}
+
+model Follower {
+  id       String    @id @default(auto()) @map("_id") @db.ObjectId
+  user   User      @relation(fields: [userId], references: [id])
+  userId   String @db.ObjectId
+}
+
+model Follow {
+  id       String    @id @default(auto()) @map("_id") @db.ObjectId
+  user   User      @relation(fields: [userId], references: [id])
+  userId   String  @db.ObjectId
+}
+
+
+model User {
+  id      String   @id @default(auto()) @map("_id") @db.ObjectId
+  email   String   @unique
+  name    String
+  imageURL String
+  age     Int
+  type    String
+  bio     String
+  badges  String[]
+  likes   BigInt
+  links   String[]
+  reports Report[]
+  follower Follower[]
+  follow  Follow[]
+  posts   Issue[]
+}
