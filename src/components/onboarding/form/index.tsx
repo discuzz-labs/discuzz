@@ -21,9 +21,11 @@ import { Textarea } from "@/components/ui/textarea";
 import { cn } from "@/lib/utils";
 import Spinner from "@/components/Spinner";
 import { useState } from "react";
+import { useToast } from "@/components/ui/use-toast";
 
 export default function OnboardingForm() {
   const [formSubmitted, setFormSubmitted] = useState<boolean>(false);
+  const { toast } = useToast();
   const form = useForm<z.infer<typeof formSchema>>({
     mode: "onSubmit",
     resolver: zodResolver(formSchema),
@@ -31,6 +33,11 @@ export default function OnboardingForm() {
 
   function onSubmit(values: z.infer<typeof formSchema>) {
     setFormSubmitted(true);
+    toast({
+      title: "Account created successfully...",
+      description: `Hello in ${config.metadata.title} family`,
+      variant: "success",
+    });
   }
 
   return (
@@ -39,7 +46,7 @@ export default function OnboardingForm() {
         onSubmit={form.handleSubmit(onSubmit)}
         className={cn(
           "dark:bg-[#212126] shadow-md flex flex-col gap-4 p-10 rounded-md",
-          "sm:w-1/3 w-full"
+          "sm:w-full md:w-1/2 lg:w-1/3 w-full"
         )}
       >
         <div className="w-full items-center justify-center">

@@ -1,3 +1,4 @@
+import { Toaster } from "@/components/ui/toaster";
 import config from "@/lib/config";
 import { auth } from "@clerk/nextjs/server";
 import { redirect } from "next/navigation";
@@ -15,5 +16,10 @@ export default function RootLayout({
     redirect("/");
   }
 
-  return <>{children}</>;
+  return (
+    <>
+      {children}
+      <Toaster />
+    </>
+  );
 }

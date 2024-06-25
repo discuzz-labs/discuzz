@@ -4,6 +4,7 @@ import { Roboto } from "next/font/google";
 import { ThemeProvider } from "@/components/providers/theme-provider";
 import { ClerkProvider } from "@clerk/nextjs";
 import NavBar from "@/components/NavBar";
+import { Toaster } from "@/components/ui/toaster";
 import config from "@/lib/config";
 import "../styles/globals.css";
 import "../styles/theme.css";
@@ -87,6 +88,7 @@ export default function RootLayout({
           <ThemeProvider>
             <NavBar />
             {children}
+            <Toaster />
           </ThemeProvider>
         </body>
       </html>
