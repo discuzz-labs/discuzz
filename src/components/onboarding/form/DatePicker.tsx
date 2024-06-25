@@ -38,7 +38,6 @@ export function DatePicker({
             <PopoverTrigger asChild>
               <FormControl>
                 <Button
-                  variant="default"
                   className={cn(
                     "pl-3 text-left font-normal border-input border",
                     !field.value && "text-muted-foreground"

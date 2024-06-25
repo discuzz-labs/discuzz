@@ -19,14 +19,18 @@ import { DatePicker } from "./DatePicker";
 import ProfileImage from "@/components/ProfileImage";
 import { Textarea } from "@/components/ui/textarea";
 import { cn } from "@/lib/utils";
+import Spinner from "@/components/Spinner";
+import { useState } from "react";
 
 export default function OnboardingForm() {
+  const [formSubmitted, setFormSubmitted] = useState<boolean>(false);
   const form = useForm<z.infer<typeof formSchema>>({
+    mode: "onSubmit",
     resolver: zodResolver(formSchema),
   });
 
   function onSubmit(values: z.infer<typeof formSchema>) {
-    console.log(values);
+    setFormSubmitted(true);
   }
 
   return (
@@ -72,7 +76,8 @@ export default function OnboardingForm() {
             </FormItem>
           )}
         />
-        <Button type="submit" variant="submit">
+        <Button type="submit" variant="submit" disabled={formSubmitted}>
+          {formSubmitted && <Spinner />}
           Continue
         </Button>
       </form>

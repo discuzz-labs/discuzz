@@ -7,7 +7,7 @@ const formSchema = z.object({
   }),
   bio: z
     .string()
-    .min(3, { message: "Minimum 3 characters." })
+    .min(10, { message: "Minimum 10 characters." })
     .max(1000, { message: "Maximum 1000 caracters." }),
   dob: z.date({
     required_error: "A date of birth is required.",
