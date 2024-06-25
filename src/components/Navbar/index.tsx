@@ -7,7 +7,7 @@ import config from "@/lib/config";
 import Link from "next/link";
 import UserActions from "./UserActions";
 
-export default function Navbar() {
+export default function NavBar() {
   const { resolvedTheme } = useTheme();
   return (
     <div className="z-20 backdrop-blur-md bg-white/50 dark:bg-black/50 px-5 py-2 items-center flex sticky top-0 h-[10vh]">

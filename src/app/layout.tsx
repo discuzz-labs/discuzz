@@ -3,7 +3,7 @@ import { Roboto } from "next/font/google";
 
 import { ThemeProvider } from "@/components/providers/theme-provider";
 import { ClerkProvider } from "@clerk/nextjs";
-import Navbar from "@/components/NavBar";
+import NavBar from "@/components/NavBar";
 import config from "@/lib/config";
 import "../styles/globals.css";
 import "../styles/theme.css";
@@ -85,7 +85,7 @@ export default function RootLayout({
            dark:bg-black`}
         >
           <ThemeProvider>
-            <Navbar />
+            <NavBar />
             {children}
           </ThemeProvider>
         </body>
