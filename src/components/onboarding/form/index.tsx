@@ -16,8 +16,9 @@ import { Input } from "@/components/ui/input";
 import formSchema from "@/lib/validations/validation";
 import config from "@/lib/config";
 import { DatePicker } from "./DatePicker";
-import ProfileImage from "./ProfileImage";
+import ProfileImage from "@/components/ProfileImage";
 import { Textarea } from "@/components/ui/textarea";
+import { cn } from "@/lib/utils";
 
 export default function OnboardingForm() {
   const form = useForm<z.infer<typeof formSchema>>({
@@ -32,7 +33,10 @@ export default function OnboardingForm() {
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(onSubmit)}
-        className="dark:bg-[#212126] shadow-md flex flex-col gap-4 p-10 rounded-md w-1/3"
+        className={cn(
+          "dark:bg-[#212126] shadow-md flex flex-col gap-4 p-10 rounded-md",
+          "sm:w-1/3 w-full"
+        )}
       >
         <div className="w-full items-center justify-center">
           <h1 className="text-2xl font-extrabold">
@@ -40,7 +44,7 @@ export default function OnboardingForm() {
           </h1>
           <p className="font-thin">Tell us a little bit about yourself.</p>
         </div>
-        <ProfileImage form={form} />
+        <ProfileImage />
         <FormField
           control={form.control}
           name="fullname"
