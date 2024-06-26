@@ -23,7 +23,7 @@ import Spinner from "@/components/Spinner";
 import { useState } from "react";
 import { useToast } from "@/components/ui/use-toast";
 
-export default function OnboardingForm() {
+export default function SignUpForm() {
   const [formSubmitted, setFormSubmitted] = useState<boolean>(false);
   const { toast } = useToast();
   const form = useForm<z.infer<typeof onBoardingFormSchema>>({
