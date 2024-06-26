@@ -24,10 +24,6 @@ interface Config {
     darkLogo: string | undefined;
     defaultTheme: ThemeType;
   };
-  clerk: {
-    socialButtonsVariant: SocialButtonsVariant;
-    socialButtonsPlacement: SocialButtonsPlacement;
-  };
 }
 
 const config: Config = {
@@ -66,18 +62,6 @@ const config: Config = {
     )
       ? process.env.NEXT_PUBLIC_SITE_DEFAULT_THEME
       : "light") as ThemeType,
-  },
-  clerk: {
-    socialButtonsVariant: (["auto", "blockButton", "iconButton"].includes(
-      process.env.NEXT_PUBLIC_CLERK_SOCIAL_BUTTONS_VARIANT as string
-    )
-      ? process.env.NEXT_PUBLIC_CLERK_SOCIAL_BUTTONS_VARIANT
-      : "auto") as SocialButtonsVariant,
-    socialButtonsPlacement: (["top", "bottom"].includes(
-      process.env.NEXT_PUBLIC_CLERK_SOCIAL_BUTTONS_PLACEMENT as string
-    )
-      ? process.env.NEXT_PUBLIC_CLERK_SOCIAL_BUTTONS_PLACEMENT
-      : "bottom") as SocialButtonsPlacement,
   },
 };
 

@@ -2,12 +2,12 @@ import type { Metadata } from "next";
 import { Roboto } from "next/font/google";
 
 import { ThemeProvider } from "@/components/providers/theme-provider";
-import { ClerkProvider } from "@clerk/nextjs";
 import NavBar from "@/components/NavBar";
 import { Toaster } from "@/components/ui/toaster";
 import config from "@/lib/config";
 import "../styles/globals.css";
 import "../styles/theme.css";
+import AuthProvider from "@/components/providers/auth-provider";
 
 const inter = Roboto({
   subsets: ["latin"],
@@ -78,20 +78,20 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <ClerkProvider>
-      <html lang="en" suppressHydrationWarning>
-        <body
-          className={`${inter.className}
+    <html lang="en" suppressHydrationWarning>
+      <body
+        className={`${inter.className}
             bg-white
            dark:bg-black`}
-        >
+      >
+        <AuthProvider>
           <ThemeProvider>
             <NavBar />
             {children}
             <Toaster />
           </ThemeProvider>
-        </body>
-      </html>
-    </ClerkProvider>
+        </AuthProvider>
+      </body>
+    </html>
   );
 }

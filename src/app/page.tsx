@@ -1,9 +1,3 @@
-
-
-export default function Hom (){
-  return (
-    <>
-     hello world
-    </>
-  );
+export default function Home() {
+  return <>hello world</>;
 }

@@ -1,7 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react";
 import { ThemeProvider } from "@/components/providers/theme-provider";
 import OnboardingForm from "@/components/onboarding/form";
-import { ClerkProvider } from "@clerk/nextjs";
 
 const meta: Meta<typeof OnboardingForm> = {
   component: OnboardingForm,
@@ -10,11 +9,9 @@ const meta: Meta<typeof OnboardingForm> = {
   decorators: [
     (Story) => (
       <div className="w-[100vw] items-center justify-center flex">
-        <ClerkProvider>
-          <ThemeProvider>
-            <Story />
-          </ThemeProvider>
-        </ClerkProvider>
+        <ThemeProvider>
+          <Story />
+        </ThemeProvider>
       </div>
     ),
   ],

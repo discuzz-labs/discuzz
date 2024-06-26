@@ -1,6 +1,5 @@
 import { Toaster } from "@/components/ui/toaster";
 import config from "@/lib/config";
-import { auth } from "@clerk/nextjs/server";
 import { redirect } from "next/navigation";
 
 export const metadata = {
@@ -12,10 +11,6 @@ export default function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
-  if (auth().sessionClaims?.metadata.onboardingComplete === true) {
-    redirect("/");
-  }
-
   return (
     <>
       {children}
