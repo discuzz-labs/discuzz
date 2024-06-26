@@ -15,7 +15,6 @@ export default function ThemeSwitch() {
   const { resolvedTheme, setTheme } = useTheme();
   const [mounted, setMounted] = useState(false);
   useEffect(() => {
-    console.log(resolvedTheme);
     setMounted(true);
   }, []);
 

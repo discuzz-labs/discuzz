@@ -13,25 +13,23 @@ import {
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { Input } from "@/components/ui/input";
-import { onBoardingFormSchema } from "@/lib/validations/validation";
+import { SignInFormSchema } from "@/lib/validations/validation";
 import config from "@/lib/config";
-import { DatePicker } from "./DatePicker";
-import ProfileImage from "@/components/ProfileImage";
-import { Textarea } from "@/components/ui/textarea";
 import { cn } from "@/lib/utils";
 import Spinner from "@/components/Spinner";
 import { useState } from "react";
 import { useToast } from "@/components/ui/use-toast";
+import Link from "next/link";
 
-export default function OnboardingForm() {
+export default function SignInForm() {
   const [formSubmitted, setFormSubmitted] = useState<boolean>(false);
   const { toast } = useToast();
-  const form = useForm<z.infer<typeof onBoardingFormSchema>>({
+  const form = useForm<z.infer<typeof SignInFormSchema>>({
     mode: "onSubmit",
-    resolver: zodResolver(onBoardingFormSchema),
+    resolver: zodResolver(SignInFormSchema),
   });
 
-  const onSubmit = (values: z.infer<typeof onBoardingFormSchema>) => {
+  const onSubmit = (values: z.infer<typeof SignInFormSchema>) => {
     setFormSubmitted(true);
     toast({
       title: "Account created successfully...",
@@ -51,38 +49,38 @@ export default function OnboardingForm() {
       >
         <div className="w-full items-center justify-center">
           <h1 className="text-2xl font-extrabold">
-            Welcome to {config.metadata.title}
+            Sign In to {config.metadata.title}
           </h1>
-          <p className="font-thin">Tell us a little bit about yourself.</p>
         </div>
-        <ProfileImage />
         <FormField
           control={form.control}
-          name="fullname"
+          name="email"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Fullname</FormLabel>
+              <FormLabel>Email</FormLabel>
               <FormControl>
-                <Input placeholder="Name" {...field} />
+                <Input type="email" placeholder="user@example.com" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
           )}
         />
-        <DatePicker form={form} />
         <FormField
           control={form.control}
-          name="bio"
+          name="password"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Bio</FormLabel>
+              <FormLabel>Password</FormLabel>
               <FormControl>
-                <Textarea placeholder="Bio" {...field} />
+                <Input type="password" placeholder="password" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
           )}
         />
+        <div>
+          <Link href="/forgot">Forgot Password?</Link>
+        </div>
         <Button type="submit" variant="submit" disabled={formSubmitted}>
           {formSubmitted && <Spinner />}
           Continue

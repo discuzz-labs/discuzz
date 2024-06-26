@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-const formSchema = z.object({
+const onBoardingFormSchema = z.object({
   profile_photo: z.string().optional(),
   fullname: z.string().min(2, {
     message: "Fullname must be at least 2 characters.",
@@ -14,4 +14,11 @@ const formSchema = z.object({
   }),
 });
 
-export default formSchema;
+const SignInFormSchema = z.object({
+  email: z.string().email("This is not a valid email."),
+  password: z.string().min(8, {
+    message: "Password must be at least 8 characters.",
+  }),
+});
+
+export { onBoardingFormSchema, SignInFormSchema };
