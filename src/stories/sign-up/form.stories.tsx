@@ -1,6 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/react";
 import { ThemeProvider } from "@/components/providers/theme-provider";
 import SignUpForm from "@/components/sign-up/form";
+import { SessionProvider } from "next-auth/react";
 
 const meta: Meta<typeof SignUpForm> = {
   component: SignUpForm,
@@ -8,9 +9,11 @@ const meta: Meta<typeof SignUpForm> = {
   decorators: [
     (Story) => (
       <div className="w-[100vw] items-center justify-center flex">
-        <ThemeProvider>
-          <Story />
-        </ThemeProvider>
+        <SessionProvider>
+          <ThemeProvider>
+            <Story />
+          </ThemeProvider>
+        </SessionProvider>
       </div>
     ),
   ],

@@ -22,14 +22,27 @@ import { cn } from "@/lib/utils";
 import Spinner from "@/components/Spinner";
 import { useState } from "react";
 import { useToast } from "@/components/ui/use-toast";
+import { SHA256 } from "crypto-js";
 
 export default function SignUpForm() {
   const [formSubmitted, setFormSubmitted] = useState<boolean>(false);
+  const [profileImageProvidedByGravater, setprofileImageProvidedByGravater] =
+    useState<string | undefined>(undefined);
+
   const { toast } = useToast();
   const form = useForm<z.infer<typeof onBoardingFormSchema>>({
     mode: "onSubmit",
     resolver: zodResolver(onBoardingFormSchema),
   });
+
+  const getprofileImageProvidedByGravater = (email: string | undefined) => {
+    if (email == undefined) return;
+
+    let hashedGravaterEmail = SHA256(email);
+    setprofileImageProvidedByGravater(
+      `https://www.gravatar.com/avatar/${hashedGravaterEmail}`
+    );
+  };
 
   const onSubmit = (values: z.infer<typeof onBoardingFormSchema>) => {
     setFormSubmitted(true);
@@ -55,7 +68,27 @@ export default function SignUpForm() {
           </h1>
           <p className="font-thin">Tell us a little bit about yourself.</p>
         </div>
-        <ProfileImage />
+        <ProfileImage img={profileImageProvidedByGravater} />
+
+        <FormField
+          control={form.control}
+          name="profile_photo"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Gravater Email</FormLabel>
+              <FormControl>
+                <Input
+                  placeholder="Gravater Email if any!"
+                  onChangeCapture={(e) =>
+                    getprofileImageProvidedByGravater(e.currentTarget.value)
+                  }
+                  {...field}
+                />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
         <FormField
           control={form.control}
           name="fullname"
