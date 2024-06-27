@@ -2,37 +2,27 @@
 
 import { z } from "zod";
 import { Button } from "@/components/ui/button";
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/components/ui/form";
+import { Form } from "@/components/ui/form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { Input } from "@/components/ui/input";
-import { onBoardingFormSchema } from "@/lib/validations/validation";
+import { SignUpFormSchema } from "@/lib/validations/validation";
 import config from "@/lib/config";
-import { DatePicker } from "./DatePicker";
 import ProfileImage from "@/components/ProfileImage";
-import { Textarea } from "@/components/ui/textarea";
 import { cn } from "@/lib/utils";
 import Spinner from "@/components/Spinner";
 import { useState } from "react";
 import { useToast } from "@/components/ui/use-toast";
 import { SHA256 } from "crypto-js";
+import { InputForm } from "@/components/InputForm";
 
 export default function SignUpForm() {
   const [formSubmitted, setFormSubmitted] = useState<boolean>(false);
   const [profileImageProvidedByGravater, setprofileImageProvidedByGravater] =
     useState<string | undefined>(undefined);
-
   const { toast } = useToast();
-  const form = useForm<z.infer<typeof onBoardingFormSchema>>({
+  const form = useForm<z.infer<typeof SignUpFormSchema>>({
     mode: "onSubmit",
-    resolver: zodResolver(onBoardingFormSchema),
+    resolver: zodResolver(SignUpFormSchema),
   });
 
   const getprofileImageProvidedByGravater = (email: string | undefined) => {
@@ -44,8 +34,9 @@ export default function SignUpForm() {
     );
   };
 
-  const onSubmit = (values: z.infer<typeof onBoardingFormSchema>) => {
+  const onSubmit = (values: z.infer<typeof SignUpFormSchema>) => {
     setFormSubmitted(true);
+    console.log(values.email);
     toast({
       title: "Account created successfully...",
       description: `Hello in ${config.metadata.title} family`,
@@ -69,52 +60,41 @@ export default function SignUpForm() {
           <p className="font-thin">Tell us a little bit about yourself.</p>
         </div>
         <ProfileImage img={profileImageProvidedByGravater} />
-
-        <FormField
-          control={form.control}
+        <InputForm<typeof SignUpFormSchema>
+          label={"Gravater Email"}
           name="profile_photo"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Gravater Email</FormLabel>
-              <FormControl>
-                <Input
-                  placeholder="Gravater Email if any!"
-                  onChangeCapture={(e) =>
-                    getprofileImageProvidedByGravater(e.currentTarget.value)
-                  }
-                  {...field}
-                />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
+          form={form}
+          type="email"
+          placeholder="Gravater Email"
+          isPending={formSubmitted}
+          onChangeCapture={getprofileImageProvidedByGravater}
         />
-        <FormField
-          control={form.control}
+        <InputForm<typeof SignUpFormSchema>
+          label={"Email"}
+          name="email"
+          form={form}
+          type="email"
+          placeholder="Email"
+          isPending={formSubmitted}
+          onChangeCapture={() => {}}
+        />
+        <InputForm<typeof SignUpFormSchema>
+          label={"Password"}
+          name="password"
+          form={form}
+          type="password"
+          placeholder="Password"
+          isPending={formSubmitted}
+          onChangeCapture={() => {}}
+        />
+        <InputForm<typeof SignUpFormSchema>
+          label={"Fullname"}
           name="fullname"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Fullname</FormLabel>
-              <FormControl>
-                <Input placeholder="Name" {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <DatePicker form={form} />
-        <FormField
-          control={form.control}
-          name="bio"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Bio</FormLabel>
-              <FormControl>
-                <Textarea placeholder="Bio" {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
+          form={form}
+          type="text"
+          placeholder="Fullname"
+          isPending={formSubmitted}
+          onChangeCapture={() => {}}
         />
         <Button type="submit" variant="submit" disabled={formSubmitted}>
           {formSubmitted && <Spinner />}

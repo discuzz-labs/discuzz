@@ -1,6 +1,6 @@
 "use client";
 
-import { z } from "zod";
+import { TypeOf, z } from "zod";
 import { CalendarIcon } from "lucide-react";
 import { format } from "date-fns";
 import { Calendar } from "@/components/ui/calendar";
@@ -19,18 +19,19 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import formSchema from "@/lib/validations/validation";
-import { UseFormReturn } from "react-hook-form";
+import { Path, UseFormReturn } from "react-hook-form";
 
-export function DatePicker({
+export function DatePicker<T extends z.ZodType<any, any>>({
   form,
+  name,
 }: {
-  form: UseFormReturn<z.infer<typeof formSchema>>;
+  form: UseFormReturn<z.infer<T>>;
+  name: Path<TypeOf<T>>;
 }) {
   return (
     <FormField
       control={form.control}
-      name="dob"
+      name={name}
       render={({ field }) => (
         <FormItem className="flex flex-col">
           <FormLabel>Date of birth</FormLabel>

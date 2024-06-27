@@ -66,3 +66,8 @@ model User {
   follow  Follow[]
   posts   Issue[]
 }
+
+model OTP { 
+  email String @id @map("_id")
+  otp   String
+}

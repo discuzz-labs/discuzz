@@ -1,13 +1,13 @@
 import type { Metadata } from "next";
 import { Roboto } from "next/font/google";
 
-import { ThemeProvider } from "@/components/providers/theme-provider";
+import { ThemeProvider } from "@/components/providers/ThemeProvider";
 import NavBar from "@/components/NavBar";
 import { Toaster } from "@/components/ui/toaster";
 import config from "@/lib/config";
 import "../styles/globals.css";
 import "../styles/theme.css";
-import AuthProvider from "@/components/providers/auth-provider";
+import AuthProvider from "@/components/providers/AuthProvider";
 
 const inter = Roboto({
   subsets: ["latin"],
