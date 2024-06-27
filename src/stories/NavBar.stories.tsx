@@ -1,6 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/react";
 import NavBar from "@/components/NavBar";
 import { ThemeProvider } from "@/components/providers/theme-provider";
+import { SessionProvider } from "next-auth/react";
 
 const meta: Meta<typeof NavBar> = {
   component: NavBar,
@@ -8,9 +9,11 @@ const meta: Meta<typeof NavBar> = {
   title: "Components/NavBar",
   decorators: [
     (Story) => (
-      <ThemeProvider>
-        <Story />
-      </ThemeProvider>
+      <SessionProvider>
+        <ThemeProvider>
+          <Story />
+        </ThemeProvider>
+      </SessionProvider>
     ),
   ],
 };

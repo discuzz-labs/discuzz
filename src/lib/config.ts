@@ -24,6 +24,12 @@ interface Config {
     darkLogo: string | undefined;
     defaultTheme: ThemeType;
   };
+  email: {
+    sender: string | undefined;
+    password: string | undefined;
+    provider: string | undefined;
+    address: string | undefined;
+  };
 }
 
 const config: Config = {
@@ -62,6 +68,12 @@ const config: Config = {
     )
       ? process.env.NEXT_PUBLIC_SITE_DEFAULT_THEME
       : "light") as ThemeType,
+  },
+  email: {
+    sender: process.env.NEXT_PUBLIC_SENDEER_EMAIL,
+    password: process.env.NEXT_PUBLIC_SENDER_EMAIL_PASSWORD,
+    provider: process.env.NEXT_PUBLIC_SENDER_EMAIL_PROVIDER,
+    address: process.env.NEXT_PUBLIC_ADDRESS_INFO,
   },
 };
 
