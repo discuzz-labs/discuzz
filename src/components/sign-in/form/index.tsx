@@ -2,17 +2,9 @@
 
 import { z } from "zod";
 import { Button } from "@/components/ui/button";
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/components/ui/form";
+import { Form } from "@/components/ui/form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { Input } from "@/components/ui/input";
 import { SignInFormSchema } from "@/lib/validations/validation";
 import config from "@/lib/config";
 import { cn } from "@/lib/utils";
@@ -20,6 +12,7 @@ import Spinner from "@/components/Spinner";
 import { useState } from "react";
 import { useToast } from "@/components/ui/use-toast";
 import Link from "next/link";
+import { InputForm } from "@/components/InputForm";
 
 export default function SignInForm() {
   const [formSubmitted, setFormSubmitted] = useState<boolean>(false);
@@ -52,31 +45,23 @@ export default function SignInForm() {
             Sign In to {config.metadata.title}
           </h1>
         </div>
-        <FormField
-          control={form.control}
+        <InputForm<typeof SignInFormSchema>
+          label={"Email"}
           name="email"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Email</FormLabel>
-              <FormControl>
-                <Input type="email" placeholder="user@example.com" {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
+          form={form}
+          type="email"
+          placeholder="Email"
+          isPending={formSubmitted}
+          onChangeCapture={() => {}}
         />
-        <FormField
-          control={form.control}
+        <InputForm<typeof SignInFormSchema>
+          label={"Password"}
           name="password"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Password</FormLabel>
-              <FormControl>
-                <Input type="password" placeholder="password" {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
+          form={form}
+          type="password"
+          placeholder="Password"
+          isPending={formSubmitted}
+          onChangeCapture={() => {}}
         />
         <div>
           <Link href="/forgot">Forgot Password?</Link>
