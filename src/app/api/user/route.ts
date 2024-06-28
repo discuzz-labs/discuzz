@@ -3,6 +3,7 @@ import { type APIResponse } from "@/types/api";
 import prisma from "@/lib/prisma";
 import { type User } from "@/types/database";
 import log from "@/lib/log";
+import { ERROR } from "@/lib/messages";
 
 //finding user by email
 export async function POST(request: NextRequest) {
@@ -27,7 +28,7 @@ export async function POST(request: NextRequest) {
     return NextResponse.json(
       {
         error: err,
-        message: "Failed to create your Account. SERVERERR 500",
+        message: ERROR.REGISTERATION_FAILED_CANNOT_REACH_THE_DATABASE,
         status: 500,
         success: false,
       } satisfies APIResponse<undefined>,

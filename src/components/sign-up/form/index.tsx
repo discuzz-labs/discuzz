@@ -14,7 +14,8 @@ import { useState } from "react";
 import { useToast } from "@/components/ui/use-toast";
 import { SHA256 } from "crypto-js";
 import { InputForm } from "@/components/InputForm";
-import logUI from "@/lib/logUi";
+import { ERROR, SUCCESS } from "@/lib/messages";
+import { User } from "@/types/database";
 
 export default function SignUpForm() {
   const [formSubmitted, setFormSubmitted] = useState<boolean>(false);
@@ -29,7 +30,6 @@ export default function SignUpForm() {
 
   const getprofileImageProvidedByGravater = (email: string | undefined) => {
     if (email == undefined) return;
-
     let hashedGravaterEmail = SHA256(email);
     setprofileImageProvidedByGravater(
       `https://www.gravatar.com/avatar/${hashedGravaterEmail}`
@@ -39,9 +39,24 @@ export default function SignUpForm() {
   const onSubmit = async (values: z.infer<typeof SignUpFormSchema>) => {
     setFormSubmitted(true);
     // check if user has the email before
+    try {
+      const apiRequest = await fetch("/api/user", {
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email: values.email }),
+      });
+      const data = await apiRequest.json();
+      if (data) setError(ERROR.REGISTERATION_FAILED_EMAIL_ALREADY_EXSITS);
+    } catch (err) {
+      setError(ERROR.API_IS_UNREACHABLE);
+      return;
+    }
+
     toast({
-      title: "Account created successfully...",
-      description: `Hello in ${config.metadata.title} family`,
+      title: SUCCESS.REGISTERATION_SUCCESS_CONFIRMATION_EMAIL_SEND,
       variant: "success",
     });
   };

@@ -1,5 +1,6 @@
 import config from "@/lib/config";
 import log from "@/lib/log";
+import { ERROR, SUCCESS } from "@/lib/messages";
 import { type APIResponse } from "@/types/api";
 import { type NextRequest, NextResponse } from "next/server";
 import nodemailer from "nodemailer";
@@ -48,7 +49,7 @@ export async function POST(request: NextRequest) {
     await sendMailPromise();
     return NextResponse.json(
       {
-        message: "Email sent",
+        message: ERROR.REGISTERATION_FAILED_CONFIRM_EMAIL_CANNOT_BE_SEND,
         status: 200,
         success: true,
       } satisfies APIResponse<undefined>,
@@ -59,7 +60,7 @@ export async function POST(request: NextRequest) {
     return NextResponse.json(
       {
         error: err,
-        message: "Sending Email failed",
+        message: SUCCESS.REGISTERATION_SUCCESS_CONFIRMATION_EMAIL_SEND,
         status: 500,
         success: false,
       } satisfies APIResponse<undefined>,
