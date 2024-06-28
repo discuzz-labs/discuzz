@@ -1,9 +1,9 @@
 import config from "@/lib/config";
-import { APIResponse } from "@/types/api";
+import log from "@/lib/log";
+import { type APIResponse } from "@/types/api";
 import { type NextRequest, NextResponse } from "next/server";
 import nodemailer from "nodemailer";
 import Mail from "nodemailer/lib/mailer";
-const log = require("log-to-file");
 
 export async function POST(request: NextRequest) {
   const { email, name, message } = await request.json();
@@ -51,18 +51,18 @@ export async function POST(request: NextRequest) {
         message: "Email sent",
         status: 200,
         success: true,
-      } satisfies APIResponse,
+      } satisfies APIResponse<undefined>,
       { status: 200 }
     );
   } catch (err) {
-    log(`POST /api/email/send - ${err}`, "logs/api.log");
+    log("api", err, "POST /api/email/send");
     return NextResponse.json(
       {
         error: err,
         message: "Sending Email failed",
         status: 500,
         success: false,
-      } satisfies APIResponse,
+      } satisfies APIResponse<undefined>,
       { status: 500 }
     );
   }

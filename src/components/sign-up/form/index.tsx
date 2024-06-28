@@ -14,9 +14,11 @@ import { useState } from "react";
 import { useToast } from "@/components/ui/use-toast";
 import { SHA256 } from "crypto-js";
 import { InputForm } from "@/components/InputForm";
+import logUI from "@/lib/logUi";
 
 export default function SignUpForm() {
   const [formSubmitted, setFormSubmitted] = useState<boolean>(false);
+  const [error, setError] = useState<any>(undefined);
   const [profileImageProvidedByGravater, setprofileImageProvidedByGravater] =
     useState<string | undefined>(undefined);
   const { toast } = useToast();
@@ -34,9 +36,9 @@ export default function SignUpForm() {
     );
   };
 
-  const onSubmit = (values: z.infer<typeof SignUpFormSchema>) => {
+  const onSubmit = async (values: z.infer<typeof SignUpFormSchema>) => {
     setFormSubmitted(true);
-    console.log(values.email);
+    // check if user has the email before
     toast({
       title: "Account created successfully...",
       description: `Hello in ${config.metadata.title} family`,
@@ -59,6 +61,11 @@ export default function SignUpForm() {
           </h1>
           <p className="font-thin">Tell us a little bit about yourself.</p>
         </div>
+        {error && (
+          <div className="p-5 m-2 flex items-center justify-center bg-destructive text-destructive-foreground font-semibold rounded-md ">
+            <p>There was an error creating your account!</p>
+          </div>
+        )}
         <ProfileImage img={profileImageProvidedByGravater} />
         <InputForm<typeof SignUpFormSchema>
           label={"Gravater Email"}
