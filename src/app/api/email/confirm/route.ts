@@ -1,13 +1,15 @@
 import config from "@/lib/config";
 import log from "@/lib/log";
-import { ERROR, SUCCESS } from "@/lib/messages";
+import { ERROR } from "@/lib/messages";
 import { type APIResponse } from "@/types/api";
 import { type NextRequest, NextResponse } from "next/server";
 import nodemailer from "nodemailer";
 import Mail from "nodemailer/lib/mailer";
+import { render } from "@react-email/components";
+import ConfirmEmailTemplate from "@/templates/confirmemail.email";
 
 export async function POST(request: NextRequest) {
-  const { email, name, message } = await request.json();
+  var { email, name, otp } = await request.json();
 
   const transport = nodemailer.createTransport({
     service: config.email.provider,
@@ -26,12 +28,14 @@ export async function POST(request: NextRequest) {
     },
   });
 
+  const emailHtml = render(ConfirmEmailTemplate({ otp, name }));
+
   const mailOptions: Mail.Options = {
     from: config.email.sender,
-    to: config.email.sender,
-    // cc: email, (uncomment this line if you want to send a copy to the sender)
-    subject: `Message from ${name} (${email})`,
-    text: message,
+    to: email,
+    // cc: config.email.sender, (uncomment this line if you want to send a copy to the sender)
+    subject: `Confirmation Email - ${config.metadata.name}`,
+    html: emailHtml,
   };
 
   const sendMailPromise = () =>
@@ -49,9 +53,10 @@ export async function POST(request: NextRequest) {
     await sendMailPromise();
     return NextResponse.json(
       {
-        message: ERROR.REGISTERATION_FAILED_CONFIRM_EMAIL_CANNOT_BE_SEND,
         status: 200,
         success: true,
+        data: undefined,
+        error: null,
       } satisfies APIResponse<undefined>,
       { status: 200 }
     );
@@ -60,9 +65,9 @@ export async function POST(request: NextRequest) {
     return NextResponse.json(
       {
         error: err,
-        message: SUCCESS.REGISTERATION_SUCCESS_CONFIRMATION_EMAIL_SEND,
         status: 500,
         success: false,
+        data: undefined,
       } satisfies APIResponse<undefined>,
       { status: 500 }
     );

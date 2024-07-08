@@ -59,7 +59,10 @@ model User {
   type    String
   bio     String
   badges  String[]
+  password String
   likes   BigInt
+  verified Boolean
+  TFA      Boolean
   links   String[]
   reports Report[]
   follower Follower[]

@@ -1,3 +1,5 @@
+import { boolean } from "zod";
+
 // Issue Type
 export type Issue = {
   id: string;
@@ -49,6 +51,9 @@ export type User = {
   bio: string;
   badges: string[];
   likes: bigint;
+  password: string;
+  verified: boolean;
+  TFA: boolean;
   links: string[];
   reports: Report[];
   follower: Follower[];
