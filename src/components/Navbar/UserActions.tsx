@@ -6,7 +6,7 @@ import ProfileImage from "../ProfileImage";
 
 export default function UserActions() {
   const { userSession } = useUserSession();
-
+  console.log(userSession);
   return (
     <>
       {!userSession?.email ? (

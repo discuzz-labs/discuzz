@@ -61,8 +61,6 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
         var decodedSession = verifyToken(token);
         if (isValidSession(decodedSession)) {
           setUserSessionState(decodedSession);
-        } else {
-          console.error("Invalid session.");
         }
       } catch (error) {
         console.error("Failed to decode token", error);
@@ -72,9 +70,13 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
 
   // Update localStorage whenever the user session changes
   const setUserSession = (session: UserSessionInterface) => {
-    const token = signToken(session);
-    localStorage.setItem("userToken", token);
-    setUserSessionState(session);
+    try {
+      const token = signToken(session);
+      localStorage.setItem("userToken", token);
+      setUserSessionState(session);
+    } catch (e) {
+      console.error(e);
+    }
   };
 
   const updateUserSession = (updatedFields: Partial<UserSessionInterface>) => {

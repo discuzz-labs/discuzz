@@ -23,9 +23,9 @@ import {
 export default function SignUpForm() {
   const [formSubmitted, setFormSubmitted] = useState<boolean>(false);
   const { setUserSession } = useUserSession();
-  const [error, setError] = useState<any>(undefined);
+  const [error, setError] = useState<any>("");
   const [profileImageProvidedByGravater, setprofileImageProvidedByGravater] =
-    useState<string | undefined>("https://www.gravatar.com/avatar/placeholder");
+    useState<string>("https://www.gravatar.com/avatar/placeholder");
   const form = useForm<z.infer<typeof SignUpFormSchema>>({
     mode: "onSubmit",
     resolver: zodResolver(SignUpFormSchema),
@@ -46,7 +46,7 @@ export default function SignUpForm() {
         email: values.email,
         password: values.password,
         fullName: values.fullname,
-        imageURL: values.profile_photo as string,
+        imageURL: profileImageProvidedByGravater as string,
       });
       if (registerUser.success == true) {
         setUserSession(registerUser.data as UserSessionInterface);
@@ -54,9 +54,9 @@ export default function SignUpForm() {
         setError(registerUser.error);
       }
     } catch (e) {
-      setFormSubmitted(false);
       setError(e);
     }
+    setFormSubmitted(false);
   };
 
   return (

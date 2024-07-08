@@ -1,3 +1,5 @@
+import AuthProvider from "@/components/providers/AuthProvider";
+
 export const metadata = {
   title: `Sign Up`,
 };
@@ -7,5 +9,5 @@ export default function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
-  return <>{children}</>;
+  return <AuthProvider>{children}</AuthProvider>;
 }

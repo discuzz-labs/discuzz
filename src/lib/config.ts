@@ -3,6 +3,9 @@ type SocialButtonsVariant = "auto" | "blockButton" | "iconButton" | undefined;
 type SocialButtonsPlacement = "top" | "bottom" | undefined;
 
 interface Config {
+  site: {
+    url: string;
+  };
   metadata: {
     keywords: string[] | undefined;
     name: string | undefined;
@@ -33,6 +36,9 @@ interface Config {
 }
 
 const config: Config = {
+  site: {
+    url: (process.env.NEXT_URL as string) || "http://localhost:3000",
+  },
   metadata: {
     keywords: (process.env.NEXT_PUBLIC_METADATA_KEYWORDS?.split(
       ","
