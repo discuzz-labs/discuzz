@@ -43,6 +43,7 @@ export function InputForm<T extends z.ZodType<any, any>>({
             <Input
               {...field}
               type={type}
+              autoComplete="true"
               disabled={isPending}
               placeholder={placeholder} // Spread the placeholder prop correctly
               onChangeCapture={(e) => onChangeCapture(e.currentTarget.value)}

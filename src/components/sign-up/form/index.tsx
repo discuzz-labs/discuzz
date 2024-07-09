@@ -6,11 +6,9 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { SignUpFormSchema } from "@/lib/validations/validation";
 import ProfileImage from "@/components/ProfileImage";
-import { cn } from "@/lib/utils";
 import { SHA256 } from "crypto-js";
 import { InputForm } from "@/components/InputForm";
 import { Button } from "@/components/ui/button";
-import Link from "next/link";
 import Spinner from "@/components/Spinner";
 
 interface SignUpFormProps {
@@ -19,6 +17,7 @@ interface SignUpFormProps {
   formSubmitted: boolean;
   register: (values: z.infer<typeof SignUpFormSchema>) => void;
 }
+
 export default function SignUpForm({
   profileImageProvidedByGravater,
   setprofileImageProvidedByGravater,
@@ -48,9 +47,7 @@ export default function SignUpForm({
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(register)}
-          className={cn(
-            "w-full flex flex-col items-center justify-center gap-5"
-          )}
+          className="w-full flex flex-col items-center justify-center gap-5"
         >
           <InputForm<typeof SignUpFormSchema>
             form={form}
@@ -80,19 +77,14 @@ export default function SignUpForm({
             placeholder="Password"
           />
 
-        <div className="w-full flex items-center flex-col gap-5 mt-5">
-          <Button
-            disabled={formSubmitted}
-            className="w-1/2 flex items-center gap-2"
-          >
-            {formSubmitted && <Spinner />} Create an account.
-          </Button>
-
-          <Link className="font-thin text-xs" href="/recover/password">
-            Forget Password!
-          </Link>
-        </div>
-
+          <div className="w-full flex items-center flex-col gap-5 mt-5">
+            <Button
+              disabled={formSubmitted}
+              className="w-1/2 flex items-center gap-2"
+            >
+              {formSubmitted && <Spinner />} Create an account.
+            </Button>
+          </div>
         </form>
       </Form>
     </>

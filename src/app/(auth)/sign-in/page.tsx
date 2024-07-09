@@ -1,9 +1,5 @@
-import SignInForm from "@/components/sign-in/form";
+import SignInPage from "@/components/sign-in/page";
 
-export default async function SignInPage() {
-  return (
-    <div className="py-5 flex items-center justify-center w-[100vw] h-full">
-      <SignInForm />
-    </div>
-  );
+export default function SignUp() {
+  return <SignInPage />;
 }
