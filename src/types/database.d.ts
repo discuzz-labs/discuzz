@@ -54,6 +54,8 @@ export type User = {
   password: string;
   verified: boolean;
   TFA: boolean;
+  OTP: String;
+  TTL: String;
   links: string[];
   reports: Report[];
   follower: Follower[];

@@ -63,6 +63,8 @@ model User {
   likes   BigInt
   verified Boolean
   TFA      Boolean
+  OTP     String
+  TTL     String
   links   String[]
   reports Report[]
   follower Follower[]

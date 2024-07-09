@@ -57,6 +57,8 @@ export async function PUT(request: NextRequest) {
         password: hashedPassword,
         verified: false,
         TFA: false,
+        OTP: "",
+        TTL: "",
         bio: "",
         badges: [],
         likes: 0,
