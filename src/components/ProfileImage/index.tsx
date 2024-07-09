@@ -4,16 +4,24 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Image as ImgIcon } from "lucide-react";
 import { useUserSession } from "../providers/AuthProvider";
 
-export default function ProfileImage({ img }: { img?: string | undefined }) {
+export default function ProfileImage({
+  img,
+  className,
+  size,
+}: {
+  img?: string | undefined;
+  className?: string;
+  size: number;
+}) {
   const { userSession } = useUserSession();
 
   return (
-    <div className="flex items-center justify-center w-full">
-      <Avatar className="border-4 border-input">
+    <div className={className}>
+      <Avatar className={`h-${size} w-${size} border-4 border-input`}>
         <AvatarImage
           src={
-            userSession?.imageURL ||
             img ||
+            userSession?.imageURL ||
             "https://www.gravatar.com/avatar/placeholder"
           }
         />

@@ -17,7 +17,8 @@ type InputFormProps<T extends z.ZodType<any, any>> = {
   onChangeCapture: (value: string) => void;
   isPending?: boolean;
   type: string;
-  label: string;
+  label?: string;
+  className?: string;
   placeholder: string; // Make placeholder an optional prop
 };
 
@@ -26,6 +27,7 @@ export function InputForm<T extends z.ZodType<any, any>>({
   name,
   type,
   label,
+  className = "",
   isPending,
   onChangeCapture,
   placeholder,
@@ -35,8 +37,8 @@ export function InputForm<T extends z.ZodType<any, any>>({
       control={form.control}
       name={name}
       render={({ field }) => (
-        <FormItem>
-          <FormLabel>{label}</FormLabel>
+        <FormItem className={className}>
+          {label && <FormLabel>{label}</FormLabel>}
           <FormControl>
             <Input
               {...field}
