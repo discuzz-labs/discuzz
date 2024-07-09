@@ -31,7 +31,6 @@ interface Config {
     sender: string | undefined;
     password: string | undefined;
     provider: string | undefined;
-    address: string | undefined;
   };
 }
 
@@ -79,7 +78,6 @@ const config: Config = {
     sender: process.env.NEXT_PUBLIC_SENDEER_EMAIL,
     password: process.env.NEXT_PUBLIC_SENDER_EMAIL_PASSWORD,
     provider: process.env.NEXT_PUBLIC_SENDER_EMAIL_PROVIDER,
-    address: process.env.NEXT_PUBLIC_ADDRESS_INFO,
   },
 };
 

@@ -30,6 +30,7 @@
     "clsx": "^2.1.1",
     "crypto-js": "^4.2.0",
     "date-fns": "^3.6.0",
+    "is-url": "^1.2.4",
     "jose": "^5.6.3",
     "jsonwebtoken": "^8.5.1",
     "log-to-file": "^3.0.3",

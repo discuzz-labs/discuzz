@@ -8,6 +8,7 @@ import config from "@/lib/config";
 import "../styles/globals.css";
 import "../styles/theme.css";
 import AuthProvider from "@/components/providers/AuthProvider";
+import build from "@/build";
 
 const inter = Roboto({
   subsets: ["latin"],
@@ -41,19 +42,6 @@ export const metadata: Metadata = {
     address: true,
     telephone: true,
   },
-  robots: {
-    index: false,
-    follow: true,
-    nocache: true,
-    googleBot: {
-      index: true,
-      follow: false,
-      noimageindex: true,
-      "max-video-preview": -1,
-      "max-image-preview": "large",
-      "max-snippet": -1,
-    },
-  },
   icons: {
     icon: config.metadata.logo,
     apple: config.metadata.logo,
@@ -77,6 +65,12 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  /**
+   * Checks for ENV variabels
+   * Only runs in dev mode.
+   */
+  build();
+
   return (
     <html lang="en" suppressHydrationWarning>
       <body

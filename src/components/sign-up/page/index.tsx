@@ -10,9 +10,7 @@ import {
   useUserSession,
 } from "@/components/providers/AuthProvider";
 import SignUpForm from "../form";
-
 import { useToast } from "@/components/ui/use-toast";
-import { cn } from "@/lib/utils";
 
 export default function SignUpPage() {
   const [formSubmitted, setFormSubmitted] = useState<boolean>(false);
