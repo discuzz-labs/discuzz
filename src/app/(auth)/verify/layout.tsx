@@ -1,5 +1,5 @@
 export const metadata = {
-  title: `Confirm Email`,
+  title: `Verify Email`,
 };
 
 export default function RootLayout({

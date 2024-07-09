@@ -6,9 +6,10 @@ import ProfileImage from "../ProfileImage";
 
 export default function UserActions() {
   const { userSession } = useUserSession();
+  console.log(userSession);
   return (
     <>
-      {!userSession?.email ? (
+      {userSession?.email == null ? (
         <>
           <Link href="/sign-in">
             <Button variant="ghost" className="flex items-center gap-2">
@@ -24,7 +25,7 @@ export default function UserActions() {
           </Link>
         </>
       ) : (
-        <ProfileImage />
+        <ProfileImage size={10} />
       )}
     </>
   );

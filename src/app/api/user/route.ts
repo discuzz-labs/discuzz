@@ -5,6 +5,12 @@ import { type User } from "@/types/database";
 import log from "@/lib/log";
 import bcrypt from "bcrypt";
 
+// @ts-ignore
+BigInt.prototype.toJSON = function () {
+  const int = Number.parseInt(this.toString());
+  return int ?? this.toString();
+};
+
 //finding user by email
 export async function POST(request: NextRequest) {
   const { email }: { email: string } = await request.json();

@@ -24,6 +24,7 @@ export default function ProfileImage({
             userSession?.imageURL ||
             "https://www.gravatar.com/avatar/placeholder"
           }
+          alt="Profile Image"
         />
         <AvatarFallback>
           <ImgIcon size={40} />

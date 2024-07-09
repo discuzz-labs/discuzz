@@ -11,11 +11,12 @@ import {
 } from "@/components/providers/AuthProvider";
 import SignUpForm from "../form";
 import { useToast } from "@/components/ui/use-toast";
+import { useRouter } from "next/navigation";
 
 export default function SignUpPage() {
+  const router = useRouter();
   const [formSubmitted, setFormSubmitted] = useState<boolean>(false);
   const { setUserSession } = useUserSession();
-  const [error, setError] = useState<any>("");
   const { toast } = useToast();
   const [profileImageProvidedByGravater, setprofileImageProvidedByGravater] =
     useState<string>("https://www.gravatar.com/avatar/placeholder");
@@ -31,18 +32,19 @@ export default function SignUpPage() {
       });
       if (registerUser.success == true) {
         setUserSession(registerUser.data as UserSessionInterface);
+        router.push("/verify");
       } else {
         toast({
           title: "Cannot create you account!",
           description: registerUser.error,
-          variant: "destructive"
+          variant: "destructive",
         });
       }
     } catch (e) {
       toast({
         title: "Cannot create you account!",
         description: e as string,
-        variant: "destructive"
+        variant: "destructive",
       });
     }
     setFormSubmitted(false);
