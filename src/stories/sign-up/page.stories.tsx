@@ -1,19 +1,19 @@
 import type { Meta, StoryObj } from "@storybook/react";
 import { ThemeProvider } from "@/components/providers/ThemeProvider";
-import SignUpForm from "@/components/sign-up/form";
-import { SessionProvider } from "next-auth/react";
+import SignUpPage from "@/components/sign-up/page";
+import AuthProvider from "@/components/providers/AuthProvider";
 
-const meta: Meta<typeof SignUpForm> = {
-  component: SignUpForm,
-  title: "Components/signup/form",
+const meta: Meta<typeof SignUpPage> = {
+  component: SignUpPage,
+  title: "Components/sign-up/page",
   decorators: [
     (Story) => (
       <div className="w-[100vw] items-center justify-center flex">
-        <SessionProvider>
+        <AuthProvider>
           <ThemeProvider>
             <Story />
           </ThemeProvider>
-        </SessionProvider>
+        </AuthProvider>
       </div>
     ),
   ],

@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/react";
 import ProfileImage from "@/components/ProfileImage";
 import { ThemeProvider } from "@/components/providers/ThemeProvider";
-import { SessionProvider } from "next-auth/react";
+import AuthProvider from "@/components/providers/AuthProvider";
 
 const meta: Meta<typeof ProfileImage> = {
   component: ProfileImage,
@@ -9,11 +9,11 @@ const meta: Meta<typeof ProfileImage> = {
   title: "Components/ProfileImage",
   decorators: [
     (Story) => (
-      <SessionProvider>
+      <AuthProvider>
         <ThemeProvider>
           <Story />
         </ThemeProvider>
-      </SessionProvider>
+      </AuthProvider>
     ),
   ],
 };
