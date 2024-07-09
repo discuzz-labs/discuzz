@@ -88,9 +88,10 @@ export default function RootLayout({
           <ThemeProvider>
             <NavBar />
             {children}
-            <Toaster />
+           
           </ThemeProvider>
-        </AuthProvider>
+        </AuthProvider> 
+        <Toaster />
       </body>
     </html>
   );

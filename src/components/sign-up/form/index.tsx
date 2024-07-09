@@ -9,6 +9,9 @@ import ProfileImage from "@/components/ProfileImage";
 import { cn } from "@/lib/utils";
 import { SHA256 } from "crypto-js";
 import { InputForm } from "@/components/InputForm";
+import { Button } from "@/components/ui/button";
+import Link from "next/link";
+import Spinner from "@/components/Spinner";
 
 interface SignUpFormProps {
   profileImageProvidedByGravater: string;
@@ -37,7 +40,6 @@ export default function SignUpForm({
 
   return (
     <>
-      {" "}
       <ProfileImage
         img={profileImageProvidedByGravater}
         size={25}
@@ -77,6 +79,20 @@ export default function SignUpForm({
             isPending={formSubmitted}
             placeholder="Password"
           />
+
+        <div className="w-full flex items-center flex-col gap-5 mt-5">
+          <Button
+            disabled={formSubmitted}
+            className="w-1/2 flex items-center gap-2"
+          >
+            {formSubmitted && <Spinner />} Create an account.
+          </Button>
+
+          <Link className="font-thin text-xs" href="/recover/password">
+            Forget Password!
+          </Link>
+        </div>
+
         </form>
       </Form>
     </>

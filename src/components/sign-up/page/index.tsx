@@ -1,7 +1,6 @@
 "use client";
 
 import { z } from "zod";
-import { Button } from "@/components/ui/button";
 import { SignUpFormSchema } from "@/lib/validations/validation";
 import { useState } from "react";
 import signUpWithCred from "@/actions/sign-up/signUpWithCred";
@@ -12,10 +11,14 @@ import {
 } from "@/components/providers/AuthProvider";
 import SignUpForm from "../form";
 
+import { useToast } from "@/components/ui/use-toast";
+import { cn } from "@/lib/utils";
+
 export default function SignUpPage() {
   const [formSubmitted, setFormSubmitted] = useState<boolean>(false);
   const { setUserSession } = useUserSession();
   const [error, setError] = useState<any>("");
+  const { toast } = useToast();
   const [profileImageProvidedByGravater, setprofileImageProvidedByGravater] =
     useState<string>("https://www.gravatar.com/avatar/placeholder");
 
@@ -31,17 +34,25 @@ export default function SignUpPage() {
       if (registerUser.success == true) {
         setUserSession(registerUser.data as UserSessionInterface);
       } else {
-        setError(registerUser.error);
+        toast({
+          title: "Cannot create you account!",
+          description: registerUser.error,
+          variant: "destructive"
+        });
       }
     } catch (e) {
-      setError(e);
+      toast({
+        title: "Cannot create you account!",
+        description: e as string,
+        variant: "destructive"
+      });
     }
     setFormSubmitted(false);
   };
 
   return (
     <div className="w-full h-[100vh] flex">
-      <div className="w-1/2 bg-[#0b0a09] decorator text-white py-10 flex gap-5 flex-col p-10 justify-end">
+      <div className="lg:flex lg:w-1/2 hidden bg-[#0b0a09] decorator text-white py-10  gap-5 flex-col p-10 justify-end">
         <p className="font-extrabold text-2xl">
           “Life is like riding a bicycle. To keep your balance, you must keep
           moving.”
@@ -49,7 +60,7 @@ export default function SignUpPage() {
         <p className="font-thin text-xl">- Albert Einstein</p>
       </div>
 
-      <div className="w-1/2 flex flex-col items-center justify-center">
+      <div className="lg:w-1/2 w-full flex flex-col items-center justify-center">
         <div className="flex flex-col gap-2 items-center justify-center pb-10">
           <p className="text-2xl font-extrabold">Create an account</p>
           <p className="text-sm font-thin">
@@ -63,20 +74,6 @@ export default function SignUpPage() {
           setprofileImageProvidedByGravater={setprofileImageProvidedByGravater}
           register={register}
         />
-
-        <div className="w-full flex items-center flex-col gap-5 mt-5">
-          <Button
-            disabled={formSubmitted}
-            className="w-1/2"
-            onClick={() => setFormSubmitted(true)}
-          >
-            Create an account.
-          </Button>
-
-          <Link className="font-thin text-xs" href="/recover/password">
-            Forget Password!
-          </Link>
-        </div>
 
         <p className="mt-10 w-1/2 font-thin text-zinc-600 text-sm text-center">
           By clicking continue, you agree to our &nbsp;

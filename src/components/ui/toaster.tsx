@@ -1,4 +1,4 @@
-"use client";
+"use client"
 
 import {
   Toast,
@@ -7,12 +7,11 @@ import {
   ToastProvider,
   ToastTitle,
   ToastViewport,
-} from "@/components/ui/toast";
-import { useToast } from "@/components/ui/use-toast";
-import { Check, CircleX } from "lucide-react";
+} from "@/components/ui/toast"
+import { useToast } from "@/components/ui/use-toast"
 
 export function Toaster() {
-  const { toasts } = useToast();
+  const { toasts } = useToast()
 
   return (
     <ToastProvider>
@@ -20,11 +19,7 @@ export function Toaster() {
         return (
           <Toast key={id} {...props}>
             <div className="grid gap-1">
-              <div className="flex items-center gap-2">
-                {props.variant == "success" && <Check />}
-                {props.variant == "destructive" && <CircleX />}
-                {title && <ToastTitle>{title}</ToastTitle>}
-              </div>
+              {title && <ToastTitle>{title}</ToastTitle>}
               {description && (
                 <ToastDescription>{description}</ToastDescription>
               )}
@@ -32,9 +27,9 @@ export function Toaster() {
             {action}
             <ToastClose />
           </Toast>
-        );
+        )
       })}
       <ToastViewport />
     </ToastProvider>
-  );
+  )
 }
