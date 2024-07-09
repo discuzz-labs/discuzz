@@ -16,7 +16,7 @@ export default function SignInPage() {
         <p className="font-thin text-xl">- Albert Einstein</p>
       </div>
 
-      <div className="lg:w-1/2 w-full flex flex-col items-center justify-center">
+      <div className="lg:w-1/2 lg:dark:bg-black lg:dark:bg-none dark:decorator w-full flex flex-col items-center justify-center">
         <div className="flex flex-col gap-2 items-center justify-center pb-10">
           <p className="text-2xl font-extrabold">Sign in</p>
           <p className="text-sm font-thin">Sign in to your account.</p>
