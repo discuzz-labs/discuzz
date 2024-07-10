@@ -1,3 +1,5 @@
+import AuthRoute from "@/components/guards/AuthRoute";
+
 export const metadata = {
   title: `Sign Up`,
 };
@@ -7,7 +9,5 @@ export default function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
-  return (
-      <>{children}</>
-  );
+  return <AuthRoute>{children}</AuthRoute>;
 }

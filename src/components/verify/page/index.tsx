@@ -10,19 +10,33 @@ import {
 } from "@/components/ui/input-otp";
 import { REGEXP_ONLY_DIGITS_AND_CHARS } from "input-otp";
 import { Check, X } from "lucide-react";
+import { useState } from "react";
 
 export default function VerifyEmailPage() {
   const { userSession } = useUserSession();
-  console.log(userSession);
+  const [verificationState, setVerificationState] = useState<
+    "pending" | "success" | "failed"
+  >("pending");
 
   return (
     <div className="w-full h-[100vh] flex flex-col items-center justify-center dark:decorator">
       <p className="font-extrabold text-xl">Verify your email.</p>
       <p className="flex items-center gap-2">
-        {/* <Check /> Verfication email was sent. */}
-        {/* <Spinner /> Sending verification email. */}
-        {/* <X /> Cannot send verification email. */}
-        {/* <X /> Cannot verify your email. */}
+        {verificationState == "success" && (
+          <>
+            <Check /> Verfication email was sent.{" "}
+          </>
+        )}
+        {verificationState == "pending" && (
+          <>
+            <Spinner /> Sending verification email.
+          </>
+        )}
+        {verificationState == "failed" && (
+          <>
+            <X /> Your OTP is invalid.
+          </>
+        )}
       </p>
       <div className="flex flex-col gap-2  mt-10 items-start">
         <InputOTP maxLength={6} pattern={REGEXP_ONLY_DIGITS_AND_CHARS}>

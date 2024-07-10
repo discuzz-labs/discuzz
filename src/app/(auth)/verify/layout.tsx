@@ -1,3 +1,5 @@
+import UnverifiedRoute from "@/components/guards/UnverifiedRoute"
+
 export const metadata = {
   title: `Verify Email`,
 };
@@ -7,5 +9,5 @@ export default function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
-  return <>{children}</>;
+  return <UnverifiedRoute>{children}</UnverifiedRoute>;
 }
