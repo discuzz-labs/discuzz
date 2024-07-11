@@ -7,10 +7,10 @@ export default function ProtectedRoute({ children }: { children: ReactNode }) {
   const { userSession } = useUserSession();
   const router = useRouter();
 
-  if (userSession) {
+  if (!userSession) {
     return <>{children}</>;
   } else {
-    if (!userSession.verified) router.push("/dashboard");
+    if (userSession.verified) router.push("/dashboard");
     else router.push("/verify");
   }
 }

@@ -9,7 +9,7 @@ import { render } from "@react-email/components";
 import ConfirmEmailTemplate from "@/templates/confirmemail.email";
 
 export async function POST(request: NextRequest) {
-  var { email, name, otp } = await request.json();
+  var { email, otp } = await request.json();
 
   const transport = nodemailer.createTransport({
     service: config.email.provider,
@@ -28,7 +28,7 @@ export async function POST(request: NextRequest) {
     },
   });
 
-  const emailHtml = render(ConfirmEmailTemplate({ otp, name }));
+  const emailHtml = render(ConfirmEmailTemplate({ otp }));
 
   const mailOptions: Mail.Options = {
     from: config.email.sender,

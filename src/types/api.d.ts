@@ -2,7 +2,7 @@ export type APIResponse<T> = {
   error: any | null;
   status: 200 | 400 | 404 | 500;
   success: boolean;
-  data: T | undefined;
+  data: T;
 };
 
 export type ACTIONResponse<T> = {
