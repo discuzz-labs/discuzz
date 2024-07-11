@@ -20,8 +20,8 @@ async function signUpWithCred({
   fullName,
 }: signUpWithCredArgs): Promise<ACTIONResponse<UserSessionInterface>> {
   try {
-    const verifyEmailExsitenceRequest = await fetch(endpoints.user.get.path, {
-      method: endpoints.user.get.method,
+    const verifyEmailExsitenceRequest = await fetch(endpoints.user.find.path, {
+      method: endpoints.user.find.method,
       headers: {
         Accept: "application/json",
         "Content-Type": "application/json",

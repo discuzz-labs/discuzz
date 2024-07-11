@@ -34,8 +34,8 @@ async function verifyUser({
       };
     }
 
-    const verifyUserRequest = await fetch(endpoints.otp.verify.path, {
-      method: endpoints.otp.verify.method,
+    const verifyUserRequest = await fetch(endpoints.user.verify.path, {
+      method: endpoints.user.verify.method,
       headers: {
         Accept: "application/json",
         "Content-Type": "application/json",
