@@ -1,4 +1,5 @@
 "use server";
+
 import { ERROR } from "@/lib/messages";
 import { User } from "@/types/database";
 import { ACTIONResponse, APIResponse } from "@/types/api";
@@ -43,8 +44,8 @@ async function signUpWithCred({
       };
     }
 
-    const createUserRequest = await fetch(endpoints.user.create.path, {
-      method: endpoints.user.create.method,
+    const registerRequest = await fetch(endpoints.auth.register.path, {
+      method: endpoints.auth.register.method,
       headers: {
         Accept: "application/json",
         "Content-Type": "application/json",
@@ -56,11 +57,10 @@ async function signUpWithCred({
         password,
       }),
     });
-    const createUserResponse: APIResponse<User> =
-      await createUserRequest.json();
-    if (createUserResponse.error) {
+    const registerResponse: APIResponse<User> = await registerRequest.json();
+    if (registerResponse.error) {
       return {
-        error: createUserResponse.error,
+        error: registerResponse.error,
         success: false,
         data: undefined,
       };

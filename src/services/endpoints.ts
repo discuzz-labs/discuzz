@@ -8,6 +8,10 @@ const endpoints = {
     create: { method: "POST", path: `${siteURL}/api/user/create` },
     verify: { method: "POST", path: `${siteURL}/api/user/verify` },
   },
+  auth: {
+    register: { method: "POST", path: `${siteURL}/api/auth/register` },
+    login: { method: "POST", path: `${siteURL}/api/auth/login` },
+  },
   otp: {
     create: { method: "POST", path: `${siteURL}/api/otp/create` },
     verify: { method: "POST", path: `${siteURL}/api/otp/verify` },
