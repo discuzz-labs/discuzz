@@ -51,6 +51,5 @@ jobs:
         run: cp .env.dev .env
       - name: Copy TS Config
         run: cp tsconfig.json && next-env.d.ts
-
       - name: Build with Next.js
         run: ${{ steps.detect-package-manager.outputs.runner }} next build
