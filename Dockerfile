@@ -1,57 +1,26 @@
-FROM node:18-alpine AS base
-FROM base AS deps
-RUN apk add --no-cache libc6-compat
+# Use the official Node.js image.
+# https://hub.docker.com/_/node
+FROM node:14-alpine
 
-WORKDIR /app
+# Create and change to the app directory.
+WORKDIR /usr/src/app
 
-COPY package.json ./
+# Copy application dependency manifests to the container image.
+# A wildcard is used to ensure both package.json AND package-lock.json are copied.
+# Copying this separately prevents re-running npm install on every code change.
+COPY package*.json ./
 
-RUN npm update && npm install
+# Install production dependencies.
+RUN npm install
 
-# If you want yarn update and  install uncomment the bellow script
-
-# RUN yarn install &&  yarn upgrade
-
-FROM base AS builder
-WORKDIR /app
-COPY --from=deps /app/node_modules ./node_modules
+# Copy local code to the container image.
 COPY . .
 
-#if npm package, then follow this:
-    RUN npm run build
+# Build the Next.js project
+RUN npm run build
 
-#if yarn package, then follow this:
+# Run the web service on container startup.
+CMD [ "npm", "start" ]
 
-    # RUN yarn build
-
-FROM base AS runner
-WORKDIR /app
-ENV NODE_ENV production
-
-#creates a system group named nodejs 
-RUN addgroup --system --gid 1001 nodejs
-
-#creates a system group named nextjs 
-RUN adduser --system --uid 1001 nextjs
-
-
-#copy the file from to public folder 
-COPY --from=builder /app/public ./public
-
-
-RUN mkdir .next
-RUN chown nextjs:nodejs .next
-
-COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
-COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
-
-
-USER nextjs
-# if in your application 3000 will not run, then change the expose port
-# ex: EXPOSE <port>
+# Document that the service listens on port 3000.
 EXPOSE 3000
-
-# set Environment port
-ENV PORT 3000
-
-CMD ["node", "server.js"]
