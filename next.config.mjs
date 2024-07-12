@@ -1,9 +1,6 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  images: {},
-  experimental: {
-    externalDir: true,
-  },
+  images: {}
 };
 
 export default nextConfig;

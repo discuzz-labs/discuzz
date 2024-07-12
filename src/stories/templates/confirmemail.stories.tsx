@@ -13,7 +13,6 @@ type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
   args: {
-    otp: "1234",
-    name: "Ahmed",
+    otp: "1234"
   },
 };

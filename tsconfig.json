@@ -1,4 +1,8 @@
 {
+  "ts-node": {
+        // Do not forget to `npm i -D tsconfig-paths`
+        "require": ["tsconfig-paths/register"]
+    },
   "compilerOptions": {
     "baseUrl": ".",
     "lib": ["dom", "dom.iterable", "esnext"],
@@ -20,6 +24,7 @@
     ],
     "paths": {
       "@/*": ["./src/*"],
+      "@/components": ["./src/components"],
       "auth": ["./auth"]
     }
   },
