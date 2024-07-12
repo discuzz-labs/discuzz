@@ -3,6 +3,7 @@ import { type APIResponse } from "@/types/api";
 import prisma from "@/lib/prisma";
 import { type User } from "@/types/database";
 import log from "@/lib/log";
+import bcrypt from "bcrypt";
 
 // @ts-ignore
 BigInt.prototype.toJSON = function () {
@@ -12,17 +13,24 @@ BigInt.prototype.toJSON = function () {
 
 //finding user by email
 export async function POST(request: NextRequest) {
-  const { email } = await request.json();
+  const { email, password } = await request.json();
   try {
+    var passwordMatches = false;
     const user: Partial<User> | null = await prisma.user.findUnique({
       where: {
         email,
       },
     });
+    if (user) {
+      passwordMatches = await bcrypt.compare(
+        password,
+        user?.password as string
+      );
+    }
     return NextResponse.json(
       {
         status: 200,
-        data: user,
+        data: user && passwordMatches ? user : null,
         success: true,
         error: null,
       } satisfies APIResponse<typeof user>,

@@ -1,6 +1,6 @@
 export type APIResponse<T> = {
   error: any | null;
-  status: 200 | 400 | 404 | 500;
+  status: 200 | 404 | 500;
   success: boolean;
   data: T;
 };

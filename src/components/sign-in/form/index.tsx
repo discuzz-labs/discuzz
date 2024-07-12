@@ -10,7 +10,7 @@ import { InputForm } from "@/components/InputForm";
 
 interface SignInFormProps {
   formSubmitted: boolean;
-  login: () => void;
+  login: (values: z.infer<typeof SignInFormSchema>) => void;
 }
 
 export default function SignInForm({ formSubmitted, login }: SignInFormProps) {
@@ -44,21 +44,20 @@ export default function SignInForm({ formSubmitted, login }: SignInFormProps) {
             isPending={formSubmitted}
             placeholder="Password"
           />
+          <div className="w-full flex items-center flex-col gap-5 mt-5">
+            <Button
+              disabled={formSubmitted}
+              className="w-1/2 flex items-center gap-2"
+            >
+              {formSubmitted && <Spinner />} Sign In.
+            </Button>
+
+            <Link className="font-thin text-xs" href="/recover/password">
+              Forget Password!
+            </Link>
+          </div>
         </form>
       </Form>
-
-      <div className="w-full flex items-center flex-col gap-5 mt-5">
-        <Button
-          disabled={formSubmitted}
-          className="w-1/2 flex items-center gap-2"
-        >
-          {formSubmitted && <Spinner />} Sign In.
-        </Button>
-
-        <Link className="font-thin text-xs" href="/recover/password">
-          Forget Password!
-        </Link>
-      </div>
     </>
   );
 }

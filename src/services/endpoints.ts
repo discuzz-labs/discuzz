@@ -5,10 +5,9 @@ const siteURL = config.site.url;
 const endpoints = {
   user: {
     find: { method: "POST", path: `${siteURL}/api/user/find` },
-    create: { method: "POST", path: `${siteURL}/api/user/create` },
-    verify: { method: "POST", path: `${siteURL}/api/user/verify` },
   },
   auth: {
+    verify: { method: "POST", path: `${siteURL}/api/auth/verify` },
     register: { method: "POST", path: `${siteURL}/api/auth/register` },
     login: { method: "POST", path: `${siteURL}/api/auth/login` },
   },
