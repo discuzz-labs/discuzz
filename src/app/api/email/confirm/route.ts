@@ -1,7 +1,7 @@
 import config from "@/lib/config";
 import log from "@/lib/log";
 import { ERROR } from "@/lib/messages";
-import { type APIResponse } from "@/types/api";
+import { type APIResponse } from "@/types/api.";
 import { type NextRequest, NextResponse } from "next/server";
 import nodemailer from "nodemailer";
 import Mail from "nodemailer/lib/mailer";

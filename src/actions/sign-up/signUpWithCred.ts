@@ -2,7 +2,7 @@
 
 import { ERROR } from "@/lib/messages";
 import { User } from "@/types/database";
-import { ACTIONResponse, APIResponse } from "@/types/api";
+import { ACTIONResponse, APIResponse } from "@/types/api.";
 import endpoints from "@/services/endpoints";
 import { UserSessionInterface } from "@/components/providers/AuthProvider";
 import log from "@/lib/log";

@@ -3,7 +3,7 @@
 import log from "@/lib/log";
 import { ERROR, SUCCESS } from "@/lib/messages";
 import endpoints from "@/services/endpoints";
-import { ACTIONResponse, APIResponse } from "@/types/api";
+import { ACTIONResponse, APIResponse } from "@/types/api.";
 
 interface sendVerificationEmailProps {
   email: string;

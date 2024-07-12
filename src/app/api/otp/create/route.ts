@@ -1,5 +1,5 @@
 import { type NextRequest, NextResponse } from "next/server";
-import { type APIResponse } from "@/types/api";
+import { type APIResponse } from "@/types/api.";
 import prisma from "@/lib/prisma";
 import log from "@/lib/log";
 import { generateOTP } from "@/services/otp";
