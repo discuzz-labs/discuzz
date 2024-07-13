@@ -1,8 +1,8 @@
 {
   "ts-node": {
-        // Do not forget to `npm i -D tsconfig-paths`
-        "require": ["tsconfig-paths/register"]
-    },
+    // Do not forget to `npm i -D tsconfig-paths`
+    "require": ["tsconfig-paths/register"]
+  },
   "compilerOptions": {
     "baseUrl": ".",
     "lib": ["dom", "dom.iterable", "esnext"],
@@ -10,8 +10,10 @@
     "skipLibCheck": true,
     "strict": true,
     "noEmit": true,
+    "types": ["node", "jest", "@types/jest"],
     "esModuleInterop": true,
     "module": "esnext",
+    "forceConsistentCasingInFileNames": true,
     "moduleResolution": "bundler",
     "resolveJsonModule": true,
     "isolatedModules": true,
@@ -29,5 +31,5 @@
     }
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
-  "exclude": ["node_modules"]
+  "exclude": ["node_modules", "test"]
 }
