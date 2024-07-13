@@ -7,7 +7,7 @@ import {
   useUserSession,
 } from "@/components/providers/AuthProvider";
 import Alert from "@/components/Alert";
-import { SignInFormSchema } from "@/lib/validations/validation";
+import { SignInFormSchema } from "@/validations/validation";
 import { z } from "zod";
 import signInWithCred from "@/actions/sign-in/signInWithCred";
 import { useRouter } from "next/navigation";

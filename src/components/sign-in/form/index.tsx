@@ -2,7 +2,7 @@ import { z } from "zod";
 import { Form } from "@/components/ui/form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { SignInFormSchema } from "@/lib/validations/validation";
+import { SignInFormSchema } from "@/validations/validation";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import Spinner from "@/components/Spinner";

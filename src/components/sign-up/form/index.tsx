@@ -4,7 +4,7 @@ import { z } from "zod";
 import { Form } from "@/components/ui/form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { SignUpFormSchema } from "@/lib/validations/validation";
+import { SignUpFormSchema } from "@/validations/validation";
 import ProfileImage from "@/components/ProfileImage";
 import { SHA256 } from "crypto-js";
 import { InputForm } from "@/components/InputForm";

@@ -1,7 +1,7 @@
 "use client";
 
 import { z } from "zod";
-import { SignUpFormSchema } from "@/lib/validations/validation";
+import { SignUpFormSchema } from "@/validations/validation";
 import { useState } from "react";
 import signUpWithCred from "@/actions/sign-up/signUpWithCred";
 import Link from "next/link";
