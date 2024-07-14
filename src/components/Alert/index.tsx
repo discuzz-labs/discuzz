@@ -15,6 +15,7 @@ export default function Alert({ message, type, className }: AlertProps) {
   return (
     <div
       className={cn(
+        "cy-alert",
         "flex items-center gap-2 p-5 shadow-md  border-l-8 rounded-md",
         className,
         `${type == "error" && "border-red-800 bg-destructive text-destructive-foreground"}
