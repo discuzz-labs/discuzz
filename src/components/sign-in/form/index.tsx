@@ -47,6 +47,7 @@ export default function SignInForm({ formSubmitted, login }: SignInFormProps) {
           <div className="w-full flex items-center flex-col gap-5 mt-5">
             <Button
               disabled={formSubmitted}
+              type="submit"
               className="w-1/2 flex items-center gap-2"
             >
               {formSubmitted && <Spinner />} Sign In.
