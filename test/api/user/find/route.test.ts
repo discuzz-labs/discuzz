@@ -75,7 +75,7 @@ describe("POST /api/user", () => {
     await POST(req as unknown as NextRequest);
 
     expect(prisma.user.findUnique).toHaveBeenCalledWith({ where: { email } });
-    expect(log).toHaveBeenCalledWith("api", error, "POST /api/user/");
+    expect(log).toHaveBeenCalledWith("api", error, "POST /api/user/find");
     expect(jsonMock).toHaveBeenCalledWith(
       {
         error,

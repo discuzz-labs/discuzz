@@ -7,13 +7,13 @@ import prisma from "@/lib/prisma";
 import { type User } from "@/types/database";
 // @ts-ignore
 import log from "@/lib/log";
-// @ts-ignore
-import { verifyOTP } from "@/services/otp";
-// @ts-ignore
-import { POST } from "@/app/api/otp/verify/route";
+import bcrypt from "bcrypt";
 import { createMocks } from "node-mocks-http";
+// @ts-ignore
+import { POST } from "@/app/api/auth/login/route";
 
 // Mock dependencies
+jest.mock("@/lib/log");
 jest.mock("@/lib/prisma", () => ({
   __esModule: true,
   default: {
@@ -22,36 +22,31 @@ jest.mock("@/lib/prisma", () => ({
     },
   },
 }));
-
-jest.mock("@/lib/log");
-jest.mock("@/services/otp");
+jest.mock("bcrypt");
 jest.mock("next/server", () => ({
   NextResponse: {
     json: jest.fn(),
   },
 }));
 
-describe("POST /api/otp/verify", () => {
+describe("POST /api/auth/login", () => {
   const email = "test@example.com";
-  const otp = "123456";
-  const user: Partial<User> = {
-    id: 1,
-    email,
-    OTP: otp,
-    TTL: Date.now().toString(),
-  };
+  const password = "testpassword";
+  const hashedPassword =
+    "$2b$10$EixZaYVK1fsbw1ZfbX3OXePaWxn96p36HOh0aG0dCE2b2/g.5RE7S"; // Example hashed password
+  const user: Partial<User> = { id: 1, email, password: hashedPassword };
 
   afterEach(() => {
     jest.clearAllMocks();
   });
 
-  it("should return 200 and true if OTP is valid", async () => {
+  it("should return 200 and user data if user is found and password matches", async () => {
     (prisma.user.findUnique as jest.Mock).mockResolvedValue(user);
-    (verifyOTP as jest.Mock).mockReturnValue(true);
+    (bcrypt.compare as jest.Mock).mockResolvedValue(true);
 
     const { req, res } = createMocks({
       method: "POST",
-      body: { email, otp },
+      body: { email, password },
     });
 
     // Add json method to req
@@ -62,43 +57,14 @@ describe("POST /api/otp/verify", () => {
     await POST(req as unknown as NextRequest);
 
     expect(prisma.user.findUnique).toHaveBeenCalledWith({ where: { email } });
-    expect(verifyOTP).toHaveBeenCalledWith(otp, user.OTP, user.TTL);
+    expect(bcrypt.compare).toHaveBeenCalledWith(password, hashedPassword);
     expect(jsonMock).toHaveBeenCalledWith(
       {
         status: 200,
-        data: true,
+        data: user,
         success: true,
         error: null,
-      } satisfies APIResponse<boolean | null>,
-      { status: 200 }
-    );
-  });
-
-  it("should return 200 and false if OTP is invalid", async () => {
-    (prisma.user.findUnique as jest.Mock).mockResolvedValue(user);
-    (verifyOTP as jest.Mock).mockReturnValue(false);
-
-    const { req, res } = createMocks({
-      method: "POST",
-      body: { email, otp },
-    });
-
-    // Add json method to req
-    req.json = async () => req.body;
-
-    const jsonMock = (NextResponse.json as jest.Mock).mockReturnValue(res);
-
-    await POST(req as unknown as NextRequest);
-
-    expect(prisma.user.findUnique).toHaveBeenCalledWith({ where: { email } });
-    expect(verifyOTP).toHaveBeenCalledWith(otp, user.OTP, user.TTL);
-    expect(jsonMock).toHaveBeenCalledWith(
-      {
-        status: 200,
-        data: false,
-        success: true,
-        error: null,
-      } satisfies APIResponse<boolean | null>,
+      } satisfies APIResponse<typeof user>,
       { status: 200 }
     );
   });
@@ -108,7 +74,7 @@ describe("POST /api/otp/verify", () => {
 
     const { req, res } = createMocks({
       method: "POST",
-      body: { email, otp },
+      body: { email, password },
     });
 
     // Add json method to req
@@ -119,14 +85,43 @@ describe("POST /api/otp/verify", () => {
     await POST(req as unknown as NextRequest);
 
     expect(prisma.user.findUnique).toHaveBeenCalledWith({ where: { email } });
-    expect(verifyOTP).not.toHaveBeenCalled();
+    expect(bcrypt.compare).not.toHaveBeenCalled();
     expect(jsonMock).toHaveBeenCalledWith(
       {
         status: 200,
         data: null,
         success: true,
         error: null,
-      } satisfies APIResponse<boolean | null>,
+      } satisfies APIResponse<null>,
+      { status: 200 }
+    );
+  });
+
+  it("should return 200 and null if password does not match", async () => {
+    (prisma.user.findUnique as jest.Mock).mockResolvedValue(user);
+    (bcrypt.compare as jest.Mock).mockResolvedValue(false);
+
+    const { req, res } = createMocks({
+      method: "POST",
+      body: { email, password },
+    });
+
+    // Add json method to req
+    req.json = async () => req.body;
+
+    const jsonMock = (NextResponse.json as jest.Mock).mockReturnValue(res);
+
+    await POST(req as unknown as NextRequest);
+
+    expect(prisma.user.findUnique).toHaveBeenCalledWith({ where: { email } });
+    expect(bcrypt.compare).toHaveBeenCalledWith(password, hashedPassword);
+    expect(jsonMock).toHaveBeenCalledWith(
+      {
+        status: 200,
+        data: null,
+        success: true,
+        error: null,
+      } satisfies APIResponse<null>,
       { status: 200 }
     );
   });
@@ -137,7 +132,7 @@ describe("POST /api/otp/verify", () => {
 
     const { req, res } = createMocks({
       method: "POST",
-      body: { email, otp },
+      body: { email, password },
     });
 
     // Add json method to req
@@ -148,7 +143,7 @@ describe("POST /api/otp/verify", () => {
     await POST(req as unknown as NextRequest);
 
     expect(prisma.user.findUnique).toHaveBeenCalledWith({ where: { email } });
-    expect(log).toHaveBeenCalledWith("api", error, "POST /api/otp/verify");
+    expect(log).toHaveBeenCalledWith("api", error, "POST /api/auth/login");
     expect(jsonMock).toHaveBeenCalledWith(
       {
         error,

@@ -100,7 +100,7 @@ describe("POST /api/otp/create", () => {
         TTL: expect.any(String),
       },
     });
-    expect(log).toHaveBeenCalledWith("api", error, "PUT /api/otp");
+    expect(log).toHaveBeenCalledWith("api", error, "PUT /api/otp/create");
     expect(jsonMock).toHaveBeenCalledWith(
       {
         error,
