@@ -11,7 +11,13 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-      - name: Build
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+      - name: Install dependencies
+        run: npm install
+      - name: Build with Next.js
         run: npm run build
       - name: Cypress run
         # Uses the official Cypress GitHub action https://github.com/cypress-io/github-action
