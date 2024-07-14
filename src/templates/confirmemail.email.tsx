@@ -12,11 +12,7 @@ import {
 } from "@react-email/components";
 import config from "@/lib/config";
 
-export default function ConfirmEmailTemplate({
-  otp
-}: {
-  otp: string;
-}) {
+export default function ConfirmEmailTemplate({ otp }: { otp: string }) {
   return (
     <Container>
       <Head>
@@ -31,8 +27,9 @@ export default function ConfirmEmailTemplate({
       <Text>Your Confirmation Code </Text>
       <Section style={{ display: "flex", margin: "1.5rem 0rem" }}>
         <Row>
-          {otp.split("").map((number) => (
+          {otp.split("").map((idx, number) => (
             <Column
+              key={idx}
               style={{
                 border: "1px black solid",
                 padding: "0.5rem 0.5rem",

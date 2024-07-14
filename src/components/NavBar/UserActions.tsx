@@ -9,14 +9,14 @@ export default function UserActions() {
     <>
       {userSession?.email == null ? (
         <>
-          <Link href="/sign-in">
-            <Button variant="ghost" className="flex items-center gap-2">
-              Sign In
-            </Button>
-          </Link>
           <Link href="/sign-up">
             <Button className="flex items-center gap-2 dark:bg-white">
               Sign Up
+            </Button>
+          </Link>
+          <Link href="/sign-in">
+            <Button variant="ghost" className="flex items-center gap-2">
+              Sign In
             </Button>
           </Link>
         </>
