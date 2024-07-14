@@ -30,7 +30,7 @@ export async function POST(request: NextRequest) {
       { status: 200 }
     );
   } catch (err) {
-    log("api", err, `PUT /api/otp`);
+    log("api", err, `PUT /api/otp/create`);
     return NextResponse.json(
       {
         error: err,

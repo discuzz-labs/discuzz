@@ -26,7 +26,7 @@ export async function POST(request: NextRequest) {
       { status: 200 }
     );
   } catch (err) {
-    log("api", err, `POST /api/user/verify`);
+    log("api", err, `POST /api/auth/verify`);
     return NextResponse.json(
       {
         error: err,

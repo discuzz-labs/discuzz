@@ -29,7 +29,7 @@ export async function POST(request: NextRequest) {
       { status: 200 }
     );
   } catch (err) {
-    log("api", err, "POST /api/user/");
+    log("api", err, "POST /api/user/find");
     return NextResponse.json(
       {
         error: err,

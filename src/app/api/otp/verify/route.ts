@@ -28,7 +28,7 @@ export async function POST(request: NextRequest) {
       { status: 200 }
     );
   } catch (err) {
-    log("api", err, `POST /api/otp`);
+    log("api", err, `POST /api/otp/verify`);
     return NextResponse.json(
       {
         error: err,
