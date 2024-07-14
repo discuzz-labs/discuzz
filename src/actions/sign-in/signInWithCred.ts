@@ -49,7 +49,7 @@ async function signInWithCred({
       };
     }
   } catch (err) {
-    log("actions", err, `ACTIONS sign-up/signUpWithCred`);
+    log("actions", err, `ACTIONS sign-in/signInWithCred`);
     return { error: ERROR.API_IS_UNREACHABLE, success: false, data: undefined };
   }
 }

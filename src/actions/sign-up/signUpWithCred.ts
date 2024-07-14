@@ -32,7 +32,7 @@ async function signUpWithCred({
     const verifyEmailExsitenceResponse: APIResponse<User> =
       await verifyEmailExsitenceRequest.json();
     if (
-      verifyEmailExsitenceResponse.data == null ||
+      verifyEmailExsitenceResponse.data !== null ||
       verifyEmailExsitenceResponse.error
     ) {
       return {
