@@ -1,10 +1,4 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
-datasource db {
+datasource database {
   provider = "mongodb"
   url      = env("DATABASE_URL")
 }
@@ -13,61 +7,103 @@ generator client {
   provider = "prisma-client-js"
 }
 
+enum ActivityBadge {
+  BRONZE_1_POST
+  BRONZE_10_POSTS
+  SILVER_50_POSTS
+  SILVER_100_POSTS
+  GOLD_200_POSTS
+  GOLD_300_POSTS
+  PLATINUM_750_POSTS
+  PLATINUM_1000_POSTS
+  LEGEND_1200_POSTS
+  BRONZE_1_VOTES
+  BRONZE_10_VOTES
+  SILVER_50_VOTES
+  SILVER_100_VOTES
+  GOLD_200_VOTES
+  GOLD_500_VOTES
+  PLATINUM_750_VOTES
+  PLATINUM_1000_VOTES
+  LEGEND_2000_VOTES
+  BRONZE_1_COMMENT
+  BRONZE_10_COMMENTS
+  SILVER_50_COMMENTS
+  SILVER_100_COMMENTS
+  GOLD_200_COMMENTS
+  GOLD_500_COMMENTS
+  PLATINUM_750_COMMENTS
+  PLATINUM_1000_COMMENTS
+  LEGEND_2000_COMMENTS
+}
+
+enum Issuestatus {
+  OPEN
+  CLOSED
+  ANSWERED
+  FORCE_CLOSED
+  INAPPROPRIATE
+}
+
+enum Level {
+  BRONZE
+  SILVER
+  GOLD
+  PLATINUM
+  LEGEND
+}
+
+enum Role {
+  USER
+  MODERATOR
+  ADMIN
+}
+
 model Issue {
-  id       String    @id @default(auto()) @map("_id") @db.ObjectId
-  label    String   
-  assignees String   
-  date    DateTime   
-  comments Int
-  status   String
-  edited   Boolean
-  title    String
-  body     String
-  user   User      @relation(fields: [userId], references: [id])
-  userId String    @db.ObjectId
+  id                Int                @id @map("_id")
+  author            User               @relation(fields: [userId], references: [id])
+  userId            Int
+  label             String
+  level             Level
+  creation_date     DateTime
+  update_date       DateTime
+  comments          Int
+  issue_status      Issuestatus
+  title             String
+  body              String
+  issue_contributer String[] // This will be a JSON string containing the id and the name of the user. Because mongodb doensot support many-to-many
 }
 
 model Report {
-  id       String    @id @default(auto()) @map("_id") @db.ObjectId
-  user   User      @relation(fields: [userId], references: [id])
-  reason   String
-  date     DateTime
-  level    Int // from 1 to 5
-  accepted Boolean
-  userId   String @db.ObjectId
+  id            Int      @id @map("_id")
+  author        User     @relation(fields: [userId], references: [id])
+  userId        Int
+  label         String
+  moderity      Int
+  body          String
+  creation_date DateTime
+  accepted      Boolean
+  seen          Boolean
 }
-
-model Follower {
-  id       String    @id @default(auto()) @map("_id") @db.ObjectId
-  user   User      @relation(fields: [userId], references: [id])
-  userId   String @db.ObjectId
-}
-
-model Follow {
-  id       String    @id @default(auto()) @map("_id") @db.ObjectId
-  user   User      @relation(fields: [userId], references: [id])
-  userId   String  @db.ObjectId
-}
-
 
 model User {
-  id      String   @id @default(auto()) @map("_id") @db.ObjectId
-  email   String   @unique
-  name    String
-  imageURL String
-  age     Int
-  type    String
-  bio     String
-  badges  String[]
-  password String
-  likes   BigInt
-  verified Boolean
-  TFA      Boolean
-  OTP     String
-  TTL     String
-  links   String[]
-  reports Report[]
-  follower Follower[]
-  follow  Follow[]
-  posts   Issue[]
+  id            Int                @id @map("_id")
+  email         String             @unique
+  fullName      String
+  name          String
+  imageURL      String
+  age           Int
+  role          Role
+  bio           String
+  badges        ActivityBadge[]
+  level         Level
+  verified      Boolean
+  TFA           Boolean
+  OTP           Boolean
+  TTL           String
+  links         String[]
+  reports       Report[]
+  issues        Issue[]
+  followerIds   Int[]
+  followingIds  Int[]
 }
