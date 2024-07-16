@@ -1,9 +1,10 @@
 {
-  "name": "blendify",
+  "name": "discuzz",
   "version": "0.1.0",
   "private": true,
   "type": "module",
   "scripts": {
+    "preinstall": "npx only-allow pnpm",
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
@@ -13,6 +14,7 @@
     "test": "jest",
     "cy:open": "cypress open",
     "cy:run": "cypress run",
+    "depcheck": "depcheck",
     "prisma:generate": "prisma generate",
     "prisma:validate": "prisma validate"
   },
@@ -47,14 +49,12 @@
     "react-day-picker": "^8.10.1",
     "react-dom": "^18",
     "react-hook-form": "^7.52.0",
-    "react-hook-usefetch": "^1.0.4",
     "swr": "^2.2.5",
     "tailwind-merge": "^2.3.0",
     "tailwindcss-animate": "^1.0.7",
     "zod": "^3.23.8"
   },
   "devDependencies": {
-    "@chromatic-com/storybook": "^1.5.0",
     "@storybook/addon-essentials": "^8.1.10",
     "@storybook/addon-interactions": "^8.1.10",
     "@storybook/addon-links": "^8.1.10",

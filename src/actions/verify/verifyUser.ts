@@ -3,7 +3,7 @@
 import log from "@/lib/log";
 import { ERROR } from "@/lib/messages";
 import endpoints from "@/services/endpoints";
-import { ACTIONResponse, APIResponse } from "@/types/api";
+import type { ACTIONResponse, APIResponse } from "@/types/api";
 
 interface verifyUserProps {
   email: string;
@@ -26,7 +26,7 @@ async function verifyUser({
 
     const verifyOTPResponse: APIResponse<undefined> =
       await verifyOTPRequest.json();
-    if (verifyOTPResponse.success == false) {
+    if (verifyOTPResponse.success === false) {
       return {
         error: ERROR.VERIFICATION_FAILED_OTP_CANNOT_BE_VERIFIED,
         success: false,
@@ -44,7 +44,7 @@ async function verifyUser({
     });
     const verifyUserResponse: APIResponse<undefined> =
       await verifyUserRequest.json();
-    if (verifyUserResponse.success == false) {
+    if (verifyUserResponse.success === false) {
       return {
         error: ERROR.VERIFICATION_FAILED_USER_BE_VERIFIED,
         success: false,

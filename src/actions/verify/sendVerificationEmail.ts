@@ -1,9 +1,9 @@
 "use server";
 
 import log from "@/lib/log";
-import { ERROR, SUCCESS } from "@/lib/messages";
+import { ERROR } from "@/lib/messages";
 import endpoints from "@/services/endpoints";
-import { ACTIONResponse, APIResponse } from "@/types/api";
+import type { ACTIONResponse, APIResponse } from "@/types/api";
 
 interface sendVerificationEmailProps {
   email: string;
@@ -24,7 +24,7 @@ async function sendVerificationEmail({
     const generateOTPResponse: APIResponse<string> =
       await generateOTPRequest.json();
 
-    if (generateOTPResponse.success == false) {
+    if (generateOTPResponse.success === false) {
       return {
         error: ERROR.VERIFICATION_FAILED_OTP_CANNOT_BE_CREATED,
         success: false,
@@ -46,7 +46,7 @@ async function sendVerificationEmail({
     const sendConfirmationEmailResponse: APIResponse<undefined> =
       await sendConfirmationEmailRequest.json();
 
-    if (sendConfirmationEmailResponse.success == false) {
+    if (sendConfirmationEmailResponse.success === false) {
       return {
         error: ERROR.VERIFICATION_FAILED_CONFIRM_EMAIL_CANNOT_BE_SEND,
         success: false,

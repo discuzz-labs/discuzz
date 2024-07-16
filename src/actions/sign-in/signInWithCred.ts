@@ -1,10 +1,10 @@
 "use server";
 
 import { ERROR } from "@/lib/messages";
-import { User } from "@/types/database";
-import { ACTIONResponse, APIResponse } from "@/types/api";
+import type { User } from "@/types/database";
+import type { ACTIONResponse, APIResponse } from "@/types/api";
 import endpoints from "@/services/endpoints";
-import { UserSessionInterface } from "@/components/providers/AuthProvider";
+import type { UserSessionInterface } from "@/components/providers/AuthProvider";
 import log from "@/lib/log";
 
 interface signInWithCredArgs {
@@ -36,7 +36,7 @@ async function signInWithCred({
         success: false,
         data: undefined,
       };
-    } else {
+    }
       return {
         success: true,
         error: null,
@@ -47,9 +47,8 @@ async function signInWithCred({
           verified: loginResponse.data.verified,
         },
       };
-    }
   } catch (err) {
-    log("actions", err, `ACTIONS sign-in/signInWithCred`);
+    log("actions", err, "ACTIONS sign-in/signInWithCred");
     return { error: ERROR.API_IS_UNREACHABLE, success: false, data: undefined };
   }
 }

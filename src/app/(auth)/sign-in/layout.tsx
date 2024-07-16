@@ -1,7 +1,7 @@
 import AuthRoute from "@/components/guards/AuthRoute";
 
 export const metadata = {
-  title: `Sign In`,
+  title: "Sign In",
 };
 
 export default function RootLayout({
