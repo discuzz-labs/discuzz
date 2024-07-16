@@ -1,8 +1,9 @@
 import { type NextRequest, NextResponse } from "next/server";
-import { type APIResponse } from "@/types/api.";
+import { type APIResponse } from "@/types/api";
 import prisma from "@/lib/prisma";
 import log from "@/lib/log";
 import bcrypt from "bcrypt";
+import { Role, Level } from "@prisma/client";
 
 // @ts-ignore
 BigInt.prototype.toJSON = function () {
@@ -17,19 +18,21 @@ export async function POST(request: NextRequest) {
     await prisma.user.create({
       data: {
         email,
-        name: fullName,
+        fullName: fullName,
         imageURL,
         age: 0,
-        type: "user",
+        role: Role.USER,
         password: hashedPassword,
+        badges: [],
+        level: Level.BRONZE,
         verified: false,
         TFA: false,
         OTP: "",
         TTL: "",
         bio: "",
-        badges: [],
-        likes: 0,
         links: [],
+        followerIds: [],
+        followingIds: [],
       },
     });
     return NextResponse.json(

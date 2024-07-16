@@ -60,9 +60,9 @@ enum Role {
 }
 
 model Issue {
-  id                Int                @id @map("_id")
+  id                String             @id @default(auto()) @map("_id") @database.ObjectId
   author            User               @relation(fields: [userId], references: [id])
-  userId            Int
+  userId            String             @database.ObjectId
   label             String
   level             Level
   creation_date     DateTime
@@ -74,10 +74,10 @@ model Issue {
   issue_contributer String[] // This will be a JSON string containing the id and the name of the user. Because mongodb doensot support many-to-many
 }
 
-model Report {
-  id            Int      @id @map("_id")
-  author        User     @relation(fields: [userId], references: [id])
-  userId        Int
+model UserReport {
+  id            String      @id @default(auto()) @map("_id") @database.ObjectId
+  author        User        @relation(fields: [userId], references: [id])
+  userId        String      @database.ObjectId
   label         String
   moderity      Int
   body          String
@@ -87,11 +87,13 @@ model Report {
 }
 
 model User {
-  id            Int                @id @map("_id")
+  id            String             @id @default(auto()) @map("_id") @database.ObjectId
   email         String             @unique
+  password      String
   fullName      String
-  name          String
   imageURL      String
+  createdAt     DateTime           @default(now()) @map(name: "created_at")
+  updatedAt     DateTime           @updatedAt @map(name: "updated_at")
   age           Int
   role          Role
   bio           String
@@ -99,10 +101,10 @@ model User {
   level         Level
   verified      Boolean
   TFA           Boolean
-  OTP           Boolean
+  OTP           String
   TTL           String
   links         String[]
-  reports       Report[]
+  reports       UserReport[]
   issues        Issue[]
   followerIds   Int[]
   followingIds  Int[]

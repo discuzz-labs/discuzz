@@ -1,7 +1,7 @@
 import log from "@/lib/log";
 import sendEmail from "@/services/sendEmail";
 import ConfirmEmailTemplate from "@/templates/confirmemail.email";
-import { type APIResponse } from "@/types/api.";
+import { type APIResponse } from "@/types/api";
 import { type NextRequest, NextResponse } from "next/server";
 
 export async function POST(request: NextRequest) {

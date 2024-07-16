@@ -1,7 +1,7 @@
 import { type NextRequest, NextResponse } from "next/server";
-import { type APIResponse } from "@/types/api.";
+import { type APIResponse } from "@/types/api";
 import prisma from "@/lib/prisma";
-import { type User } from "@/types/database.";
+import { type User } from "@/types/database";
 import log from "@/lib/log";
 import { verifyOTP } from "@/services/otp";
 

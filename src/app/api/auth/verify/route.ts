@@ -1,6 +1,6 @@
 import { type NextRequest, NextResponse } from "next/server";
 import log from "@/lib/log";
-import { type APIResponse } from "@/types/api.";
+import { type APIResponse } from "@/types/api";
 import prisma from "@/lib/prisma";
 
 export async function POST(request: NextRequest) {
