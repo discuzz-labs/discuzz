@@ -11,7 +11,10 @@
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build",
     "test": "jest",
-    "cy:open": "cypress open"
+    "cy:open": "cypress open",
+    "cy:run": "cypress run",
+    "prisma:generate": "prisma generate",
+    "prisma:validate": "prisma validate"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.6.0",
@@ -45,6 +48,7 @@
     "react-dom": "^18",
     "react-hook-form": "^7.52.0",
     "react-hook-usefetch": "^1.0.4",
+    "schemix": "^1.15.0",
     "swr": "^2.2.5",
     "tailwind-merge": "^2.3.0",
     "tailwindcss-animate": "^1.0.7",
