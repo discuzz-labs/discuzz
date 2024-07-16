@@ -1,8 +1,7 @@
 import { ERROR } from "@/lib/messages";
 
 describe("Sign-Up Test", () => {
-  it("Fills out the sign-up form and navigates to verify page", async () => {
-    // making sure the user doesnot exsit
+  it("Fills out the sign-up form and navigates to verify page", () => {
     // Visit the site
     cy.visit("/");
 
@@ -32,7 +31,6 @@ describe("Sign-Up Test", () => {
     cy.get('a[href*="sign-up"]').should("not.exist");
     cy.get('a[href*="sign-in"]').should("not.exist");
   });
-
   it("Fills out the sign-up form with an exsiting email and getting email already exsits error", () => {
     // Visit the site
     cy.visit("/");
@@ -49,7 +47,6 @@ describe("Sign-Up Test", () => {
       .contains("Create an account.")
       .click({ force: true });
 
-    // Check if the URL includes "/verify"
     cy.get(".cy-alert")
       .should("be.visible")
       .contains(ERROR.REGISTERATION_FAILED_EMAIL_ALREADY_EXSITS);

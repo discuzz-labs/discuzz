@@ -1,4 +1,5 @@
 import { defineConfig } from "cypress";
+import prisma from "./src/lib/prisma";
 
 export default defineConfig({
   projectId: "43aacv",
@@ -11,7 +12,17 @@ export default defineConfig({
   e2e: {
     baseUrl: "http://localhost:3000",
     setupNodeEvents(on, config) {
-      // implement node event listeners here
+      on("before:spec", (details) => {
+        if (details.name == "01-signup.cy.ts") {
+          prisma.user.delete({
+            where: {
+              email: "test@example.com",
+            },
+          });
+        }
+      });
     },
+    experimentalRunAllSpecs: true,
   },
+  experimentalInteractiveRunEvents: true,
 });

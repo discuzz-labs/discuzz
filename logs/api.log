@@ -8,3 +8,17 @@
 2024.07.14, 18:44:42.0516 UTC -> POST /api/email/confirm - Can't send mail - all recipients were rejected: 501 5.1.5 Recipient address reserved by RFC 2606
 2024.07.14, 18:45:09.0695 UTC -> POST /api/email/confirm - Can't send mail - all recipients were rejected: 501 5.1.5 Recipient address reserved by RFC 2606
 2024.07.14, 19:26:06.0276 UTC -> POST /api/email/confirm - Can't send mail - all recipients were rejected: 501 5.1.5 Recipient address reserved by RFC 2606
+2024.07.16, 09:40:10.0010 UTC -> PUT /api/otp/create - PrismaClientKnownRequestError: 
+Invalid `prisma.user.update()` invocation:
+
+
+An operation failed because it depends on one or more records that were required but not found. Record to update not found.
+2024.07.16, 09:40:38.0525 UTC -> POST /api/email/confirm - Can't send mail - all recipients were rejected: 501 5.1.5 Recipient address reserved by RFC 2606
+2024.07.16, 09:40:47.0125 UTC -> POST /api/email/confirm - Can't send mail - all recipients were rejected: 501 5.1.5 Recipient address reserved by RFC 2606
+2024.07.16, 09:44:10.0645 UTC -> POST /api/email/confirm - Can't send mail - all recipients were rejected: 501 5.1.5 Recipient address reserved by RFC 2606
+2024.07.16, 09:44:17.0156 UTC -> POST /api/email/confirm - Can't send mail - all recipients were rejected: 501 5.1.5 Recipient address reserved by RFC 2606
+2024.07.16, 09:44:40.0400 UTC -> POST /api/email/confirm - Can't send mail - all recipients were rejected: 501 5.1.5 Recipient address reserved by RFC 2606
+2024.07.16, 09:44:43.0292 UTC -> POST /api/email/confirm - Can't send mail - all recipients were rejected: 501 5.1.5 Recipient address reserved by RFC 2606
+2024.07.16, 10:00:42.0132 UTC -> POST /api/email/confirm - Can't send mail - all recipients were rejected: 501 5.1.5 Recipient address reserved by RFC 2606
+2024.07.16, 10:00:45.0016 UTC -> POST /api/email/confirm - Can't send mail - all recipients were rejected: 501 5.1.5 Recipient address reserved by RFC 2606
+2024.07.16, 10:02:31.0210 UTC -> POST /api/email/confirm - Can't send mail - all recipients were rejected: 501 5.1.5 Recipient address reserved by RFC 2606
