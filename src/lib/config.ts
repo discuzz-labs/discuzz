@@ -75,7 +75,7 @@ const config: Config = {
       : "light") as ThemeType,
   },
   email: {
-    sender: process.env.NEXT_PUBLIC_SENDEER_EMAIL,
+    sender: process.env.NEXT_PUBLIC_SENDER_EMAIL,
     password: process.env.NEXT_PUBLIC_SENDER_EMAIL_PASSWORD,
     provider: process.env.NEXT_PUBLIC_SENDER_EMAIL_PROVIDER,
   },

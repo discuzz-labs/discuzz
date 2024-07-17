@@ -10,7 +10,6 @@ import Alert from "@/components/Alert";
 import { SignInFormSchema } from "@/validations/validation";
 import { z } from "zod";
 import signInWithCred from "@/actions/sign-in/signInWithCred";
-import { useRouter } from "next/navigation";
 
 export default function SignInPage() {
   const [formSubmitted, setFormSubmitted] = useState<boolean>(false);
@@ -35,8 +34,8 @@ export default function SignInPage() {
   };
   return (
     <>
-      {error && <Alert message={error} type="error" />}
-      <div className="w-full h-[100vh] flex">
+      <div className="w-full h-[100vh] relative flex">
+        {error && <Alert message={error} type="error" />}
         <div className="lg:flex lg:w-1/2 hidden bg-[#0b0a09] decorator text-white py-10  gap-5 flex-col p-10 justify-end">
           <p className="font-extrabold text-2xl">
             “Life is like riding a bicycle. To keep your balance, you must keep

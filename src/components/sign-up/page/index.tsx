@@ -45,8 +45,8 @@ export default function SignUpPage() {
 
   return (
     <>
-      {error && <Alert message={error} type="error" />}
-      <div className="w-full min-h-[100vh] flex">
+      <div className="w-full relative min-h-[100vh] flex">
+        {error && <Alert message={error} type="error" />}
         <div className="lg:flex lg:w-1/2 hidden bg-[#0b0a09] decorator text-white py-10  gap-5 flex-col p-10 justify-end">
           <p className="font-extrabold text-2xl">
             “Life is like riding a bicycle. To keep your balance, you must keep
