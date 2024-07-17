@@ -1,18 +1,16 @@
-// @ts-ignore
 import signUpWithCred from "@/actions/sign-up/signUpWithCred";
-// @ts-ignore
-import log from "@/lib/log";
-// @ts-ignore
 import { ERROR } from "@/lib/messages";
-// @ts-ignore
+import type { APIResponse } from "@/types/api";
 import endpoints from "@/services/endpoints";
-// @ts-ignore
-import { APIResponse } from "@/types/api";
-// @ts-ignore
-import { User } from "@/types/database";
+import log from "@/lib/log";
+import type {
+  AuthRegisterResponse,
+  UserFindResponse,
+} from "@/services/endpoints";
+import sendRequest from "@/lib/sendRequest";
 
 // Mock dependencies
-global.fetch = jest.fn();
+jest.mock("@/lib/sendRequest");
 jest.mock("@/lib/log");
 
 describe("ACTIONS sign-up/signUpWithCred", () => {
@@ -26,16 +24,14 @@ describe("ACTIONS sign-up/signUpWithCred", () => {
   });
 
   it("should return an error if the email already exists", async () => {
-    const emailExistsResponse: APIResponse<Partial<User> | null> = {
+    const emailExistsResponse: APIResponse<UserFindResponse> = {
       status: 200,
       data: { email, fullName, imageURL, verified: true },
       success: true,
       error: null,
     };
 
-    (fetch as jest.Mock).mockResolvedValueOnce({
-      json: jest.fn().mockResolvedValue(emailExistsResponse),
-    });
+    (sendRequest as jest.Mock).mockResolvedValueOnce(emailExistsResponse);
 
     const result = await signUpWithCred({
       email,
@@ -44,13 +40,12 @@ describe("ACTIONS sign-up/signUpWithCred", () => {
       fullName,
     });
 
-    expect(fetch).toHaveBeenCalledWith(endpoints.user.find.path, {
+    expect(sendRequest).toHaveBeenCalledWith({
+      path: endpoints.user.find.path,
       method: endpoints.user.find.method,
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
+      payload: {
+        email,
       },
-      body: JSON.stringify({ email }),
     });
 
     expect(result).toEqual({
@@ -61,27 +56,23 @@ describe("ACTIONS sign-up/signUpWithCred", () => {
   });
 
   it("should return an error if registration fails", async () => {
-    const emailNotExistResponse: APIResponse<User> = {
+    const emailNotExistResponse: APIResponse<UserFindResponse> = {
       status: 200,
       data: null,
       success: true,
       error: null,
     };
 
-    const registerErrorResponse: APIResponse<User> = {
+    const registerErrorResponse: APIResponse<undefined> = {
       status: 500,
       data: undefined,
       success: false,
       error: "Registration error",
     };
 
-    (fetch as jest.Mock)
-      .mockResolvedValueOnce({
-        json: jest.fn().mockResolvedValue(emailNotExistResponse),
-      })
-      .mockResolvedValueOnce({
-        json: jest.fn().mockResolvedValue(registerErrorResponse),
-      });
+    (sendRequest as jest.Mock)
+      .mockResolvedValueOnce(emailNotExistResponse)
+      .mockResolvedValueOnce(registerErrorResponse);
 
     const result = await signUpWithCred({
       email,
@@ -90,27 +81,23 @@ describe("ACTIONS sign-up/signUpWithCred", () => {
       fullName,
     });
 
-    expect(fetch).toHaveBeenCalledWith(endpoints.user.find.path, {
+    expect(sendRequest).toHaveBeenCalledWith({
+      path: endpoints.user.find.path,
       method: endpoints.user.find.method,
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
+      payload: {
+        email,
       },
-      body: JSON.stringify({ email }),
     });
 
-    expect(fetch).toHaveBeenCalledWith(endpoints.auth.register.path, {
+    expect(sendRequest).toHaveBeenCalledWith({
+      path: endpoints.auth.register.path,
       method: endpoints.auth.register.method,
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
+      payload: {
         email,
         fullName,
         imageURL,
         password,
-      }),
+      },
     });
 
     expect(result).toEqual({
@@ -121,27 +108,23 @@ describe("ACTIONS sign-up/signUpWithCred", () => {
   });
 
   it("should return success if registration succeeds", async () => {
-    const emailNotExistResponse: APIResponse<User> = {
+    const emailNotExistResponse: APIResponse<UserFindResponse> = {
       status: 200,
       data: null,
       success: true,
       error: null,
     };
 
-    const registerSuccessResponse: APIResponse<User> = {
+    const registerSuccessResponse: APIResponse<AuthRegisterResponse> = {
       status: 200,
-      data: { email, fullName, imageURL, verified: false },
+      data: { id: "5436256188199ss" },
       success: true,
       error: null,
     };
 
-    (fetch as jest.Mock)
-      .mockResolvedValueOnce({
-        json: jest.fn().mockResolvedValue(emailNotExistResponse),
-      })
-      .mockResolvedValueOnce({
-        json: jest.fn().mockResolvedValue(registerSuccessResponse),
-      });
+    (sendRequest as jest.Mock)
+      .mockResolvedValueOnce(emailNotExistResponse)
+      .mockResolvedValueOnce(registerSuccessResponse);
 
     const result = await signUpWithCred({
       email,
@@ -150,27 +133,23 @@ describe("ACTIONS sign-up/signUpWithCred", () => {
       fullName,
     });
 
-    expect(fetch).toHaveBeenCalledWith(endpoints.user.find.path, {
+    expect(sendRequest).toHaveBeenCalledWith({
+      path: endpoints.user.find.path,
       method: endpoints.user.find.method,
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
+      payload: {
+        email,
       },
-      body: JSON.stringify({ email }),
     });
 
-    expect(fetch).toHaveBeenCalledWith(endpoints.auth.register.path, {
+    expect(sendRequest).toHaveBeenCalledWith({
+      path: endpoints.auth.register.path,
       method: endpoints.auth.register.method,
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
+      payload: {
         email,
         fullName,
         imageURL,
         password,
-      }),
+      },
     });
 
     expect(result).toEqual({
@@ -182,7 +161,7 @@ describe("ACTIONS sign-up/signUpWithCred", () => {
 
   it("should return an error if there is a network error", async () => {
     const error = new Error("Network error");
-    (fetch as jest.Mock).mockRejectedValue(error);
+    (sendRequest as jest.Mock).mockRejectedValue(error);
 
     const result = await signUpWithCred({
       email,

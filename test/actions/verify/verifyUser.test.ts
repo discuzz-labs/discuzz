@@ -1,47 +1,74 @@
-// @ts-ignore
 import verifyUser from "@/actions/verify/verifyUser";
-// @ts-ignore
-import log from "@/lib/log";
-// @ts-ignore
+import sendRequest from "@/lib/sendRequest";
 import { ERROR } from "@/lib/messages";
-// @ts-ignore
-import endpoints from "@/services/endpoints";
-// @ts-ignore
+import endpoints, {
+  AuthVerifyResponse,
+  OtpVerifyResponse,
+} from "@/services/endpoints";
 import { APIResponse } from "@/types/api";
 
-// Mock dependencies
-global.fetch = jest.fn();
-jest.mock("@/lib/log");
+jest.mock("@/lib/sendRequest");
 
 describe("ACTIONS verify/verifyUser", () => {
   const email = "test@example.com";
   const otp = "123456";
 
-  afterEach(() => {
-    jest.clearAllMocks();
-  });
-
-  it("should return an error if OTP verification fails", async () => {
-    const otpErrorResponse: APIResponse<undefined> = {
-      status: 400,
-      data: undefined,
-      success: false,
-      error: "OTP verification failed",
+  it("should return success if OTP and user verification succeed", async () => {
+    const otpVerifyResponse: APIResponse<OtpVerifyResponse> = {
+      success: true,
+      status: 200,
+      data: { verified: true },
+      error: null,
     };
 
-    (fetch as jest.Mock).mockResolvedValueOnce({
-      json: jest.fn().mockResolvedValue(otpErrorResponse),
-    });
+    const userVerifyResponse: APIResponse<AuthVerifyResponse> = {
+      status: 200,
+      success: true,
+      data: undefined,
+      error: null,
+    };
+
+    (sendRequest as jest.Mock)
+      .mockResolvedValueOnce(otpVerifyResponse) // OTP verification response
+      .mockResolvedValueOnce(userVerifyResponse); // User verification response
 
     const result = await verifyUser({ email, otp });
 
-    expect(fetch).toHaveBeenCalledWith(endpoints.otp.verify.path, {
+    expect(sendRequest).toHaveBeenCalledWith({
+      path: endpoints.otp.verify.path,
       method: endpoints.otp.verify.method,
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ email, otp }),
+      payload: { otp, email },
+    });
+
+    expect(sendRequest).toHaveBeenCalledWith({
+      path: endpoints.auth.verify.path,
+      method: endpoints.auth.verify.method,
+      payload: { email },
+    });
+
+    expect(result).toEqual({
+      error: null,
+      success: true,
+      data: undefined,
+    });
+  });
+
+  it("should return an error if OTP verification fails", async () => {
+    const otpVerifyResponse: APIResponse<undefined> = {
+      status: 500,
+      success: false,
+      data: undefined,
+      error: null,
+    };
+
+    (sendRequest as jest.Mock).mockResolvedValueOnce(otpVerifyResponse);
+
+    const result = await verifyUser({ email, otp });
+
+    expect(sendRequest).toHaveBeenCalledWith({
+      path: endpoints.otp.verify.path,
+      method: endpoints.otp.verify.method,
+      payload: { otp, email },
     });
 
     expect(result).toEqual({
@@ -51,47 +78,62 @@ describe("ACTIONS verify/verifyUser", () => {
     });
   });
 
-  it("should return an error if user verification fails", async () => {
-    const otpSuccessResponse: APIResponse<undefined> = {
+  it("should return an error if OTP is invalid", async () => {
+    const otpVerifyResponse: APIResponse<OtpVerifyResponse> = {
       status: 200,
-      data: undefined,
       success: true,
+      data: { verified: false },
       error: null,
     };
 
-    const userVerificationErrorResponse: APIResponse<undefined> = {
-      status: 400,
-      data: undefined,
-      success: false,
-      error: "User verification failed",
-    };
-
-    (fetch as jest.Mock)
-      .mockResolvedValueOnce({
-        json: jest.fn().mockResolvedValue(otpSuccessResponse),
-      })
-      .mockResolvedValueOnce({
-        json: jest.fn().mockResolvedValue(userVerificationErrorResponse),
-      });
+    (sendRequest as jest.Mock).mockResolvedValueOnce(otpVerifyResponse);
 
     const result = await verifyUser({ email, otp });
 
-    expect(fetch).toHaveBeenCalledWith(endpoints.otp.verify.path, {
+    expect(sendRequest).toHaveBeenCalledWith({
+      path: endpoints.otp.verify.path,
       method: endpoints.otp.verify.method,
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ email, otp }),
+      payload: { otp, email },
     });
 
-    expect(fetch).toHaveBeenCalledWith(endpoints.auth.verify.path, {
+    expect(result).toEqual({
+      error: ERROR.VERIFICATION_FAILED_OTP_INVALID,
+      success: false,
+      data: undefined,
+    });
+  });
+
+  it("should return an error if user verification fails", async () => {
+    const otpVerifyResponse: APIResponse<OtpVerifyResponse> = {
+      status: 200,
+      success: true,
+      data: { verified: true },
+      error: null,
+    };
+
+    const userVerifyResponse: APIResponse<undefined> = {
+      status: 500,
+      success: false,
+      data: undefined,
+      error: null,
+    };
+
+    (sendRequest as jest.Mock)
+      .mockResolvedValueOnce(otpVerifyResponse) // OTP verification response
+      .mockResolvedValueOnce(userVerifyResponse); // User verification response
+
+    const result = await verifyUser({ email, otp });
+
+    expect(sendRequest).toHaveBeenCalledWith({
+      path: endpoints.otp.verify.path,
+      method: endpoints.otp.verify.method,
+      payload: { otp, email },
+    });
+
+    expect(sendRequest).toHaveBeenCalledWith({
+      path: endpoints.auth.verify.path,
       method: endpoints.auth.verify.method,
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ email, otp }),
+      payload: { email },
     });
 
     expect(result).toEqual({
@@ -101,70 +143,16 @@ describe("ACTIONS verify/verifyUser", () => {
     });
   });
 
-  it("should return success if OTP and user verification succeed", async () => {
-    const otpSuccessResponse: APIResponse<undefined> = {
-      status: 200,
-      data: undefined,
-      success: true,
-      error: null,
-    };
-
-    const userVerificationSuccessResponse: APIResponse<undefined> = {
-      status: 200,
-      data: undefined,
-      success: true,
-      error: null,
-    };
-
-    (fetch as jest.Mock)
-      .mockResolvedValueOnce({
-        json: jest.fn().mockResolvedValue(otpSuccessResponse),
-      })
-      .mockResolvedValueOnce({
-        json: jest.fn().mockResolvedValue(userVerificationSuccessResponse),
-      });
-
-    const result = await verifyUser({ email, otp });
-
-    expect(fetch).toHaveBeenCalledWith(endpoints.otp.verify.path, {
-      method: endpoints.otp.verify.method,
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ email, otp }),
-    });
-
-    expect(fetch).toHaveBeenCalledWith(endpoints.auth.verify.path, {
-      method: endpoints.auth.verify.method,
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ email, otp }),
-    });
-
-    expect(result).toEqual({
-      error: null,
-      success: true,
-      data: undefined,
-    });
-  });
-
-  it("should return an error if there is a network error", async () => {
-    const error = new Error("Network error");
-    (fetch as jest.Mock).mockRejectedValue(error);
-
-    const result = await verifyUser({ email, otp });
-
-    expect(log).toHaveBeenCalledWith(
-      "actions",
-      error,
-      "ACTIONS verify/verifyUser"
+  it("should return an error if an exception occurs", async () => {
+    (sendRequest as jest.Mock).mockRejectedValueOnce(
+      new Error("Network Error")
     );
+
+    const result = await verifyUser({ email, otp });
+
     expect(result).toEqual({
-      success: false,
       error: ERROR.API_IS_UNREACHABLE,
+      success: false,
       data: undefined,
     });
   });

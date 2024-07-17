@@ -1,4 +1,3 @@
-// @ts-ignore
 import { signToken, verifyToken } from "@/services/jwt";
 import jwt from "jsonwebtoken";
 jest.mock("jsonwebtoken");

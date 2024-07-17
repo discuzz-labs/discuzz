@@ -1,18 +1,13 @@
-// @ts-ignore
-import signInWithCred from "@/actions/sign-in/signInWithCred"; // Adjust the import path
-// @ts-ignore
+import signInWithCred from "@/actions/sign-in/signInWithCred";
 import { ERROR } from "@/lib/messages";
-// @ts-ignore
-import { User } from "@/types/database";
-// @ts-ignore
-import { APIResponse } from "@/types/api";
-// @ts-ignore
+import type { APIResponse } from "@/types/api";
 import endpoints from "@/services/endpoints";
-// @ts-ignore
 import log from "@/lib/log";
+import type { AuthLoginResponse } from "@/services/endpoints";
+import sendRequest from "@/lib/sendRequest";
 
 // Mock dependencies
-global.fetch = jest.fn();
+jest.mock("@/lib/sendRequest");
 jest.mock("@/lib/log");
 
 describe("ACTIONS sign-in/signInWithCred", () => {
@@ -24,32 +19,30 @@ describe("ACTIONS sign-in/signInWithCred", () => {
   });
 
   it("should return success and user data if login is successful", async () => {
-    const userData: Partial<User> = {
+    const userData: AuthLoginResponse = {
       email,
-      name: "Test User",
+      fullName: "Test User",
       imageURL: "http://example.com/image.jpg",
       verified: true,
     };
-    const apiResponse: APIResponse<User> = {
+    const apiResponse: APIResponse<AuthLoginResponse> = {
       status: 200,
       data: userData,
       success: true,
       error: null,
     };
 
-    (fetch as jest.Mock).mockResolvedValue({
-      json: jest.fn().mockResolvedValue(apiResponse),
-    });
+    (sendRequest as jest.Mock).mockResolvedValue(apiResponse);
 
     const result = await signInWithCred({ email, password });
 
-    expect(fetch).toHaveBeenCalledWith(endpoints.auth.login.path, {
-      method: endpoints.auth.login.method,
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
+    expect(sendRequest).toHaveBeenCalledWith({
+      payload: {
+        email,
+        password,
       },
-      body: JSON.stringify({ email, password }),
+      path: endpoints.auth.login.path,
+      method: endpoints.auth.login.method,
     });
 
     expect(result).toEqual({
@@ -58,23 +51,21 @@ describe("ACTIONS sign-in/signInWithCred", () => {
       data: {
         email,
         imageURL: userData.imageURL,
-        fullName: userData.name,
+        fullName: userData.fullName,
         verified: userData.verified,
       },
     });
   });
 
   it("should return an error if login credentials are incorrect", async () => {
-    const apiResponse: APIResponse<null> = {
-      status: 401,
-      data: null,
+    const apiResponse: APIResponse<undefined> = {
+      status: 500,
+      data: undefined,
       success: false,
-      error: ERROR.LOGIN_FAILED_WRONG_CREDENTIALS,
+      error: null,
     };
 
-    (fetch as jest.Mock).mockResolvedValue({
-      json: jest.fn().mockResolvedValue(apiResponse),
-    });
+    (sendRequest as jest.Mock).mockResolvedValue(apiResponse);
 
     const result = await signInWithCred({ email, password });
 
@@ -87,7 +78,7 @@ describe("ACTIONS sign-in/signInWithCred", () => {
 
   it("should return an error if there is an API error", async () => {
     const error = new Error("Network error");
-    (fetch as jest.Mock).mockRejectedValue(error);
+    (sendRequest as jest.Mock).mockRejectedValue(error);
 
     const result = await signInWithCred({ email, password });
 

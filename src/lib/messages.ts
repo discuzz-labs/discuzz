@@ -7,6 +7,7 @@ export enum ERROR {
 
   VERIFICATION_FAILED_CONFIRM_EMAIL_CANNOT_BE_SEND = "We cannot send you the confirmation email. Try later.",
   VERIFICATION_FAILED_OTP_CANNOT_BE_CREATED = "We cannot assign your account an OTP. Try later.",
+  VERIFICATION_FAILED_OTP_INVALID = "Wrong OTP.",
   VERIFICATION_FAILED_OTP_CANNOT_BE_VERIFIED = "We cannot verify your OTP. Try later.",
   VERIFICATION_FAILED_USER_BE_VERIFIED = "We cannot verify your account. Try later.",
 

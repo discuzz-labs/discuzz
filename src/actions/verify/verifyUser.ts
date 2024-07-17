@@ -42,6 +42,14 @@ async function verifyUser({
       };
     }
 
+    if (verifyOTPResponse.data.verified === false) {
+      return {
+        error: ERROR.VERIFICATION_FAILED_OTP_INVALID,
+        success: false,
+        data: undefined,
+      };
+    }
+
     const verifyUserResponse = await sendRequest<
       AuthVerifyPayload,
       AuthVerifyResponse

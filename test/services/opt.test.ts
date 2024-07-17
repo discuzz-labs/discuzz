@@ -1,5 +1,4 @@
 import { randomInt } from "crypto";
-// @ts-ignore
 import { generateOTP, verifyOTP } from "@/services/otp";
 
 jest.mock("crypto", () => ({

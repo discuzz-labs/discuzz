@@ -30,7 +30,7 @@ async function signInWithCred({
       method: endpoints.auth.login.method,
     });
 
-    if (loginResponse.data == null || loginResponse.error) {
+    if (!loginResponse.data || loginResponse.error) {
       return {
         error: loginResponse.error
           ? loginResponse.error
@@ -40,14 +40,20 @@ async function signInWithCred({
       };
     }
 
+    const {
+      imageURL = "",
+      fullName = "",
+      verified = false,
+    } = loginResponse.data;
+
     return {
       success: true,
       error: null,
       data: {
         email,
-        imageURL: loginResponse.data.imageURL ?? "",
-        fullName: loginResponse.data.fullName ?? "",
-        verified: loginResponse.data.verified ?? false,
+        imageURL,
+        fullName,
+        verified,
       },
     };
   } catch (err) {

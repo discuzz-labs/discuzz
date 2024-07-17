@@ -28,10 +28,7 @@ async function sendVerificationEmail({
       },
     });
 
-    if (
-      generateOTPResponse.success === false &&
-      generateOTPResponse.data.otp !== ""
-    ) {
+    if (generateOTPResponse.success === false) {
       return {
         error: ERROR.VERIFICATION_FAILED_OTP_CANNOT_BE_CREATED,
         success: false,
@@ -39,19 +36,21 @@ async function sendVerificationEmail({
       };
     }
 
-    await sendEmail({
-      email,
-      emailTemplate: ConfirmEmailTemplate({
-        otp: generateOTPResponse.data.otp,
-      }),
-      subject: subject,
-    }).catch(() => {
+    try {
+      await sendEmail({
+        email,
+        emailTemplate: ConfirmEmailTemplate({
+          otp: generateOTPResponse.data.otp,
+        }),
+        subject: subject,
+      });
+    } catch (err) {
       return {
         error: ERROR.VERIFICATION_FAILED_CONFIRM_EMAIL_CANNOT_BE_SEND,
         success: false,
         data: undefined,
       };
-    });
+    }
 
     return {
       error: null,

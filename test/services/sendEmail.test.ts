@@ -1,8 +1,5 @@
 import nodemailer from "nodemailer";
 import { render } from "@react-email/components";
-// @ts-ignore
-import config from "@/lib/config";
-// @ts-ignore
 import sendEmail from "@/services/sendEmail";
 import { JSXElementConstructor, ReactElement } from "react";
 
