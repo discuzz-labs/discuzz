@@ -1,8 +1,9 @@
 import { type NextRequest, NextResponse } from "next/server";
 import { type APIResponse } from "@/types/api";
 import prisma from "@/lib/prisma";
-import { type User } from "@/types/database";
 import log from "@/lib/log";
+import endpoints from "@/services/endpoints";
+import { User } from "@/types/database";
 
 // @ts-ignore
 BigInt.prototype.toJSON = function () {
@@ -25,7 +26,7 @@ export async function POST(request: NextRequest) {
         data: user,
         success: true,
         error: null,
-      } satisfies APIResponse<typeof user>,
+      } satisfies APIResponse<typeof endpoints.user.find.responseType>,
       { status: 200 }
     );
   } catch (err) {

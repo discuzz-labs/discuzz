@@ -3,6 +3,7 @@ import { type APIResponse } from "@/types/api";
 import prisma from "@/lib/prisma";
 import log from "@/lib/log";
 import { generateOTP } from "@/services/otp";
+import endpoints from "@/services/endpoints";
 
 export async function POST(request: NextRequest) {
   const { email } = await request.json();
@@ -23,10 +24,12 @@ export async function POST(request: NextRequest) {
     return NextResponse.json(
       {
         status: 200,
-        data: otp,
+        data: {
+          otp,
+        },
         success: true,
         error: null,
-      } satisfies APIResponse<string>,
+      } satisfies APIResponse<typeof endpoints.otp.create.responseType>,
       { status: 200 }
     );
   } catch (err) {

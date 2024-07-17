@@ -4,6 +4,7 @@ import prisma from "@/lib/prisma";
 import { type User } from "@/types/database";
 import log from "@/lib/log";
 import bcrypt from "bcrypt";
+import endpoints from "@/services/endpoints";
 
 // @ts-ignore
 BigInt.prototype.toJSON = function () {
@@ -33,7 +34,7 @@ export async function POST(request: NextRequest) {
         data: user && passwordMatches ? user : null,
         success: true,
         error: null,
-      } satisfies APIResponse<typeof user>,
+      } satisfies APIResponse<typeof endpoints.auth.login.responseType>,
       { status: 200 }
     );
   } catch (err) {

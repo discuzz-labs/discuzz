@@ -4,6 +4,8 @@ import prisma from "@/lib/prisma";
 import log from "@/lib/log";
 import bcrypt from "bcrypt";
 import { Role, Level } from "@prisma/client";
+import { User } from "@/types/database";
+import endpoints from "@/services/endpoints";
 
 // @ts-ignore
 BigInt.prototype.toJSON = function () {
@@ -15,7 +17,7 @@ export async function POST(request: NextRequest) {
   const { email, fullName, imageURL, password } = await request.json();
   try {
     let hashedPassword = await bcrypt.hashSync(password, 10);
-    await prisma.user.create({
+    const createdUser = await prisma.user.create({
       data: {
         email,
         fullName: fullName,
@@ -39,9 +41,9 @@ export async function POST(request: NextRequest) {
       {
         status: 200,
         success: true,
-        data: undefined,
+        data: { id: createdUser.id },
         error: null,
-      } satisfies APIResponse<undefined>,
+      } satisfies APIResponse<typeof endpoints.auth.register.responseType>,
       { status: 200 }
     );
   } catch (err) {

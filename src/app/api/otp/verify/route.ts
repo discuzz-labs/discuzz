@@ -4,6 +4,7 @@ import prisma from "@/lib/prisma";
 import { type User } from "@/types/database";
 import log from "@/lib/log";
 import { verifyOTP } from "@/services/otp";
+import endpoints from "@/services/endpoints";
 
 // verify
 export async function POST(request: NextRequest) {
@@ -19,12 +20,14 @@ export async function POST(request: NextRequest) {
     return NextResponse.json(
       {
         status: 200,
-        data: user
-          ? verifyOTP(otp, user.OTP as string, user.TTL as string)
-          : null,
+        data: {
+          verified: user
+            ? verifyOTP(otp, user.OTP as string, user.TTL as string)
+            : null,
+        },
         success: true,
         error: null,
-      } satisfies APIResponse<boolean | null>,
+      } satisfies APIResponse<typeof endpoints.otp.verify.responseType>,
       { status: 200 }
     );
   } catch (err) {
