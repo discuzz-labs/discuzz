@@ -1,5 +1,5 @@
 /**
- * This messages only represent the messages the the app can trace.
+ * Show message on an expected behavior
  */
 export enum ERROR {
   API_IS_UNREACHABLE = "We cannot reach our API endpoint in the moment. Try later.",

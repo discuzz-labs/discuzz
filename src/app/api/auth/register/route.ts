@@ -4,8 +4,10 @@ import prisma from "@/lib/prisma";
 import log from "@/lib/log";
 import bcrypt from "bcrypt";
 import { Role, Level } from "@prisma/client";
-import { User } from "@/types/database";
-import endpoints from "@/services/endpoints";
+import type {
+  AuthRegisterPayload,
+  AuthRegisterResponse,
+} from "@/services/endpoints";
 
 // @ts-ignore
 BigInt.prototype.toJSON = function () {
@@ -14,7 +16,8 @@ BigInt.prototype.toJSON = function () {
 };
 
 export async function POST(request: NextRequest) {
-  const { email, fullName, imageURL, password } = await request.json();
+  const { email, fullName, imageURL, password }: AuthRegisterPayload =
+    await request.json();
   try {
     let hashedPassword = await bcrypt.hashSync(password, 10);
     const createdUser = await prisma.user.create({
@@ -43,7 +46,7 @@ export async function POST(request: NextRequest) {
         success: true,
         data: { id: createdUser.id },
         error: null,
-      } satisfies APIResponse<typeof endpoints.auth.register.responseType>,
+      } satisfies APIResponse<AuthRegisterResponse>,
       { status: 200 }
     );
   } catch (err) {

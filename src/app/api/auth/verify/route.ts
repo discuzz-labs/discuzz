@@ -2,10 +2,13 @@ import { type NextRequest, NextResponse } from "next/server";
 import log from "@/lib/log";
 import { type APIResponse } from "@/types/api";
 import prisma from "@/lib/prisma";
-import endpoints from "@/services/endpoints";
+import type {
+  AuthVerifyPayload,
+  AuthVerifyResponse,
+} from "@/services/endpoints";
 
 export async function POST(request: NextRequest) {
-  const { email } = await request.json();
+  const { email }: AuthVerifyPayload = await request.json();
 
   try {
     await prisma.user.update({
@@ -23,7 +26,7 @@ export async function POST(request: NextRequest) {
         data: undefined,
         success: true,
         error: null,
-      } satisfies APIResponse<typeof endpoints.auth.verify.responseType>,
+      } satisfies APIResponse<AuthVerifyResponse>,
       { status: 200 }
     );
   } catch (err) {

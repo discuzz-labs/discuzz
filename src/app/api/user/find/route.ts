@@ -2,8 +2,8 @@ import { type NextRequest, NextResponse } from "next/server";
 import { type APIResponse } from "@/types/api";
 import prisma from "@/lib/prisma";
 import log from "@/lib/log";
-import endpoints from "@/services/endpoints";
-import { User } from "@/types/database";
+import type { UserFindPayload, UserFindResponse } from "@/services/endpoints";
+import type { User } from "@/types/database";
 
 // @ts-ignore
 BigInt.prototype.toJSON = function () {
@@ -13,7 +13,7 @@ BigInt.prototype.toJSON = function () {
 
 //finding user by email
 export async function POST(request: NextRequest) {
-  const { email } = await request.json();
+  const { email }: UserFindPayload = await request.json();
   try {
     const user: Partial<User> | null = await prisma.user.findUnique({
       where: {
@@ -26,7 +26,7 @@ export async function POST(request: NextRequest) {
         data: user,
         success: true,
         error: null,
-      } satisfies APIResponse<typeof endpoints.user.find.responseType>,
+      } satisfies APIResponse<UserFindResponse>,
       { status: 200 }
     );
   } catch (err) {

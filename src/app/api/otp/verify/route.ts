@@ -4,11 +4,11 @@ import prisma from "@/lib/prisma";
 import { type User } from "@/types/database";
 import log from "@/lib/log";
 import { verifyOTP } from "@/services/otp";
-import endpoints from "@/services/endpoints";
+import type { OtpVerifyPayload, OtpVerifyResponse } from "@/services/endpoints";
 
 // verify
 export async function POST(request: NextRequest) {
-  const { otp, email } = await request.json();
+  const { otp, email }: OtpVerifyPayload = await request.json();
 
   try {
     const user: Partial<User> | null = await prisma.user.findUnique({
@@ -27,7 +27,7 @@ export async function POST(request: NextRequest) {
         },
         success: true,
         error: null,
-      } satisfies APIResponse<typeof endpoints.otp.verify.responseType>,
+      } satisfies APIResponse<OtpVerifyResponse>,
       { status: 200 }
     );
   } catch (err) {

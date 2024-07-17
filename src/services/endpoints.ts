@@ -3,12 +3,28 @@ import config from "@/lib/config";
 import { User } from "@/types/database";
 
 // Define the response types
-type UserFindResponse = Partial<User> | null;
-type AuthVerifyResponse = undefined;
-type AuthRegisterResponse = { id: string };
-type AuthLoginResponse = Partial<User> | null;
-type OtpCreateResponse = { otp: string };
-type OtpVerifyResponse = { verified: boolean | null };
+export type UserFindResponse = Partial<User> | null;
+export type UserFindPayload = { email: string };
+
+export type AuthVerifyResponse = undefined;
+export type AuthVerifyPayload = { email: string };
+
+export type AuthRegisterResponse = { id: string };
+export type AuthRegisterPayload = {
+  email: string;
+  fullName: string;
+  imageURL: string;
+  password: string;
+};
+
+export type AuthLoginResponse = Partial<User> | null;
+export type AuthLoginPayload = { email: string; password: string };
+
+export type OtpCreateResponse = { otp: string };
+export type OtpCreatePayload = { email: string };
+
+export type OtpVerifyResponse = { verified: boolean | null };
+export type OtpVerifyPayload = { otp: string; email: string };
 
 const siteURL = config.site.url;
 
@@ -17,36 +33,30 @@ const endpoints = {
     find: {
       method: "POST",
       path: `${siteURL}/api/user/find`,
-      responseType: {} as UserFindResponse,
     },
   },
   auth: {
     verify: {
       method: "POST",
       path: `${siteURL}/api/auth/verify`,
-      responseType: undefined as AuthVerifyResponse,
     },
     register: {
       method: "POST",
       path: `${siteURL}/api/auth/register`,
-      responseType: {} as AuthRegisterResponse,
     },
     login: {
       method: "POST",
       path: `${siteURL}/api/auth/login`,
-      responseType: {} as AuthLoginResponse,
     },
   },
   otp: {
     create: {
       method: "POST",
       path: `${siteURL}/api/otp/create`,
-      responseType: {} as OtpCreateResponse,
     },
     verify: {
       method: "POST",
       path: `${siteURL}/api/otp/verify`,
-      responseType: {} as OtpVerifyResponse,
     },
   },
 };
