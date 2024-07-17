@@ -15,9 +15,6 @@ const endpoints = {
     create: { method: "POST", path: `${siteURL}/api/otp/create` },
     verify: { method: "POST", path: `${siteURL}/api/otp/verify` },
   },
-  email: {
-    confirm: { method: "POST", path: `${siteURL}/api/email/confirm` },
-  },
 };
 
 export default endpoints;

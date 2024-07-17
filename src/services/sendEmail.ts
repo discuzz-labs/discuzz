@@ -14,7 +14,7 @@ const sendEmail = ({
   email,
   emailTemplate,
   subject,
-}: sendMailProps): Promise<any> => {
+}: sendMailProps): Promise<string> => {
   const transport = nodemailer.createTransport({
     service: config.email.provider,
     /* 

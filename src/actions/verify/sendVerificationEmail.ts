@@ -3,7 +3,9 @@
 import log from "@/lib/log";
 import { ERROR } from "@/lib/messages";
 import endpoints from "@/services/endpoints";
+import sendEmail from "@/services/sendEmail";
 import type { ACTIONResponse, APIResponse } from "@/types/api";
+import ConfirmEmailTemplate, { subject } from "@/email/confirmemail.email";
 
 interface sendVerificationEmailProps {
   email: string;
@@ -24,7 +26,10 @@ async function sendVerificationEmail({
     const generateOTPResponse: APIResponse<string> =
       await generateOTPRequest.json();
 
-    if (generateOTPResponse.success === false) {
+    if (
+      generateOTPResponse.success === false &&
+      generateOTPResponse.data !== ""
+    ) {
       return {
         error: ERROR.VERIFICATION_FAILED_OTP_CANNOT_BE_CREATED,
         success: false,
@@ -32,27 +37,17 @@ async function sendVerificationEmail({
       };
     }
 
-    const sendConfirmationEmailRequest = await fetch(
-      endpoints.email.confirm.path,
-      {
-        method: endpoints.email.confirm.method,
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ email, otp: generateOTPResponse.data }),
-      }
-    );
-    const sendConfirmationEmailResponse: APIResponse<undefined> =
-      await sendConfirmationEmailRequest.json();
-
-    if (sendConfirmationEmailResponse.success === false) {
+    await sendEmail({
+      email,
+      emailTemplate: ConfirmEmailTemplate({ otp: generateOTPResponse.data }),
+      subject: subject,
+    }).catch(() => {
       return {
         error: ERROR.VERIFICATION_FAILED_CONFIRM_EMAIL_CANNOT_BE_SEND,
         success: false,
         data: undefined,
       };
-    }
+    });
 
     return {
       error: null,

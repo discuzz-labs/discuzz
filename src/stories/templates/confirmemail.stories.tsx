@@ -1,9 +1,9 @@
 import type { Meta, StoryObj } from "@storybook/react";
-import ConfirmEmailTemplate from "@/templates/confirmemail.email";
+import ConfirmEmailTemplate from "@/email/confirmemail.email";
 
 const meta: Meta<typeof ConfirmEmailTemplate> = {
   component: ConfirmEmailTemplate,
-  title: "Templates/email/confirmemail",
+  title: "Email/confirmemail",
   tags: ["autodocs"],
 };
 
@@ -13,6 +13,6 @@ type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
   args: {
-    otp: "1234"
+    otp: "1234",
   },
 };

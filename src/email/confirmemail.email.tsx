@@ -12,6 +12,7 @@ import {
 } from "@react-email/components";
 import config from "@/lib/config";
 
+export const subject = "Confirmation Email";
 export default function ConfirmEmailTemplate({ otp }: { otp: string }) {
   return (
     <Container>
