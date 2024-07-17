@@ -2,8 +2,15 @@
 
 import log from "@/lib/log";
 import { ERROR } from "@/lib/messages";
+import sendRequest from "@/lib/sendRequest";
+import type {
+  AuthVerifyPayload,
+  AuthVerifyResponse,
+  OtpVerifyPayload,
+  OtpVerifyResponse,
+} from "@/services/endpoints";
 import endpoints from "@/services/endpoints";
-import type { ACTIONResponse, APIResponse } from "@/types/api";
+import type { ACTIONResponse } from "@/types/api";
 
 interface verifyUserProps {
   email: string;
@@ -15,17 +22,18 @@ async function verifyUser({
   otp,
 }: verifyUserProps): Promise<ACTIONResponse<undefined>> {
   try {
-    const verifyOTPRequest = await fetch(endpoints.otp.verify.path, {
+    const verifyOTPResponse = await sendRequest<
+      OtpVerifyPayload,
+      OtpVerifyResponse
+    >({
+      path: endpoints.otp.verify.path,
       method: endpoints.otp.verify.method,
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
+      payload: {
+        otp,
+        email,
       },
-      body: JSON.stringify({ email, otp }),
     });
 
-    const verifyOTPResponse: APIResponse<undefined> =
-      await verifyOTPRequest.json();
     if (verifyOTPResponse.success === false) {
       return {
         error: ERROR.VERIFICATION_FAILED_OTP_CANNOT_BE_VERIFIED,
@@ -34,16 +42,17 @@ async function verifyUser({
       };
     }
 
-    const verifyUserRequest = await fetch(endpoints.auth.verify.path, {
+    const verifyUserResponse = await sendRequest<
+      AuthVerifyPayload,
+      AuthVerifyResponse
+    >({
+      path: endpoints.auth.verify.path,
       method: endpoints.auth.verify.method,
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
+      payload: {
+        email,
       },
-      body: JSON.stringify({ email, otp }),
     });
-    const verifyUserResponse: APIResponse<undefined> =
-      await verifyUserRequest.json();
+
     if (verifyUserResponse.success === false) {
       return {
         error: ERROR.VERIFICATION_FAILED_USER_BE_VERIFIED,

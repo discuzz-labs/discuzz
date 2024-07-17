@@ -1,14 +1,14 @@
-import { APIResponse } from "@/types/api";
+import type { APIResponse } from "@/types/api";
 
-async function sendrequest<P, T>({
+async function sendRequest<PayloadType, ResponseType>({
   payload,
   method,
   path,
 }: {
-  payload: P;
+  payload: PayloadType;
   method: string;
   path: string;
-}): Promise<APIResponse<T>> {
+}): Promise<APIResponse<ResponseType>> {
   const request = await fetch(path, {
     method: method,
     headers: {
@@ -18,8 +18,8 @@ async function sendrequest<P, T>({
     body: JSON.stringify(payload),
   });
 
-  const response: APIResponse<T> = await request.json();
+  const response: APIResponse<ResponseType> = await request.json();
   return response;
 }
 
-export default sendrequest;
+export default sendRequest;

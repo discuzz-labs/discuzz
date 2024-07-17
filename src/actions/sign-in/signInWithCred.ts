@@ -1,11 +1,12 @@
 "use server";
 
 import { ERROR } from "@/lib/messages";
-import type { User } from "@/types/database";
-import type { ACTIONResponse, APIResponse } from "@/types/api";
+import type { ACTIONResponse } from "@/types/api";
+import type { AuthLoginPayload, AuthLoginResponse } from "@/services/endpoints";
 import endpoints from "@/services/endpoints";
 import type { UserSessionInterface } from "@/components/providers/AuthProvider";
 import log from "@/lib/log";
+import sendRequest from "@/lib/sendRequest";
 
 interface signInWithCredArgs {
   email: string;
@@ -17,16 +18,17 @@ async function signInWithCred({
   password,
 }: signInWithCredArgs): Promise<ACTIONResponse<UserSessionInterface>> {
   try {
-    const loginRequest = await fetch(endpoints.auth.login.path, {
-      method: endpoints.auth.login.method,
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
+    const loginResponse = await sendRequest<
+      AuthLoginPayload,
+      AuthLoginResponse
+    >({
+      payload: {
+        email,
+        password,
       },
-      body: JSON.stringify({ email, password }),
+      path: endpoints.auth.login.path,
+      method: endpoints.auth.login.method,
     });
-
-    const loginResponse: APIResponse<User | null> = await loginRequest.json();
 
     if (loginResponse.data == null || loginResponse.error) {
       return {
@@ -37,16 +39,17 @@ async function signInWithCred({
         data: undefined,
       };
     }
-      return {
-        success: true,
-        error: null,
-        data: {
-          email,
-          imageURL: loginResponse.data.imageURL,
-          fullName: loginResponse.data.fullName,
-          verified: loginResponse.data.verified,
-        },
-      };
+
+    return {
+      success: true,
+      error: null,
+      data: {
+        email,
+        imageURL: loginResponse.data.imageURL ?? "",
+        fullName: loginResponse.data.fullName ?? "",
+        verified: loginResponse.data.verified ?? false,
+      },
+    };
   } catch (err) {
     log("actions", err, "ACTIONS sign-in/signInWithCred");
     return { error: ERROR.API_IS_UNREACHABLE, success: false, data: undefined };

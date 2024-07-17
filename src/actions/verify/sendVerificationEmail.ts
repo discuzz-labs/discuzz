@@ -2,10 +2,12 @@
 
 import log from "@/lib/log";
 import { ERROR } from "@/lib/messages";
+import type { OtpCreatePayload, OtpCreateResponse } from "@/services/endpoints";
 import endpoints from "@/services/endpoints";
 import sendEmail from "@/services/sendEmail";
-import type { ACTIONResponse, APIResponse } from "@/types/api";
+import type { ACTIONResponse } from "@/types/api";
 import ConfirmEmailTemplate, { subject } from "@/email/confirmemail.email";
+import sendRequest from "@/lib/sendRequest";
 
 interface sendVerificationEmailProps {
   email: string;
@@ -15,20 +17,20 @@ async function sendVerificationEmail({
   email,
 }: sendVerificationEmailProps): Promise<ACTIONResponse<undefined>> {
   try {
-    const generateOTPRequest = await fetch(endpoints.otp.create.path, {
+    const generateOTPResponse = await sendRequest<
+      OtpCreatePayload,
+      OtpCreateResponse
+    >({
+      path: endpoints.otp.create.path,
       method: endpoints.otp.create.method,
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
+      payload: {
+        email,
       },
-      body: JSON.stringify({ email }),
     });
-    const generateOTPResponse: APIResponse<string> =
-      await generateOTPRequest.json();
 
     if (
       generateOTPResponse.success === false &&
-      generateOTPResponse.data !== ""
+      generateOTPResponse.data.otp !== ""
     ) {
       return {
         error: ERROR.VERIFICATION_FAILED_OTP_CANNOT_BE_CREATED,
@@ -39,7 +41,9 @@ async function sendVerificationEmail({
 
     await sendEmail({
       email,
-      emailTemplate: ConfirmEmailTemplate({ otp: generateOTPResponse.data }),
+      emailTemplate: ConfirmEmailTemplate({
+        otp: generateOTPResponse.data.otp,
+      }),
       subject: subject,
     }).catch(() => {
       return {

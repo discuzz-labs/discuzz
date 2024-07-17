@@ -1,11 +1,17 @@
 "use server";
 
 import { ERROR } from "@/lib/messages";
-import type { User } from "@/types/database";
-import type { ACTIONResponse, APIResponse } from "@/types/api";
+import type { ACTIONResponse } from "@/types/api";
+import type {
+  AuthRegisterPayload,
+  AuthRegisterResponse,
+  UserFindPayload,
+  UserFindResponse,
+} from "@/services/endpoints";
 import endpoints from "@/services/endpoints";
 import type { UserSessionInterface } from "@/components/providers/AuthProvider";
 import log from "@/lib/log";
+import sendRequest from "@/lib/sendRequest";
 
 interface signUpWithCredArgs {
   email: string;
@@ -21,16 +27,17 @@ async function signUpWithCred({
   fullName,
 }: signUpWithCredArgs): Promise<ACTIONResponse<UserSessionInterface>> {
   try {
-    const verifyEmailExsitenceRequest = await fetch(endpoints.user.find.path, {
+    const verifyEmailExsitenceResponse = await sendRequest<
+      UserFindPayload,
+      UserFindResponse
+    >({
+      path: endpoints.user.find.path,
       method: endpoints.user.find.method,
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
+      payload: {
+        email,
       },
-      body: JSON.stringify({ email }),
     });
-    const verifyEmailExsitenceResponse: APIResponse<User> =
-      await verifyEmailExsitenceRequest.json();
+
     if (
       verifyEmailExsitenceResponse.data !== null ||
       verifyEmailExsitenceResponse.error
@@ -44,20 +51,20 @@ async function signUpWithCred({
       };
     }
 
-    const registerRequest = await fetch(endpoints.auth.register.path, {
+    const registerResponse = await sendRequest<
+      AuthRegisterPayload,
+      AuthRegisterResponse
+    >({
+      path: endpoints.auth.register.path,
       method: endpoints.auth.register.method,
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
+      payload: {
         email,
         fullName,
         imageURL,
         password,
-      }),
+      },
     });
-    const registerResponse: APIResponse<User> = await registerRequest.json();
+
     if (registerResponse.error) {
       return {
         error: registerResponse.error,
@@ -65,6 +72,7 @@ async function signUpWithCred({
         data: undefined,
       };
     }
+
     return {
       success: true,
       error: null,
