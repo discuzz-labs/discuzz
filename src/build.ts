@@ -27,9 +27,8 @@ const build = async () => {
       );
     }
 
-    // Chexk APP_KEY
-    console.log((process.env.APP_KEY as string).length);
-    if ((process.env.APP_KEY as string).length >= 32)
+    // Check APP_KEY
+    if ((process.env.APP_KEY as string).length < 32)
       throw new Error(`APP_KEY is not valid: MUST BE AT LEAST 32 BYTES LONG.`);
 
     // Check NEXT_URL
