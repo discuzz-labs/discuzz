@@ -1,7 +1,8 @@
 {
   "github-actions.workflows.pinned.workflows": [
     ".github/workflows/test.yml",
-    ".github/workflows/build.yml"
+    ".github/workflows/build.yml",
+    ".github/workflows/cypress.yml"
   ],
   "typescript.tsdk": "node_modules\\typescript\\lib"
 }

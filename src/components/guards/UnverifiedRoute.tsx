@@ -3,6 +3,7 @@ import { useUserSession } from "@/components/providers/AuthProvider";
 import { useRouter } from "next/navigation";
 import { ReactNode, useEffect } from "react";
 import Loading from "@/components/Loading"
+import routes from "@/services/routes";
 
 export default function UnverifiedRoute({ children }: { children: ReactNode }) {
   const { userSession } = useUserSession();
@@ -11,10 +12,10 @@ export default function UnverifiedRoute({ children }: { children: ReactNode }) {
   useEffect(() => {
     if (userSession) {
       if (userSession.verified) {
-        router.push("/dashboard");
+        router.push(routes.user.dashboard.path);
       }
     } else {
-      router.push("/sign-in");
+      router.push(routes.auth.signIn.path);
     }
   }, [userSession, router]);
 

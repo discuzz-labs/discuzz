@@ -11,6 +11,7 @@ import {
   Column,
 } from "@react-email/components";
 import config from "@/lib/config";
+import routes from "@/services/routes";
 
 export const subject = "Confirmation Email";
 export default function ConfirmEmailTemplate({ otp }: { otp: string }) {
@@ -49,7 +50,7 @@ export default function ConfirmEmailTemplate({ otp }: { otp: string }) {
           padding: "0.5rem 1rem",
           background: "black",
         }}
-        href={`${config.site.url}/verify`}
+        href={`${config.site.url}${routes.auth.verify.path}`}
       >
         Confirm your email.
       </Link>

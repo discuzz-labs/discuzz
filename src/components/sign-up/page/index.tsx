@@ -10,12 +10,9 @@ import {
   useUserSession,
 } from "@/components/providers/AuthProvider";
 import SignUpForm from "../form";
-import { useToast } from "@/components/ui/use-toast";
-import { useRouter } from "next/navigation";
 import Alert from "@/components/Alert";
 
 export default function SignUpPage() {
-  const router = useRouter();
   const [formSubmitted, setFormSubmitted] = useState<boolean>(false);
   const [error, setError] = useState<string>("");
   const { setUserSession } = useUserSession();
@@ -33,7 +30,6 @@ export default function SignUpPage() {
       });
       if (signUpWithCredAction.success == true) {
         setUserSession(signUpWithCredAction.data as UserSessionInterface);
-        router.push("/verify");
       } else {
         setError(signUpWithCredAction.error);
       }
