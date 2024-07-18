@@ -6,7 +6,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { SignUpFormSchema } from "@/validations/validation";
 import ProfileImage from "@/components/ProfileImage";
-import { SHA256 } from "crypto-js";
+import crypto from "crypto";
 import { InputForm } from "@/components/InputForm";
 import { Button } from "@/components/ui/button";
 import Spinner from "@/components/Spinner";
@@ -31,7 +31,8 @@ export default function SignUpForm({
 
   const getprofileImageProvidedByGravater = (email: string | undefined) => {
     if (email == undefined) return;
-    let hashedGravaterEmail = SHA256(email);
+    const trimmedEmail = email.trim().toLowerCase();
+    const hashedGravaterEmail = crypto.createHash('sha256').update(trimmedEmail).digest('hex');
     setprofileImageProvidedByGravater(
       `https://www.gravatar.com/avatar/${hashedGravaterEmail}`
     );
