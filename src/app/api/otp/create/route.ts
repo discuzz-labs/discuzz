@@ -25,7 +25,7 @@ export async function POST(request: NextRequest) {
       {
         status: 200,
         data: {
-          otp,
+          otp: otp,
         },
         success: true,
         error: null,

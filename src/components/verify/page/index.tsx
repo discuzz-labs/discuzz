@@ -44,7 +44,7 @@ export default function VerifyEmailPage() {
     try {
       const verifyUserAction = await verifyUser({
         email: userSession?.email as string,
-        otp: "888888",
+        otp,
       });
       if (verifyUserAction.success == false) {
         setVerificationState("failed");

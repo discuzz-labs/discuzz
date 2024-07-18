@@ -5,6 +5,7 @@ type SocialButtonsPlacement = "top" | "bottom" | undefined;
 interface Config {
   site: {
     url: string;
+    appKey: string;
   };
   metadata: {
     keywords: string[] | undefined;
@@ -37,6 +38,9 @@ interface Config {
 const config: Config = {
   site: {
     url: (process.env.NEXT_URL as string) || "http://localhost:3000",
+    appKey:
+      (process.env.APP_KEY as string) ||
+      "yE=-CXVXL*5:@uyb8*Yz9tw3%61rFrhs*znF)=Gdp@i?rW9",
   },
   metadata: {
     keywords: (process.env.NEXT_PUBLIC_METADATA_KEYWORDS?.split(

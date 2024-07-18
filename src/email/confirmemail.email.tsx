@@ -28,7 +28,7 @@ export default function ConfirmEmailTemplate({ otp }: { otp: string }) {
       <Text>Your Confirmation Code </Text>
       <Section style={{ display: "flex", margin: "1.5rem 0rem" }}>
         <Row>
-          {otp.split("").map((idx, number) => (
+          {otp.split("").map((number, idx) => (
             <Column
               key={idx}
               style={{
