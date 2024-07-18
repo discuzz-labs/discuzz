@@ -1,4 +1,4 @@
-import UnverifiedRoute from "@/components/guards/UnverifiedRoute"
+import UnverifiedRoute from "@/components/guards/UnverifiedRoute";
 
 export const metadata = {
   title: `Verify Email`,

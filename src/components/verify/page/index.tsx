@@ -60,7 +60,7 @@ export default function VerifyEmailPage() {
   };
 
   useEffect(() => {
-    if (verificationState == "pending") sendEmail();
+    sendEmail();
   }, []);
 
   return (

@@ -2,5 +2,6 @@
   "github-actions.workflows.pinned.workflows": [
     ".github/workflows/test.yml",
     ".github/workflows/build.yml"
-  ]
+  ],
+  "typescript.tsdk": "node_modules\\typescript\\lib"
 }
