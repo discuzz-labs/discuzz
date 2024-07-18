@@ -10,8 +10,11 @@ import Alert from "@/components/Alert";
 import { SignInFormSchema } from "@/validations/validation";
 import { z } from "zod";
 import signInWithCred from "@/actions/sign-in/signInWithCred";
+import { Button } from "@/components/ui/button";
+import { Github } from "lucide-react";
+import { signIn } from "next-auth/react";
 
-export default function SignInPage() {
+export default function SignInPage() { 
   const [formSubmitted, setFormSubmitted] = useState<boolean>(false);
   const [error, setError] = useState<string>("");
   const { setUserSession } = useUserSession();
@@ -43,13 +46,21 @@ export default function SignInPage() {
           </p>
           <p className="font-thin text-xl">- Albert Einstein</p>
         </div>
-
         <div className="lg:w-1/2 lg:dark:bg-black lg:dark:bg-none dark:decorator w-full flex flex-col items-center justify-center">
           <div className="flex flex-col gap-2 items-center justify-center pb-10">
             <p className="text-2xl font-extrabold">Sign in</p>
             <p className="text-sm font-thin">Sign in to your account.</p>
           </div>
-
+          <Button
+              disabled={formSubmitted}
+              className="w-1/2 flex items-center gap-2"
+              onClick={() => { 
+                signIn("github") 
+                
+              }}
+            >
+              <Github /> Github
+            </Button>
           <SignInForm login={login} formSubmitted={formSubmitted} />
         </div>
       </div>
