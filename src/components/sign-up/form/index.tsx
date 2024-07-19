@@ -52,7 +52,7 @@ export default function SignUpForm({
         >
           <InputForm<typeof SignUpFormSchema>
             form={form}
-            name={"fullname"}
+            name={"fullName"}
             className="w-1/2"
             onChangeCapture={() => {}}
             type={"text"}

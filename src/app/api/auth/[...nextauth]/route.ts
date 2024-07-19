@@ -2,6 +2,7 @@ import signInWithCred from "@/actions/sign-in/signInWithCred";
 import NextAuth from "next-auth";
 import GithubProvider from "next-auth/providers/github";
 import CredentialsProvider  from "next-auth/providers/credentials";
+import signUpWithCred from "@/actions/sign-up/signUpWithCred";
 
 export const authOptions = {
   // Configure one or more authentication providers
@@ -27,10 +28,29 @@ export const authOptions = {
         }
       },
     }),
-    // CredentialsProvider({
-    //   id: "signup",
-    //   async authorize(credentials) {},
-    // }),
+    CredentialsProvider({
+      id: "signup",
+      // @ts-ignore
+      // see: https://github.com/nextauthjs/next-auth/issues/2701
+      async authorize(credentials) {
+        const signUpWithCredAction = await signUpWithCred({
+          email: credentials?.email as string,
+          password: credentials?.password as string,
+          fullName: credentials?.fullName as string,
+          imageURL: credentials?.imageURL as string,
+        });
+        if(signUpWithCredAction.success === true) {
+          return {
+            email: signUpWithCredAction.data?.email,
+            fullName: signUpWithCredAction.data?.fullName,
+            imageURL: signUpWithCredAction.data?.imageURL,
+            verified: signUpWithCredAction.data?.verified,
+          }
+        } else {
+          throw new Error(signUpWithCredAction.error)
+        }
+      },
+    }),
     GithubProvider({
       clientId: process.env.GITHUB_CLIENT_ID as string,
       clientSecret: process.env.GITHUB_CLIENT_SECRET as string,
@@ -59,7 +79,11 @@ export const authOptions = {
       return session;
     },
     // @ts-ignore
-    async jwt({ token, user }) {
+    async jwt({ session, trigger, token, user }) {
+      if (trigger === 'update' && session?.user?.verified) {
+        token.verified = session.user.verified
+      }
+
       if (user) {
         token.verified = user.verified;
         token.fullName = user.fullName;

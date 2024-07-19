@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import { SessionProvider } from "next-auth/react";
 import { ReactNode } from "react";
@@ -9,7 +9,6 @@ export interface UserSessionInterface {
   email: string;
   verified: boolean;
 }
-
 interface AuthProviderProps {
   children: ReactNode;
 }

@@ -3,13 +3,10 @@
 import { z } from "zod";
 import { SignUpFormSchema } from "@/validations/validation";
 import { useState } from "react";
-import signUpWithCred from "@/actions/sign-up/signUpWithCred";
 import Link from "next/link";
-import {
-  UserSessionInterface,
-} from "@/components/providers/AuthProvider";
 import SignUpForm from "../form";
 import Alert from "@/components/Alert";
+import { signIn } from "next-auth/react";
 
 export default function SignUpPage() {
   const [formSubmitted, setFormSubmitted] = useState<boolean>(false);
@@ -20,7 +17,14 @@ export default function SignUpPage() {
   const register = async (values: z.infer<typeof SignUpFormSchema>) => {
     setFormSubmitted(true);
     try {
-      
+      const signUpRequest = await signIn("signup", {
+        email: values.email,
+        password: values.password,
+        fullName: values.fullName,
+        imageURL: profileImageProvidedByGravater,
+        redirect:false
+      })
+      if(!signUpRequest?.ok) setError(signUpRequest?.error as string)
     } catch (e) {
       setError(e as string);
     }

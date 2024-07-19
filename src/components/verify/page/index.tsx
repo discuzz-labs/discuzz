@@ -1,5 +1,6 @@
 "use client";
 
+import { getSession, getCsrfToken } from "next-auth/react";
 import Spinner from "@/components/Spinner";
 import { Button } from "@/components/ui/button";
 import {
@@ -8,7 +9,7 @@ import {
   InputOTPSlot,
 } from "@/components/ui/input-otp";
 import { REGEXP_ONLY_DIGITS } from "input-otp";
-import { Check, X } from "lucide-react";
+import { Check, Verified, X } from "lucide-react";
 import { useEffect, useState } from "react";
 import sendVerificationEmail from "@/actions/verify/sendVerificationEmail";
 import { SUCCESS } from "@/lib/messages";
@@ -16,52 +17,58 @@ import verifyUser from "@/actions/verify/verifyUser";
 import { useSession } from "next-auth/react";
 
 export default function VerifyEmailPage() {
-  const { data: userSession } = useSession();
+  const { data: userSession, update } = useSession();
   const [error, setError] = useState<string>("");
   const [otp, setOTP] = useState<string>("");
   const [verificationState, setVerificationState] = useState<
-    "pending" | "success" | "failed" | "verifying"
-  >("pending");
+    "" | "pending" | "success" | "failed" | "verifying" | "verified"
+  >("");
 
   const sendEmail = async () => {
-    // try {
-    //   const sendVerificationEmailAction = await sendVerificationEmail({
-    //     email: userSession?.user.email as string,
-    //   });
-    //   if (sendVerificationEmailAction.success == false) {
-    //     setVerificationState("failed");
-    //     setError(sendVerificationEmailAction.error);
-    //   } else {
-    //     setVerificationState("success");
-    //   }
-    // } catch (err) {
-    //   setVerificationState("failed");
-    //   setError(err as string);
-    // }
+    try {
+      const sendVerificationEmailAction = await sendVerificationEmail({
+        email: userSession?.user.email as string,
+      });
+      if (sendVerificationEmailAction.success == false) {
+        setVerificationState("failed");
+        setError(sendVerificationEmailAction.error);
+      } else {
+        setVerificationState("success");
+      }
+    } catch (err) {
+      setVerificationState("failed");
+      setError(err as string);
+    }
   };
 
   const verify = async () => {
     // try {
     //   const verifyUserAction = await verifyUser({
-    //     email: userSession?.email as string,
+    //     email: userSession?.user.email as string,
     //     otp,
     //   });
     //   if (verifyUserAction.success == false) {
     //     setVerificationState("failed");
     //     setError(verifyUserAction.error);
     //   } else {
-    //     setVerificationState("success");
-    //     updateUserSession({ verified: true });
+    //     setVerificationState("verified");
+    //     await update({verified: true})
     //   }
     // } catch (err) {
     //   setVerificationState("failed");
     //   setError(err as string);
     // }
-  };
 
-  useEffect(() => {
-    sendEmail();
-  }, []);
+    const csrfToken = await getCsrfToken();
+    await getSession({
+      req: {
+        body: {
+          csrfToken,
+          data: { user: { verified: true } },
+        },
+      },
+    });
+  };
 
   return (
     <>
@@ -71,6 +78,12 @@ export default function VerifyEmailPage() {
           {verificationState == "success" && (
             <>
               <Check /> {SUCCESS.VERIFICATION_SUCCESS_CONFIRMATION_EMAIL_SEND}
+            </>
+          )}
+          {verificationState == "verified" && (
+            <>
+              {userSession?.user.verified}
+              <Verified /> {SUCCESS.VERIFICATION_SUCCESS_VERIFIED}
             </>
           )}
           {(verificationState == "pending" ||
@@ -116,13 +129,13 @@ export default function VerifyEmailPage() {
             Verify email.
           </Button>
           <Button
-            variant={"link"}
+            className="w-full"
             onClick={() => {
               setVerificationState("pending");
               sendEmail();
             }}
           >
-            Resend verification email?
+            Send verification email.
           </Button>
         </div>
       </div>

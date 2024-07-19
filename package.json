@@ -15,7 +15,7 @@
     "test": "jest",
     "cy:open": "cypress open",
     "cy:run": "cypress run",
-    "depcheck": "depcheck",
+    "prisma:studio": "prisma studio",
     "prisma:generate": "prisma generate",
     "prisma:validate": "prisma validate"
   },

@@ -9,6 +9,17 @@ const routes = {
       path: "/dashboard",
     },
   },
+  redirects : {
+    onUnAuthenticated: "/sign-in",
+    onAuthenticated: "/dashboard",
+    onVerified : "/dashboard",
+    onAfterSignIn : {
+      unVerified: "/verify",
+      verified: "/dashboard"
+    },
+    onAfterSignUp : "/verify",
+    onAfterVerify: "/dashboard",
+  }
 };
 
 export default routes;

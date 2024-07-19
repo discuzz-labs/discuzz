@@ -16,4 +16,5 @@ export enum ERROR {
 
 export enum SUCCESS {
   VERIFICATION_SUCCESS_CONFIRMATION_EMAIL_SEND = "We sended you a confirmation email. Check the spam folder too.",
+  VERIFICATION_SUCCESS_VERIFIED= "Email verified successfully.",
 }

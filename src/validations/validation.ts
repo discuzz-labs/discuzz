@@ -1,7 +1,7 @@
 import { z } from "zod";
 
 const SignUpFormSchema = z.object({
-  fullname: z.string().min(2, {
+  fullName: z.string().min(2, {
     message: "Fullname must be at least 2 characters.",
   }),
   email: z.string().email("This is not a valid email."),
