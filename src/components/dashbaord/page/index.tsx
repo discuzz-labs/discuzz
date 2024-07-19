@@ -1,12 +1,12 @@
 "use client";
-import { useUserSession } from "@/components/providers/AuthProvider";
+import { useSession } from "next-auth/react";
 import Banner from "../Banner";
 
 export default function DashboardPage() {
-  const { userSession } = useUserSession();
+  const { data: userSession } = useSession();
   return (
     <div className="w-2/3 h-full border-x border-input">
-      <Banner name={userSession?.fullName as string} />
+      <Banner name={userSession?.user.fullName as string} />
       {/* <UserInfo userEmail={} /> */}
     </div>
   );

@@ -1,17 +1,18 @@
 "use client";
-import { useUserSession } from "@/components/providers/AuthProvider";
+
 import { useRouter } from "next/navigation";
 import { ReactNode, useEffect } from "react";
 import Loading from "@/components/Loading"
 import routes from "@/services/routes";
+import { useSession } from "next-auth/react";
 
 export default function UnverifiedRoute({ children }: { children: ReactNode }) {
-  const { userSession } = useUserSession();
+  const { data: userSession } = useSession();
   const router = useRouter();
 
   useEffect(() => {
     if (userSession) {
-      if (userSession.verified) {
+      if (userSession.user.verified) {
         router.push(routes.user.dashboard.path);
       }
     } else {
@@ -19,7 +20,7 @@ export default function UnverifiedRoute({ children }: { children: ReactNode }) {
     }
   }, [userSession, router]);
 
-  if (userSession && userSession.email && !userSession.verified) {
+  if (userSession && userSession.user.email && !userSession.user.verified) {
     return <>{children}</>;
   }
 

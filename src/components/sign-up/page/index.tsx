@@ -7,7 +7,6 @@ import signUpWithCred from "@/actions/sign-up/signUpWithCred";
 import Link from "next/link";
 import {
   UserSessionInterface,
-  useUserSession,
 } from "@/components/providers/AuthProvider";
 import SignUpForm from "../form";
 import Alert from "@/components/Alert";
@@ -15,24 +14,13 @@ import Alert from "@/components/Alert";
 export default function SignUpPage() {
   const [formSubmitted, setFormSubmitted] = useState<boolean>(false);
   const [error, setError] = useState<string>("");
-  const { setUserSession } = useUserSession();
   const [profileImageProvidedByGravater, setprofileImageProvidedByGravater] =
     useState<string>("https://www.gravatar.com/avatar/placeholder");
 
   const register = async (values: z.infer<typeof SignUpFormSchema>) => {
     setFormSubmitted(true);
     try {
-      const signUpWithCredAction = await signUpWithCred({
-        email: values.email,
-        password: values.password,
-        fullName: values.fullname,
-        imageURL: profileImageProvidedByGravater as string,
-      });
-      if (signUpWithCredAction.success == true) {
-        setUserSession(signUpWithCredAction.data as UserSessionInterface);
-      } else {
-        setError(signUpWithCredAction.error);
-      }
+      
     } catch (e) {
       setError(e as string);
     }

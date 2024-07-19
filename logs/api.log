@@ -1,0 +1,3 @@
+2024.07.18, 23:33:19.0466 UTC -> POST /api/auth/login - Error: data and hash arguments required
+2024.07.18, 23:33:19.0472 UTC -> POST /api/auth/login - Error: data and hash arguments required
+2024.07.18, 23:36:13.0933 UTC -> POST /api/auth/login - Error: data and hash arguments required

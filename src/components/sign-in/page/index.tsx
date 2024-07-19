@@ -2,14 +2,9 @@
 
 import React, { useState } from "react";
 import SignInForm from "../form";
-import {
-  UserSessionInterface,
-  useUserSession,
-} from "@/components/providers/AuthProvider";
 import Alert from "@/components/Alert";
 import { SignInFormSchema } from "@/validations/validation";
 import { z } from "zod";
-import signInWithCred from "@/actions/sign-in/signInWithCred";
 import { Button } from "@/components/ui/button";
 import { Github } from "lucide-react";
 import { signIn } from "next-auth/react";
@@ -17,19 +12,15 @@ import { signIn } from "next-auth/react";
 export default function SignInPage() { 
   const [formSubmitted, setFormSubmitted] = useState<boolean>(false);
   const [error, setError] = useState<string>("");
-  const { setUserSession } = useUserSession();
   const login = async (values: z.infer<typeof SignInFormSchema>) => {
     setFormSubmitted(true);
     try {
-      const signInWithCredAction = await signInWithCred({
+      const signInRequest = await signIn("login", {
         email: values.email,
         password: values.password,
-      });
-      if (signInWithCredAction.success == true) {
-        setUserSession(signInWithCredAction.data as UserSessionInterface);
-      } else {
-        setError(signInWithCredAction.error);
-      }
+        redirect:false
+      })
+      if(!signInRequest?.ok) setError(signInRequest?.error as string)
     } catch (e) {
       setError(e as string);
     }
@@ -54,9 +45,9 @@ export default function SignInPage() {
           <Button
               disabled={formSubmitted}
               className="w-1/2 flex items-center gap-2"
-              onClick={() => { 
-                signIn("github") 
-                
+              onClick={async () => { 
+                const auth = await signIn("github") 
+                console.log(auth)
               }}
             >
               <Github /> Github

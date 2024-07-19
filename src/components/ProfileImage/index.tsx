@@ -2,7 +2,7 @@
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Image as ImgIcon } from "lucide-react";
-import { useUserSession } from "../providers/AuthProvider";
+import { useSession } from "next-auth/react";
 
 export default function ProfileImage({
   img,
@@ -13,7 +13,7 @@ export default function ProfileImage({
   className?: string;
   size: number;
 }) {
-  const { userSession } = useUserSession();
+  const { data: userSession } = useSession();
 
   return (
     <div className={className}>
@@ -21,7 +21,7 @@ export default function ProfileImage({
         <AvatarImage
           src={
             img ||
-            userSession?.imageURL ||
+            userSession?.user.imageURL ||
             "https://www.gravatar.com/avatar/placeholder"
           }
           alt="Profile Image"

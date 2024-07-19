@@ -20,8 +20,9 @@ export async function POST(request: NextRequest) {
     const user: Partial<User> | null = await prisma.user.findUnique({
       where: {
         email,
-      },
+      }
     });
+    
     if (user) {
       passwordMatches = await bcrypt.compare(
         password,
@@ -31,7 +32,7 @@ export async function POST(request: NextRequest) {
     return NextResponse.json(
       {
         status: 200,
-        data: user && passwordMatches ? user : null,
+        data: user && passwordMatches ? user : null ,
         success: true,
         error: null,
       } satisfies APIResponse<AuthLoginResponse>,

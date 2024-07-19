@@ -29,6 +29,7 @@ export type UserReport = {
 };
 
 export type User = {
+  id: string,
   email: string;
   password: String;
   fullName: string;

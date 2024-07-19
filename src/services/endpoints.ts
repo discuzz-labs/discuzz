@@ -17,7 +17,7 @@ export type AuthRegisterPayload = {
   password: string;
 };
 
-export type AuthLoginResponse = Partial<User> | null;
+export type AuthLoginResponse = Partial<User> | null
 export type AuthLoginPayload = { email: string; password: string };
 
 export type OtpCreateResponse = { otp: string };

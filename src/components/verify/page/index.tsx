@@ -1,6 +1,5 @@
 "use client";
 
-import { useUserSession } from "@/components/providers/AuthProvider";
 import Spinner from "@/components/Spinner";
 import { Button } from "@/components/ui/button";
 import {
@@ -14,9 +13,10 @@ import { useEffect, useState } from "react";
 import sendVerificationEmail from "@/actions/verify/sendVerificationEmail";
 import { SUCCESS } from "@/lib/messages";
 import verifyUser from "@/actions/verify/verifyUser";
+import { useSession } from "next-auth/react";
 
 export default function VerifyEmailPage() {
-  const { userSession, updateUserSession } = useUserSession();
+  const { data: userSession } = useSession();
   const [error, setError] = useState<string>("");
   const [otp, setOTP] = useState<string>("");
   const [verificationState, setVerificationState] = useState<
@@ -24,39 +24,39 @@ export default function VerifyEmailPage() {
   >("pending");
 
   const sendEmail = async () => {
-    try {
-      const sendVerificationEmailAction = await sendVerificationEmail({
-        email: userSession?.email as string,
-      });
-      if (sendVerificationEmailAction.success == false) {
-        setVerificationState("failed");
-        setError(sendVerificationEmailAction.error);
-      } else {
-        setVerificationState("success");
-      }
-    } catch (err) {
-      setVerificationState("failed");
-      setError(err as string);
-    }
+    // try {
+    //   const sendVerificationEmailAction = await sendVerificationEmail({
+    //     email: userSession?.user.email as string,
+    //   });
+    //   if (sendVerificationEmailAction.success == false) {
+    //     setVerificationState("failed");
+    //     setError(sendVerificationEmailAction.error);
+    //   } else {
+    //     setVerificationState("success");
+    //   }
+    // } catch (err) {
+    //   setVerificationState("failed");
+    //   setError(err as string);
+    // }
   };
 
   const verify = async () => {
-    try {
-      const verifyUserAction = await verifyUser({
-        email: userSession?.email as string,
-        otp,
-      });
-      if (verifyUserAction.success == false) {
-        setVerificationState("failed");
-        setError(verifyUserAction.error);
-      } else {
-        setVerificationState("success");
-        updateUserSession({ verified: true });
-      }
-    } catch (err) {
-      setVerificationState("failed");
-      setError(err as string);
-    }
+    // try {
+    //   const verifyUserAction = await verifyUser({
+    //     email: userSession?.email as string,
+    //     otp,
+    //   });
+    //   if (verifyUserAction.success == false) {
+    //     setVerificationState("failed");
+    //     setError(verifyUserAction.error);
+    //   } else {
+    //     setVerificationState("success");
+    //     updateUserSession({ verified: true });
+    //   }
+    // } catch (err) {
+    //   setVerificationState("failed");
+    //   setError(err as string);
+    // }
   };
 
   useEffect(() => {

@@ -58,7 +58,7 @@ async function signUpWithCred({
       path: endpoints.auth.register.path,
       method: endpoints.auth.register.method,
       payload: {
-        email,
+        email: email.toLowerCase(),
         fullName,
         imageURL,
         password,
