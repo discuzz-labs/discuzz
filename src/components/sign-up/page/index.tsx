@@ -7,8 +7,11 @@ import Link from "next/link";
 import SignUpForm from "../form";
 import Alert from "@/components/Alert";
 import { signIn } from "next-auth/react";
+import { useRouter } from "next/navigation";
+import routes from "@/services/routes";
 
 export default function SignUpPage() {
+  const router = useRouter()
   const [formSubmitted, setFormSubmitted] = useState<boolean>(false);
   const [error, setError] = useState<string>("");
   const [profileImageProvidedByGravater, setprofileImageProvidedByGravater] =
@@ -25,6 +28,7 @@ export default function SignUpPage() {
         redirect:false
       })
       if(!signUpRequest?.ok) setError(signUpRequest?.error as string)
+      router.push(routes.redirects.onAfterSignUp)
     } catch (e) {
       setError(e as string);
     }

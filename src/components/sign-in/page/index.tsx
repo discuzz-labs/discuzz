@@ -8,8 +8,13 @@ import { z } from "zod";
 import { Button } from "@/components/ui/button";
 import { Github } from "lucide-react";
 import { signIn } from "next-auth/react";
+import { useRouter } from "next/navigation";
+import routes from "@/services/routes";
+import { useSearchParams } from 'next/navigation'
 
 export default function SignInPage() { 
+  const searchParams = useSearchParams()
+  const router = useRouter()
   const [formSubmitted, setFormSubmitted] = useState<boolean>(false);
   const [error, setError] = useState<string>("");
   const login = async (values: z.infer<typeof SignInFormSchema>) => {
@@ -21,6 +26,8 @@ export default function SignInPage() {
         redirect:false
       })
       if(!signInRequest?.ok) setError(signInRequest?.error as string)
+      const callbackUrl = searchParams.get("callbackUrl")
+      router.push(callbackUrl ? callbackUrl : routes.redirects.onAfterSignIn)
     } catch (e) {
       setError(e as string);
     }
