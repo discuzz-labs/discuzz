@@ -28,6 +28,8 @@ export default function Logo() {
             height={0}
             className="min-w-[100px]"
             priority
+            unoptimized={true}
+            unselectable="on"
           />
         </Link>
       </div>

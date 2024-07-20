@@ -6,15 +6,17 @@ import type { OtpCreatePayload, OtpCreateResponse } from "@/services/endpoints";
 import endpoints from "@/services/endpoints";
 import sendEmail from "@/services/sendEmail";
 import type { ACTIONResponse } from "@/types/api";
-import ConfirmEmailTemplate, { subject } from "@/email/confirmemail.email";
+import ConfirmEmailTemplate, { subject } from "@/emailTemplate/confirmemail.email";
 import sendRequest from "@/lib/sendRequest";
 
 interface sendVerificationEmailProps {
   email: string;
+  userName: string;
 }
 
 async function sendVerificationEmail({
   email,
+  userName
 }: sendVerificationEmailProps): Promise<ACTIONResponse<undefined>> {
   try {
     const generateOTPResponse = await sendRequest<
@@ -41,6 +43,7 @@ async function sendVerificationEmail({
         email,
         emailTemplate: ConfirmEmailTemplate({
           otp: generateOTPResponse.data.otp,
+          userName
         }),
         subject: subject,
       });

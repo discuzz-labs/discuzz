@@ -1,6 +1,4 @@
 type ThemeType = "dark" | "light" | "system" | undefined;
-type SocialButtonsVariant = "auto" | "blockButton" | "iconButton" | undefined;
-type SocialButtonsPlacement = "top" | "bottom" | undefined;
 
 interface Config {
   site: {

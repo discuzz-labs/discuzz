@@ -5,7 +5,9 @@ import sendRequest from "@/lib/sendRequest";
 import endpoints, { OtpCreateResponse } from "@/services/endpoints";
 import sendEmail from "@/services/sendEmail";
 import { APIResponse } from "@/types/api";
-import ConfirmEmailTemplate, { subject } from "@/email/confirmemail.email";
+import ConfirmEmailTemplate, {
+  subject,
+} from "@/emailTemplate/confirmemail.email";
 
 // Mock dependencies
 jest.mock("@/lib/sendRequest");
@@ -29,7 +31,10 @@ describe("ACTIONS verify/sendVerificationEmail", () => {
 
     (sendRequest as jest.Mock).mockResolvedValueOnce(otpErrorResponse);
 
-    const result = await sendVerificationEmail({ email });
+    const result = await sendVerificationEmail({
+      email,
+      userName: "Test User",
+    });
 
     expect(sendRequest).toHaveBeenCalledWith({
       path: endpoints.otp.create.path,
@@ -61,7 +66,10 @@ describe("ACTIONS verify/sendVerificationEmail", () => {
       new Error("Sending email failed")
     );
 
-    const result = await sendVerificationEmail({ email });
+    const result = await sendVerificationEmail({
+      email,
+      userName: "Test User",
+    });
 
     expect(sendRequest).toHaveBeenCalledWith({
       path: endpoints.otp.create.path,
@@ -75,6 +83,7 @@ describe("ACTIONS verify/sendVerificationEmail", () => {
       email,
       emailTemplate: ConfirmEmailTemplate({
         otp: "123456",
+        userName: "Test User",
       }),
       subject: subject,
     });
@@ -99,7 +108,10 @@ describe("ACTIONS verify/sendVerificationEmail", () => {
     // Mock sending Email
     (sendEmail as jest.Mock).mockResolvedValueOnce("");
 
-    const result = await sendVerificationEmail({ email });
+    const result = await sendVerificationEmail({
+      email,
+      userName: "Test User",
+    });
 
     expect(sendRequest).toHaveBeenCalledWith({
       path: endpoints.otp.create.path,
@@ -113,6 +125,7 @@ describe("ACTIONS verify/sendVerificationEmail", () => {
       email,
       emailTemplate: ConfirmEmailTemplate({
         otp: "123456",
+        userName: "Test User",
       }),
       subject: subject,
     });
@@ -128,7 +141,10 @@ describe("ACTIONS verify/sendVerificationEmail", () => {
     const error = new Error("Network error");
     (sendRequest as jest.Mock).mockRejectedValue(error);
 
-    const result = await sendVerificationEmail({ email });
+    const result = await sendVerificationEmail({
+      email,
+      userName: "Test User",
+    });
 
     expect(log).toHaveBeenCalledWith(
       "actions",

@@ -37,6 +37,7 @@ export default function VerifyEmailPage() {
     try {
       const sendVerificationEmailAction = await sendVerificationEmail({
         email: userSession?.user.email as string,
+        userName: userSession?.user.fullName as string
       });
       if (sendVerificationEmailAction.success == false) {
         setVerificationStatus("emailSentFailed");
