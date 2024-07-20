@@ -62,7 +62,8 @@ export const authOptions = {
   },
   callbacks: {
     // @ts-ignore
-    async signIn({ user, account, profile, email, credentials }) {
+    async signIn({ user, account, profile}) {
+      console.log(profile, account)
       if (user) { 
         return true;
       }
