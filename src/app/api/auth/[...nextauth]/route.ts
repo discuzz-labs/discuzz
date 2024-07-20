@@ -1,8 +1,9 @@
 import signInWithCred from "@/actions/sign-in/signInWithCred";
 import NextAuth from "next-auth";
-import GithubProvider from "next-auth/providers/github";
-import CredentialsProvider  from "next-auth/providers/credentials";
+import GithubProvider, { GithubProfile } from "next-auth/providers/github";
+import CredentialsProvider from "next-auth/providers/credentials";
 import signUpWithCred from "@/actions/sign-up/signUpWithCred";
+import { ERROR } from "@/lib/messages";
 
 export const authOptions = {
   // Configure one or more authentication providers
@@ -16,15 +17,15 @@ export const authOptions = {
           email: credentials?.email as string,
           password: credentials?.password as string,
         });
-        if(signInWithCredAction.success === true) {
+        if (signInWithCredAction.success === true) {
           return {
             email: signInWithCredAction.data?.email,
             fullName: signInWithCredAction.data?.fullName,
             imageURL: signInWithCredAction.data?.imageURL,
             verified: signInWithCredAction.data?.verified,
-          }
+          };
         } else {
-          throw new Error(signInWithCredAction.error)
+          throw new Error(signInWithCredAction.error);
         }
       },
     }),
@@ -39,39 +40,44 @@ export const authOptions = {
           fullName: credentials?.fullName as string,
           imageURL: credentials?.imageURL as string,
         });
-        if(signUpWithCredAction.success === true) {
+        if (signUpWithCredAction.success === true) {
           return {
             email: signUpWithCredAction.data?.email,
             fullName: signUpWithCredAction.data?.fullName,
             imageURL: signUpWithCredAction.data?.imageURL,
             verified: signUpWithCredAction.data?.verified,
-          }
+          };
         } else {
-          throw new Error(signUpWithCredAction.error)
+          throw new Error(signUpWithCredAction.error);
         }
       },
     }),
     GithubProvider({
       clientId: process.env.GITHUB_CLIENT_ID as string,
       clientSecret: process.env.GITHUB_CLIENT_SECRET as string,
+      async profile(profile: GithubProfile)  {
+        return {
+          id: profile.id.toString(),
+          email: profile.email,
+          fullName: profile.login ?? profile.login,
+          imageURL: profile.avatar_url,
+          verified: true,
+        };
+      },
     }),
   ],
   secret: process.env.APP_KEY,
   session: {
-    strategy: 'jwt',
+    strategy: "jwt",
   },
   callbacks: {
     // @ts-ignore
-    async signIn({ user, account, profile}) {
-      console.log(profile, account)
-      if (user) { 
-        return true;
-      }
-      return false;
+    async signIn({ user, profile  }) {
+      return true;
     },
 
     // @ts-ignore
-    async session({ session, token, user }) {
+    async session({ session, token }) {
       if (session?.user) {
         session.user.verified = token.verified;
         session.user.fullName = token.fullName;
@@ -81,8 +87,8 @@ export const authOptions = {
     },
     // @ts-ignore
     async jwt({ session, trigger, token, user }) {
-      if (trigger === 'update' && session?.user?.verified) {
-        token.verified = session.user.verified
+      if (trigger === "update" && session?.user?.verified) {
+        token.verified = session.user.verified;
       }
 
       if (user) {

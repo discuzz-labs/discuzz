@@ -23,7 +23,7 @@ export default function Banner({ name }: BannerProps) {
           Welcome, {name} 👋
         </p>
       </div>
-      <ProfileImage size={32} className="absolute left-10 bottom-[-3rem]" />
+      <ProfileImage size={32} className="absolute left-10 max-w-32 max-h-32 bottom-[-3rem]" />
       <Button className="absolute right-10 bottom-[-3rem]">Follow</Button>
     </div>
   );
