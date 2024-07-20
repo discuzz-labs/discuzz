@@ -5,7 +5,7 @@ import {
 } from "@/components/ui/input-otp";
 import config from "@/lib/config";
 import routes from "@/services/routes";
-export const subject = "Confirmation Email";
+export const subject = "Verificationation Email";
 import {
   Body,
   Button,
@@ -18,12 +18,12 @@ import {
   Text,
 } from "@react-email/components";
 
-interface ConfirmEmailTemplateProps {
+interface VerificationEmailTemplateProps {
   userName: string;
   otp: string;
 }
 
-const ConfirmEmailTemplate = ({ userName, otp }: ConfirmEmailTemplateProps) => {
+const VerificationEmailTemplate = ({ userName, otp }: VerificationEmailTemplateProps) => {
   return (
     <Html>
       <Head />
@@ -109,4 +109,4 @@ const button = {
   padding: "14px 7px",
 };
 
-export default ConfirmEmailTemplate;
+export default VerificationEmailTemplate;

@@ -18,7 +18,7 @@ import { useSession } from "next-auth/react";
 import {useRouter} from "next/navigation"
 import routes from "@/services/routes";
 
-export default function VerifyEmailPage() {
+export default function VerifyLayout() {
   const router = useRouter()
   const { data: userSession } = useSession();
   const [error, setError] = useState<string>("");
@@ -88,7 +88,7 @@ export default function VerifyEmailPage() {
       <p className="flex items-center gap-2">
         {verificationStatus === "emailSentSuccess" && (
           <>
-            <Check /> {SUCCESS.VERIFICATION_SUCCESS_CONFIRMATION_EMAIL_SEND}
+            <Check /> {SUCCESS.VERIFICATION_SUCCESS_VerificationATION_EMAIL_SEND}
           </>
         )}
         {verificationStatus === "otpVerifiedSuccess" && (

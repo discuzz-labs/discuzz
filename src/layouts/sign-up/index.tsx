@@ -4,14 +4,14 @@ import { z } from "zod";
 import { SignUpFormSchema } from "@/validations/validation";
 import { useState } from "react";
 import Link from "next/link";
-import SignUpForm from "../form";
 import Alert from "@/components/Alert";
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import routes from "@/services/routes";
+import AuthForm from "@/components/AuthForm";
 
-export default function SignUpPage() {
-  const router = useRouter()
+export default function SignUpLayout() {
+  const router = useRouter();
   const [formSubmitted, setFormSubmitted] = useState<boolean>(false);
   const [error, setError] = useState<string>("");
   const [profileImageProvidedByGravater, setprofileImageProvidedByGravater] =
@@ -25,10 +25,10 @@ export default function SignUpPage() {
         password: values.password,
         fullName: values.fullName,
         imageURL: profileImageProvidedByGravater,
-        redirect:false
-      })
-      if(!signUpRequest?.ok) setError(signUpRequest?.error as string)
-      router.push(routes.redirects.onAfterSignUp)
+        redirect: false,
+      });
+      if (!signUpRequest?.ok) setError(signUpRequest?.error as string);
+      router.push(routes.redirects.onAfterSignUp);
     } catch (e) {
       setError(e as string);
     }
@@ -54,13 +54,30 @@ export default function SignUpPage() {
               Fill the form below to create an account.
             </p>
           </div>
-          <SignUpForm
-            profileImageProvidedByGravater={profileImageProvidedByGravater}
+          <AuthForm
+            schema={SignUpFormSchema}
             formSubmitted={formSubmitted}
-            setprofileImageProvidedByGravater={
-              setprofileImageProvidedByGravater
-            }
-            register={register}
+            callbackFn={register}
+            fields={[
+              {
+                name: "email",
+                type: "email",
+                placeholder: "Email",
+                label: "email",
+              },
+              {
+                name: "fullName",
+                type: "text",
+                placeholder: "Fullname",
+                label: "fullname",
+              },
+              {
+                name: "password",
+                type: "password",
+                placeholder: "Password",
+                label: "password",
+              },
+            ]}
           />
 
           <p className="mt-10 w-1/2 font-thin text-zinc-600 text-sm text-center">

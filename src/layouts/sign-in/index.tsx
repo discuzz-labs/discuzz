@@ -1,18 +1,18 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
-import SignInForm from "../form";
+import React, { useState } from "react";
 import Alert from "@/components/Alert";
 import { SignInFormSchema } from "@/validations/validation";
 import { z } from "zod";
 import { Button } from "@/components/ui/button";
 import { Github } from "lucide-react";
-import { getProviders, signIn, useSession } from "next-auth/react";
+import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import routes from "@/services/routes";
 import { Separator } from "@/components/ui/separator";
+import AuthForm from "@/components/AuthForm";
 
-export default function SignInPage() {
+export default function SignInLayout() {
   const router = useRouter();
   const [formSubmitted, setFormSubmitted] = useState<boolean>(false);
   const [error, setError] = useState<string>("");
@@ -43,6 +43,7 @@ export default function SignInPage() {
     }
     setFormSubmitted(false);
   };
+
   return (
     <>
       <div className="w-full h-[100vh] relative flex">
@@ -60,16 +61,29 @@ export default function SignInPage() {
             <p className="text-sm font-thin">Sign in to your account.</p>
           </div>
           <Button
-            // @ts-ignore
             disabled={formSubmitted}
             className="w-1/2 flex items-center gap-2"
             onClick={loginWithGithub}
           >
-            {/* @ts-ignore */}
             <Github /> Github
           </Button>
           <Separator className="w-1/2 my-2" />
-          <SignInForm login={login} formSubmitted={formSubmitted} />
+          <AuthForm 
+            schema={SignInFormSchema}
+            formSubmitted={formSubmitted}
+            callbackFn={login}
+            fields={[{
+              name: "email",
+              type: "email",
+              placeholder: "Email",
+              label : "email"
+            }, {
+              name: "password",
+              type: "password",
+              placeholder: "Password",
+              label : "password"
+            }]}
+          />
         </div>
       </div>
     </>

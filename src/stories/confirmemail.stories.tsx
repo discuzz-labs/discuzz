@@ -1,9 +1,9 @@
 import type { Meta, StoryObj } from "@storybook/react";
-import ConfirmEmailTemplate from "@/emailTemplate/confirmemail.email";
+import VerificationEmailTemplate from "@/emailTemplate/VerificationEmail";
 
-const meta: Meta<typeof ConfirmEmailTemplate> = {
-  component: ConfirmEmailTemplate,
-  title: "emailtemplate/confirmemail",
+const meta: Meta<typeof VerificationEmailTemplate> = {
+  component: VerificationEmailTemplate,
+  title: "emailtemplate/Verificationemail",
   tags: ["autodocs"],
 };
 

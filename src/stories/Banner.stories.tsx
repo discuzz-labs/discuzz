@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react";
-import Banner from "@/components/dashbaord/Banner";
+import Banner from "@/components/Banner";
 import { ThemeProvider } from "@/components/providers/ThemeProvider";
 import AuthProvider from "@/components/providers/AuthProvider";
 

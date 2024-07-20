@@ -6,7 +6,7 @@ import type { OtpCreatePayload, OtpCreateResponse } from "@/services/endpoints";
 import endpoints from "@/services/endpoints";
 import sendEmail from "@/services/sendEmail";
 import type { ACTIONResponse } from "@/types/api";
-import ConfirmEmailTemplate, { subject } from "@/emailTemplate/confirmemail.email";
+import VerificationEmailTemplate, { subject } from "@/emailTemplate/Verificationemail.email";
 import sendRequest from "@/lib/sendRequest";
 
 interface sendVerificationEmailProps {
@@ -41,7 +41,7 @@ async function sendVerificationEmail({
     try {
       await sendEmail({
         email,
-        emailTemplate: ConfirmEmailTemplate({
+        emailTemplate: VerificationEmailTemplate({
           otp: generateOTPResponse.data.otp,
           userName
         }),
@@ -49,7 +49,7 @@ async function sendVerificationEmail({
       });
     } catch (err) {
       return {
-        error: ERROR.VERIFICATION_FAILED_CONFIRM_EMAIL_CANNOT_BE_SEND,
+        error: ERROR.VERIFICATION_FAILED_Verification_EMAIL_CANNOT_BE_SEND,
         success: false,
         data: undefined,
       };

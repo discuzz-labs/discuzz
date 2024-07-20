@@ -5,9 +5,9 @@ import sendRequest from "@/lib/sendRequest";
 import endpoints, { OtpCreateResponse } from "@/services/endpoints";
 import sendEmail from "@/services/sendEmail";
 import { APIResponse } from "@/types/api";
-import ConfirmEmailTemplate, {
+import VerificationEmailTemplate, {
   subject,
-} from "@/emailTemplate/confirmemail.email";
+} from "@/emailTemplate/Verificationemail.email";
 
 // Mock dependencies
 jest.mock("@/lib/sendRequest");
@@ -51,7 +51,7 @@ describe("ACTIONS verify/sendVerificationEmail", () => {
     });
   });
 
-  it("should return an error if sending confirmation email fails", async () => {
+  it("should return an error if sending Verificationation email fails", async () => {
     const otpSuccessResponse: APIResponse<OtpCreateResponse> = {
       status: 200,
       data: { otp: "123456" },
@@ -81,7 +81,7 @@ describe("ACTIONS verify/sendVerificationEmail", () => {
 
     expect(sendEmail).toHaveBeenCalledWith({
       email,
-      emailTemplate: ConfirmEmailTemplate({
+      emailTemplate: VerificationEmailTemplate({
         otp: "123456",
         userName: "Test User",
       }),
@@ -89,7 +89,7 @@ describe("ACTIONS verify/sendVerificationEmail", () => {
     });
 
     expect(result).toEqual({
-      error: ERROR.VERIFICATION_FAILED_CONFIRM_EMAIL_CANNOT_BE_SEND,
+      error: ERROR.VERIFICATION_FAILED_Verification_EMAIL_CANNOT_BE_SEND,
       success: false,
       data: undefined,
     });
@@ -123,7 +123,7 @@ describe("ACTIONS verify/sendVerificationEmail", () => {
 
     expect(sendEmail).toHaveBeenCalledWith({
       email,
-      emailTemplate: ConfirmEmailTemplate({
+      emailTemplate: VerificationEmailTemplate({
         otp: "123456",
         userName: "Test User",
       }),

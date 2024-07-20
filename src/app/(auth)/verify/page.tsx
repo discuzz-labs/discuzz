@@ -1,5 +1,5 @@
-import VerifyEmailPage from "@/components/verify/page";
+import VerifyLayout from "@/layouts/verify";
 
-export default function ConfirmEmail() {
-  return <VerifyEmailPage />;
+export default function VerifyPage() {
+  return <VerifyLayout />;
 }
