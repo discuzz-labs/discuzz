@@ -21,7 +21,7 @@ export default function ProfileImage({
         <AvatarImage
           src={
             img ||
-            userSession?.user.imageURL ||
+            userSession?.user.image ||
             "https://www.gravatar.com/avatar/placeholder"
           }
           alt="Profile Image"

@@ -1,5 +1,6 @@
 const signInRoute = "/sign-in";
 const signUpRoute = "/sign-up";
+const signOutRoute = "/";
 const verifyRoute = "/verify";
 const dashboardRoute = "/dashboard";
 
@@ -8,6 +9,7 @@ const routes = {
     signIn: { path: signInRoute },
     signUp: { path: signUpRoute },
     verify: { path: verifyRoute },
+    signOut: { path : signOutRoute}
   },
   user: {
     dashboard: {

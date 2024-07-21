@@ -23,12 +23,15 @@ export default function SignUpLayout() {
       const signUpRequest = await signIn("signup", {
         email: values.email,
         password: values.password,
-        fullName: values.fullName,
-        imageURL: profileImageProvidedByGravater,
+        name: values.name,
+        image: profileImageProvidedByGravater,
         redirect: false,
       });
-      if (!signUpRequest?.ok) setError(signUpRequest?.error as string);
-      router.push(routes.redirects.onAfterSignUp);
+      if (!signUpRequest?.ok) {
+        setError(signUpRequest?.error as string);
+      } else {
+        router.push(routes.redirects.onAfterSignUp);
+      }
     } catch (e) {
       setError(e as string);
     }
@@ -39,7 +42,7 @@ export default function SignUpLayout() {
     <>
       <div className="w-full relative min-h-[100vh] flex">
         {error && <Alert message={error} type="error" />}
-        <div className="lg:flex lg:w-1/2 hidden bg-[#0b0a09] decorator text-white py-10  gap-5 flex-col p-10 justify-end">
+        <div className="lg:flex lg:w-1/2 hidden decorator text-white py-10  gap-5 flex-col p-10 justify-end">
           <p className="font-extrabold text-2xl">
             “Life is like riding a bicycle. To keep your balance, you must keep
             moving.”
@@ -62,20 +65,17 @@ export default function SignUpLayout() {
               {
                 name: "email",
                 type: "email",
-                placeholder: "Email",
-                label: "email",
+                placeholder: "Email - use grevater email!",
               },
               {
-                name: "fullName",
+                name: "name",
                 type: "text",
                 placeholder: "Fullname",
-                label: "fullname",
               },
               {
                 name: "password",
                 type: "password",
                 placeholder: "Password",
-                label: "password",
               },
             ]}
           />

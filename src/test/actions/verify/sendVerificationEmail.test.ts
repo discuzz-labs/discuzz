@@ -4,7 +4,7 @@ import { ERROR } from "@/lib/messages";
 import sendRequest from "@/lib/sendRequest";
 import endpoints, { OtpCreateResponse } from "@/services/endpoints";
 import sendEmail from "@/services/sendEmail";
-import { APIResponse } from "@/types/api";
+import { APIResponse } from "@/types/types";
 import VerificationEmailTemplate, {
   subject,
 } from "@/emailTemplate/Verificationemail.email";
@@ -89,7 +89,7 @@ describe("ACTIONS verify/sendVerificationEmail", () => {
     });
 
     expect(result).toEqual({
-      error: ERROR.VERIFICATION_FAILED_Verification_EMAIL_CANNOT_BE_SEND,
+      error: ERROR.VERIFICATION_FAILED_EMAIL_CANNOT_BE_SENT,
       success: false,
       data: undefined,
     });
@@ -152,7 +152,7 @@ describe("ACTIONS verify/sendVerificationEmail", () => {
       "ACTIONS verify/sendVerificationEmail"
     );
     expect(result).toEqual({
-      error: ERROR.API_IS_UNREACHABLE,
+      error: ERROR.SERVER_ERROR,
       success: false,
       data: undefined,
     });

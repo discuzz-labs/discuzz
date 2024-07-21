@@ -1,5 +1,5 @@
 import NextAuth from "next-auth";
-import { UserSessionInterface } from '../components/providers/AuthProvider';
+import { UserSessionInterface } from '../providers/AuthProvider';
 
 declare module "next-auth" {
   interface Session {

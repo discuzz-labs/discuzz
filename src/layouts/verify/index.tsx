@@ -11,7 +11,9 @@ import {
 import { REGEXP_ONLY_DIGITS } from "input-otp";
 import { Check, Verified, X } from "lucide-react";
 import { useState } from "react";
-import sendVerificationEmail from "@/actions/verify/sendVerificationEmail";
+import sendVerificationEmail from "@/actions/verify/sendVerificationEmail"; 
+import createOtp from "@/actions/verify/createOtp"; 
+import verifyOtp from "@/actions/verify/verifyOtp"; 
 import { SUCCESS } from "@/lib/messages";
 import verifyUser from "@/actions/verify/verifyUser";
 import { useSession } from "next-auth/react";
@@ -35,9 +37,18 @@ export default function VerifyLayout() {
 
   const sendEmail = async () => {
     try {
+      console.log(userSession?.user)
+      const createOTP = await createOtp({ id: userSession?.user.id as string })
+      if (createOTP.success == false) {
+        setVerificationStatus("emailSentFailed");
+        setError(createOTP.error);
+        return;
+      }
+
       const sendVerificationEmailAction = await sendVerificationEmail({
         email: userSession?.user.email as string,
-        userName: userSession?.user.fullName as string
+        userName: userSession?.user.name as string,
+        otp: createOTP.data?.otp as string
       });
       if (sendVerificationEmailAction.success == false) {
         setVerificationStatus("emailSentFailed");
@@ -46,17 +57,24 @@ export default function VerifyLayout() {
         setVerificationStatus("emailSentSuccess");
       }
     } catch (err) {
-      setVerificationStatus("emailSentSuccess");
+      setVerificationStatus("emailSentFailed");
       setError(err as string);
     }
   };
 
   const verify = async () => {
     try {
+      const verifyOTP = await verifyOtp({ id: userSession?.user.id as string, otp })
+      if (verifyOTP.success == false) {
+        setVerificationStatus("otpVerifiedFailed");
+        setError(verifyOTP.error);
+        return
+      }
+
       const verifyUserAction = await verifyUser({
-        email: userSession?.user.email as string,
-        otp,
+        id: userSession?.user.id as string,
       });
+      
       if (verifyUserAction.success == false) {
         setVerificationStatus("otpVerifiedFailed");
         setOTP("")
@@ -88,7 +106,7 @@ export default function VerifyLayout() {
       <p className="flex items-center gap-2">
         {verificationStatus === "emailSentSuccess" && (
           <>
-            <Check /> {SUCCESS.VERIFICATION_SUCCESS_VerificationATION_EMAIL_SEND}
+            <Check /> {SUCCESS.VERIFICATION_SUCCESS_EMAIL_SENT}
           </>
         )}
         {verificationStatus === "otpVerifiedSuccess" && (

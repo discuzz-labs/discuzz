@@ -5,7 +5,7 @@ import endpoints, {
   AuthVerifyResponse,
   OtpVerifyResponse,
 } from "@/services/endpoints";
-import { APIResponse } from "@/types/api";
+import { APIResponse } from "@/types/types";
 
 jest.mock("@/lib/sendRequest");
 
@@ -151,7 +151,7 @@ describe("ACTIONS verify/verifyUser", () => {
     const result = await verifyUser({ email, otp });
 
     expect(result).toEqual({
-      error: ERROR.API_IS_UNREACHABLE,
+      error: ERROR.SERVER_ERROR,
       success: false,
       data: undefined,
     });

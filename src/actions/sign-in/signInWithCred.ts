@@ -1,12 +1,10 @@
 "use server";
 
 import { ERROR } from "@/lib/messages";
-import type { ACTIONResponse } from "@/types/api";
-import type { AuthLoginPayload, AuthLoginResponse } from "@/services/endpoints";
-import endpoints from "@/services/endpoints";
-import type { UserSessionInterface } from "@/components/providers/AuthProvider";
+import type { ACTIONResponse } from "@/types/types";
+import type { UserSessionInterface } from "@/providers/AuthProvider";
 import log from "@/lib/log";
-import sendRequest from "@/lib/sendRequest";
+import Profile, { ProfileErrorType } from "@/database/Profile";
 
 interface signInWithCredArgs {
   email: string;
@@ -18,47 +16,37 @@ async function signInWithCred({
   password,
 }: signInWithCredArgs): Promise<ACTIONResponse<UserSessionInterface>> {
   try {
-    const loginResponse = await sendRequest<
-      AuthLoginPayload,
-      AuthLoginResponse
-    >({
-      payload: {
-        email,
-        password,
-      },
-      path: endpoints.auth.login.path,
-      method: endpoints.auth.login.method,
+    const userProfile = new Profile({
+      email,
+      password,
     });
-
-    if (!loginResponse.data || loginResponse.error) {
+    const userLogin = await userProfile.login()
+    
+    if(userLogin.success === false && userLogin.error){
       return {
-        error: loginResponse.error
-          ? loginResponse.error
-          : ERROR.LOGIN_FAILED_WRONG_CREDENTIALS,
         success: false,
+        error:
+          userLogin.error.type === ProfileErrorType.CannotLoginWithProfile
+            ? ERROR.LOGIN_FAILED_WRONG_CREDENTIALS
+            : userLogin.error.origin,
         data: undefined,
       };
     }
-
-    const {
-      imageURL = "",
-      fullName = "",
-      verified = false,
-    } = loginResponse.data;
 
     return {
       success: true,
       error: null,
       data: {
         email,
-        imageURL,
-        fullName,
-        verified,
+        image: userLogin.data?.image as string,
+        name: userLogin.data?.name as string,
+        verified: userLogin.data?.verified as boolean,
+        id: userLogin.data?.id as string
       },
     };
   } catch (err) {
     log("actions", err, "ACTIONS sign-in/signInWithCred");
-    return { error: ERROR.API_IS_UNREACHABLE, success: false, data: undefined };
+    return { error: ERROR.SERVER_ERROR, success: false, data: undefined };
   }
 }
 

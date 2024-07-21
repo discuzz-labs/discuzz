@@ -1,6 +1,6 @@
 import signInWithCred from "@/actions/sign-in/signInWithCred";
 import { ERROR } from "@/lib/messages";
-import type { APIResponse } from "@/types/api";
+import type { APIResponse } from "@/types/types";
 import endpoints from "@/services/endpoints";
 import log from "@/lib/log";
 import type { AuthLoginResponse } from "@/services/endpoints";
@@ -21,8 +21,8 @@ describe("ACTIONS sign-in/signInWithCred", () => {
   it("should return success and user data if login is successful", async () => {
     const userData: AuthLoginResponse = {
       email,
-      fullName: "Test User",
-      imageURL: "http://example.com/image.jpg",
+      name: "Test User",
+      image: "http://example.com/image.jpg",
       verified: true,
     };
     const apiResponse: APIResponse<AuthLoginResponse> = {
@@ -50,8 +50,8 @@ describe("ACTIONS sign-in/signInWithCred", () => {
       error: null,
       data: {
         email,
-        imageURL: userData.imageURL,
-        fullName: userData.fullName,
+        image: userData.image,
+        name: userData.name,
         verified: userData.verified,
       },
     });
@@ -89,7 +89,7 @@ describe("ACTIONS sign-in/signInWithCred", () => {
     );
     expect(result).toEqual({
       success: false,
-      error: ERROR.API_IS_UNREACHABLE,
+      error: ERROR.SERVER_ERROR,
       data: undefined,
     });
   });

@@ -4,10 +4,11 @@ import { SessionProvider } from "next-auth/react";
 import { ReactNode } from "react";
 
 export interface UserSessionInterface {
-  fullName: string;
-  imageURL: string;
+  name: string;
+  image: string;
   email: string;
   verified: boolean;
+  id: string;
 }
 interface AuthProviderProps {
   children: ReactNode;

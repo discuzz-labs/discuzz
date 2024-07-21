@@ -6,7 +6,7 @@ export default function DashboardLayout() {
   const { data: userSession } = useSession();
   return (
     <div className="w-2/3 h-full border-x border-input">
-      <Banner name={userSession?.user.fullName as string} />
+      <Banner name={userSession?.user.name as string} />
       {/* <UserInfo userEmail={} /> */}
     </div>
   );

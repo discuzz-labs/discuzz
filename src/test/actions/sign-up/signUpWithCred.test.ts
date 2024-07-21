@@ -1,6 +1,6 @@
 import signUpWithCred from "@/actions/sign-up/signUpWithCred";
 import { ERROR } from "@/lib/messages";
-import type { APIResponse } from "@/types/api";
+import type { APIResponse } from "@/types/types";
 import endpoints from "@/services/endpoints";
 import log from "@/lib/log";
 import type {
@@ -16,8 +16,8 @@ jest.mock("@/lib/log");
 describe("ACTIONS sign-up/signUpWithCred", () => {
   const email = "test@example.com";
   const password = "password";
-  const imageURL = "http://example.com/image.jpg";
-  const fullName = "Test User";
+  const image = "http://example.com/image.jpg";
+  const name = "Test User";
 
   afterEach(() => {
     jest.clearAllMocks();
@@ -26,7 +26,7 @@ describe("ACTIONS sign-up/signUpWithCred", () => {
   it("should return an error if the email already exists", async () => {
     const emailExistsResponse: APIResponse<UserFindResponse> = {
       status: 200,
-      data: { email, fullName, imageURL, verified: true },
+      data: { email, name, image, verified: true },
       success: true,
       error: null,
     };
@@ -36,8 +36,8 @@ describe("ACTIONS sign-up/signUpWithCred", () => {
     const result = await signUpWithCred({
       email,
       password,
-      imageURL,
-      fullName,
+      image,
+      name,
     });
 
     expect(sendRequest).toHaveBeenCalledWith({
@@ -49,7 +49,7 @@ describe("ACTIONS sign-up/signUpWithCred", () => {
     });
 
     expect(result).toEqual({
-      error: ERROR.REGISTERATION_FAILED_EMAIL_ALREADY_EXSITS,
+      error: ERROR.REGISTRATION_FAILED_EMAIL_ALREADY_EXISTS,
       success: false,
       data: undefined,
     });
@@ -77,8 +77,8 @@ describe("ACTIONS sign-up/signUpWithCred", () => {
     const result = await signUpWithCred({
       email,
       password,
-      imageURL,
-      fullName,
+      image,
+      name,
     });
 
     expect(sendRequest).toHaveBeenCalledWith({
@@ -94,8 +94,8 @@ describe("ACTIONS sign-up/signUpWithCred", () => {
       method: endpoints.auth.register.method,
       payload: {
         email,
-        fullName,
-        imageURL,
+        name,
+        image,
         password,
       },
     });
@@ -129,8 +129,8 @@ describe("ACTIONS sign-up/signUpWithCred", () => {
     const result = await signUpWithCred({
       email,
       password,
-      imageURL,
-      fullName,
+      image,
+      name,
     });
 
     expect(sendRequest).toHaveBeenCalledWith({
@@ -146,8 +146,8 @@ describe("ACTIONS sign-up/signUpWithCred", () => {
       method: endpoints.auth.register.method,
       payload: {
         email,
-        fullName,
-        imageURL,
+        name,
+        image,
         password,
       },
     });
@@ -155,7 +155,7 @@ describe("ACTIONS sign-up/signUpWithCred", () => {
     expect(result).toEqual({
       success: true,
       error: null,
-      data: { email, fullName, imageURL, verified: false },
+      data: { email, name, image, verified: false },
     });
   });
 
@@ -166,8 +166,8 @@ describe("ACTIONS sign-up/signUpWithCred", () => {
     const result = await signUpWithCred({
       email,
       password,
-      imageURL,
-      fullName,
+      image,
+      name,
     });
 
     expect(log).toHaveBeenCalledWith(
@@ -176,7 +176,7 @@ describe("ACTIONS sign-up/signUpWithCred", () => {
       "ACTIONS sign-up/signUpWithCred"
     );
     expect(result).toEqual({
-      error: ERROR.API_IS_UNREACHABLE,
+      error: ERROR.SERVER_ERROR,
       success: false,
       data: undefined,
     });

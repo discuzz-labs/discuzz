@@ -1,13 +1,13 @@
 import type { Metadata } from "next";
 import { Roboto } from "next/font/google";
 
-import { ThemeProvider } from "@/components/providers/ThemeProvider";
+import { ThemeProvider } from "@/providers/ThemeProvider";
 import NavBar from "@/components/NavBar";
 import { Toaster } from "@/components/ui/toaster";
 import config from "@/lib/config";
 import "../styles/globals.css";
 import "../styles/theme.css";
-import AuthProvider from "@/components/providers/AuthProvider";
+import AuthProvider from "@/providers/AuthProvider";
 import build from "@/build";
 
 const inter = Roboto({

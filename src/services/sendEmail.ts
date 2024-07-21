@@ -3,6 +3,7 @@ import Mail from "nodemailer/lib/mailer";
 import { render } from "@react-email/components";
 import config from "@/lib/config";
 import { JSXElementConstructor, ReactElement } from "react";
+import { log } from "console";
 
 interface sendMailProps {
   email: string;
@@ -47,6 +48,7 @@ const sendEmail = ({
       if (!err) {
         resolve("");
       } else {
+        log("services", err, "SERVICES services/sendEmail");
         reject(err.message);
       }
     });

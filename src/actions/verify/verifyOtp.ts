@@ -3,14 +3,17 @@
 import Profile, { ProfileErrorType } from "@/database/Profile";
 import log from "@/lib/log";
 import { ERROR } from "@/lib/messages";
+import { verifyOTP } from "@/services/otp";
 import type { ACTIONResponse } from "@/types/types";
 
 interface verifyUserProps {
   id: string;
+  otp: string;
 }
 
 async function verifyUser({
   id,
+  otp,
 }: verifyUserProps): Promise<ACTIONResponse<undefined>> {
   try {
 
@@ -20,19 +23,28 @@ async function verifyUser({
         verified: true,
       },
     });
-    
-    const userVerification = await userProfile.updateProfile();
-    if (userVerification.success === false && userVerification.error) {
+
+    const otpVerification = await userProfile.findById()
+
+    if (otpVerification.success === false && otpVerification.error) {
       return {
         error:
-          userVerification.error?.type === ProfileErrorType.UpdateProfileFailed
-            ? ERROR.VERIFICATION_FAILED_USER_CANNOT_BE_VERIFIED
-            : userVerification.error.origin,
+        otpVerification.error?.type === ProfileErrorType.CannotFindProfile
+            ? ERROR.VERIFICATION_FAILED_OTP_CANNOT_BE_VERIFIED
+            : otpVerification.error.origin,
         success: false,
         data: undefined,
       };
     }
-
+    
+    if(verifyOTP(otp, otpVerification.data?.OTP as string, otpVerification.data?.TTL as string)){
+      return {
+        error: ERROR.VERIFICATION_FAILED_OTP_INVALID,
+        success: false,
+        data: undefined,
+      };
+    }
+    
     return {
       error: null,
       success: true,

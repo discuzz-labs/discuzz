@@ -1,8 +1,3 @@
-import {
-  InputOTP,
-  InputOTPGroup,
-  InputOTPSlot,
-} from "@/components/ui/input-otp";
 import config from "@/lib/config";
 import routes from "@/services/routes";
 export const subject = "Verificationation Email";
@@ -42,17 +37,7 @@ const VerificationEmailTemplate = ({ userName, otp }: VerificationEmailTemplateP
             <Text style={text}>Hi {userName},</Text>
             <Text style={text}>Verify your email.</Text>
             <Text>
-              Conformation code:
-              <InputOTP maxLength={6} value={otp}>
-                <InputOTPGroup>
-                  <InputOTPSlot index={0} />
-                  <InputOTPSlot index={1} />
-                  <InputOTPSlot index={2} />
-                  <InputOTPSlot index={3} />
-                  <InputOTPSlot index={4} />
-                  <InputOTPSlot index={5} />
-                </InputOTPGroup>
-              </InputOTP>
+              Conformation code:{otp}
             </Text>
             <Button
               style={button}

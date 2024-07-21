@@ -1,4 +1,4 @@
-import type { APIResponse } from "@/types/api";
+import type { APIResponse } from "@/types/types";
 
 async function sendRequest<PayloadType, ResponseType>({
   payload,
