@@ -94,7 +94,7 @@ export const authOptions = {
   callbacks: {
     // @ts-ignore
     async signIn({ user, profile, account }) {
-      if(profile.success === false) {
+      if(account.provider === "github" && profile.success === false) {
         throw new Error(profile.error)
       }
       return true;

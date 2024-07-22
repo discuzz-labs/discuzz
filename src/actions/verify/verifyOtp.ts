@@ -11,7 +11,7 @@ interface verifyUserProps {
   otp: string;
 }
 
-async function verifyUser({
+async function verifyOtp({
   id,
   otp,
 }: verifyUserProps): Promise<ACTIONResponse<undefined>> {
@@ -36,8 +36,7 @@ async function verifyUser({
         data: undefined,
       };
     }
-    
-    if(verifyOTP(otp, otpVerification.data?.OTP as string, otpVerification.data?.TTL as string)){
+    if(!verifyOTP(otp, otpVerification.data?.OTP as string, otpVerification.data?.TTL as string)){
       return {
         error: ERROR.VERIFICATION_FAILED_OTP_INVALID,
         success: false,
@@ -56,4 +55,4 @@ async function verifyUser({
   }
 }
 
-export default verifyUser;
+export default verifyOtp;

@@ -37,7 +37,6 @@ export default function VerifyLayout() {
 
   const sendEmail = async () => {
     try {
-      console.log(userSession?.user)
       const createOTP = await createOtp({ id: userSession?.user.id as string })
       if (createOTP.success == false) {
         setVerificationStatus("emailSentFailed");
@@ -64,8 +63,12 @@ export default function VerifyLayout() {
 
   const verify = async () => {
     try {
+      if(otp == ""){
+        setVerificationStatus("")
+        return
+      }
       const verifyOTP = await verifyOtp({ id: userSession?.user.id as string, otp })
-      if (verifyOTP.success == false) {
+      if (verifyOTP.success === false) {
         setVerificationStatus("otpVerifiedFailed");
         setError(verifyOTP.error);
         return

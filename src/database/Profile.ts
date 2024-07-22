@@ -28,7 +28,7 @@ export enum ProfileErrorType {
 // Define the Profile class
 export default class Profile {
   public email: string | null;
-  protected password: string | null;
+  public password: string | null;
   public name: string | null;
   public id: string | null;
   public valuesToUpdate: Partial<User> | null;
@@ -217,7 +217,6 @@ export default class Profile {
   }
 
   async updateProfile(): Promise<DatabaseResponse<undefined | User | null>> {
-    console.log(this.valuesToUpdate, this.id)
     if (this.valuesToUpdate && this.id) {
       try {
         const user = await prisma.user.update({
