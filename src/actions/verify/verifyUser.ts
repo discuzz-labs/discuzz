@@ -6,22 +6,23 @@ import { ERROR } from "@/lib/messages";
 import type { ACTIONResponse } from "@/types/types";
 
 interface verifyUserProps {
-  id: string;
+  email: string;
 }
 
 async function verifyUser({
-  id,
+  email,
 }: verifyUserProps): Promise<ACTIONResponse<undefined>> {
   try {
 
     const userProfile = new Profile({
-      id,
+      email,
       valuesToUpdate: {
         verified: true,
+        emailVerified: Date.now().toString()
       },
     });
     
-    const userVerification = await userProfile.updateProfile();
+    const userVerification = await userProfile.updateProfileByEmail();
     if (userVerification.success === false && userVerification.error) {
       return {
         error:

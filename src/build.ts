@@ -12,6 +12,8 @@ const build = async () => {
       "NEXT_PUBLIC_SENDER_EMAIL_PROVIDER",
       "APP_KEY",
       "DATABASE_URL",
+      "NEXTAUTH_URL",
+      "NEXT_PUBLIC_SUPPORT_EMAIL"
     ];
 
     const missingEnvVariables = requiredEnvVariables.filter(

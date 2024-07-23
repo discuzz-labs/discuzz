@@ -113,10 +113,6 @@ export const authOptions = {
     },
     // @ts-ignore
     async jwt({ session, trigger, token, user }) {
-      if (trigger === "update" && session?.user?.verified) {
-        token.verified = session.user.verified;
-      }
-
       if (user) {
         token.verified = user.verified;
         token.name = user.name;

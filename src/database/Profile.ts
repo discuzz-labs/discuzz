@@ -42,7 +42,7 @@ export default class Profile {
     id,
     valuesToUpdate,
   }: ProfileConstructor) {
-    this.email = email ? email : null;
+    this.email = email ? email.trim().toLowerCase() : null;
     this.password = password ? password : null;
     this.name = name ? name : null;
     this.image = image ? image : null;
@@ -74,8 +74,7 @@ export default class Profile {
             level: Level.BRONZE,
             verified: false,
             TFA: false,
-            OTP: "",
-            TTL: "",
+            token: "",
             bio: "",
             links: [],
             followerIds: [],
@@ -216,12 +215,12 @@ export default class Profile {
     }
   }
 
-  async updateProfile(): Promise<DatabaseResponse<undefined | User | null>> {
-    if (this.valuesToUpdate && this.id) {
+  async updateProfileByEmail(): Promise<DatabaseResponse<undefined | User | null>> {
+    if (this.valuesToUpdate &&  this.email) {
       try {
         const user = await prisma.user.update({
-          where: {
-            id: this.id,
+          where: { 
+            email: this.email
           },
           data: this.valuesToUpdate,
         });

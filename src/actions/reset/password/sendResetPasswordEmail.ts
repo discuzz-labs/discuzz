@@ -3,27 +3,26 @@
 import { ERROR } from "@/lib/messages";
 import sendEmail from "@/services/sendEmail";
 import type { ACTIONResponse } from "@/types/types";
-import VerificationEmailTemplate, {
-  subject,
-} from "@/emailTemplate/VerificationEmail";
+import ResetPasswordEmailTemplate, {subject} from "@/emailTemplate/ResetPasswordEmail";
 
-interface sendVerificationEmailProps {
-  token: string;
+
+interface sendResetPasswordEmailProps {
   email: string;
   userName: string;
+  token: string;
 }
 
-async function sendVerificationEmail({
+async function sendResetPasswordEmail({
   userName,
   email,
-  token,
-}: sendVerificationEmailProps): Promise<ACTIONResponse<undefined>> {
+  token
+}: sendResetPasswordEmailProps): Promise<ACTIONResponse<undefined>> {
   try {
     await sendEmail({
       email,
-      emailTemplate: VerificationEmailTemplate({
-        token,
+      emailTemplate: ResetPasswordEmailTemplate({
         userName,
+        token,
       }),
       subject: subject,
     });
@@ -35,11 +34,11 @@ async function sendVerificationEmail({
     };
   } catch (err) {
     return {
-      error: ERROR.VERIFICATION_FAILED_EMAIL_CANNOT_BE_SENT,
+      error: ERROR.RESETPASSWORD_FAILED_EMAIL_CANNOT_BE_SENT,
       success: false,
       data: undefined,
     };
   }
 }
 
-export default sendVerificationEmail;
+export default sendResetPasswordEmail;

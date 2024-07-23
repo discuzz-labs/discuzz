@@ -3,7 +3,6 @@ import { Form } from "@/components/ui/form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm, UseFormReturn, Path } from "react-hook-form";
 import { Button } from "@/components/ui/button";
-import Link from "next/link";
 import Spinner from "@/components/Spinner";
 import { InputForm } from "@/components/InputForm";
 
@@ -12,6 +11,7 @@ interface FormProps<T extends z.ZodType<any, any, any>> {
   formSubmitted: boolean;
   callbackFn: (values: z.infer<T>) => void;
   fields: Array<{ name: Path<z.infer<T>>, type: string, placeholder: string, label?: string }>;
+  submitBtnText?: string | undefined;
 }
 
 export default function AuthForm<T extends z.ZodType<any, any>>({
@@ -19,6 +19,7 @@ export default function AuthForm<T extends z.ZodType<any, any>>({
   formSubmitted,
   callbackFn,
   fields,
+  submitBtnText
 }: FormProps<T>) {
   const form = useForm<z.infer<T>>({
     mode: "onSubmit",
@@ -50,12 +51,8 @@ export default function AuthForm<T extends z.ZodType<any, any>>({
             type="submit"
             className="w-1/2 flex items-center gap-2"
           >
-            {formSubmitted && <Spinner />} Submit
+            {formSubmitted && <Spinner />} {submitBtnText ? submitBtnText : "Submit"}
           </Button>
-
-          <Link className="font-thin text-xs" href="/recover/password">
-            Forget Password!
-          </Link>
         </div>
       </form>
     </Form>

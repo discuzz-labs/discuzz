@@ -15,10 +15,10 @@ import {
 
 interface VerificationEmailTemplateProps {
   userName: string;
-  otp: string;
+  token: string;
 }
 
-const VerificationEmailTemplate = ({ userName, otp }: VerificationEmailTemplateProps) => {
+const VerificationEmailTemplate = ({ userName, token }: VerificationEmailTemplateProps) => {
   return (
     <Html>
       <Head />
@@ -36,15 +36,15 @@ const VerificationEmailTemplate = ({ userName, otp }: VerificationEmailTemplateP
           <Section>
             <Text style={text}>Hi {userName},</Text>
             <Text style={text}>Verify your email.</Text>
-            <Text>
-              Conformation code:{otp}
-            </Text>
             <Button
               style={button}
-              href={`${config.site.url}${routes.auth.verify}`}
-            >
+              href={`${config.site.url}${routes.auth.verify.path}/${token}`}
+              >
               Verify your email.
             </Button>
+              <Text>
+                Conformation link: {`${config.site.url}${routes.auth.verify.path}/${token}`}
+              </Text>
             <Text style={text}>
               To keep your account secure, please don&apos;t forward this email
               to anyone.

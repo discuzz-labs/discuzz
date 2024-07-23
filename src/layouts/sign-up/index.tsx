@@ -1,7 +1,7 @@
 "use client";
 
 import { z } from "zod";
-import { SignUpFormSchema } from "@/validations/validation";
+import { SignUpFormSchema } from "@/validations/form";
 import { useState } from "react";
 import Link from "next/link";
 import Alert from "@/components/Alert";
@@ -9,6 +9,7 @@ import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import routes from "@/services/routes";
 import AuthForm from "@/components/AuthForm";
+import Header from "@/components/Header";
 
 export default function SignUpLayout() {
   const router = useRouter();
@@ -51,12 +52,7 @@ export default function SignUpLayout() {
         </div>
 
         <div className="lg:w-1/2 lg:dark:bg-black lg:dark:bg-none dark:decorator w-full flex flex-col items-center justify-center">
-          <div className="flex flex-col gap-2 items-center justify-center pb-10">
-            <p className="text-2xl font-extrabold">Create an account</p>
-            <p className="text-sm font-thin">
-              Fill the form below to create an account.
-            </p>
-          </div>
+          <Header content="Sign Up." caption="Create a new account." />
           <AuthForm
             schema={SignUpFormSchema}
             formSubmitted={formSubmitted}
@@ -78,6 +74,7 @@ export default function SignUpLayout() {
                 placeholder: "Password",
               },
             ]}
+            submitBtnText="Create an account"
           />
 
           <p className="mt-10 w-1/2 font-thin text-zinc-600 text-sm text-center">

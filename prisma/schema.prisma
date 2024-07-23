@@ -60,9 +60,9 @@ enum Role {
 }
 
 model Issue {
-  id                String             @id @default(auto()) @map("_id") @db.ObjectId
-  author            User               @relation(fields: [userId], references: [id])
-  userId            String             @db.ObjectId
+  id                String      @id @default(auto()) @map("_id") @db.ObjectId
+  author            User        @relation(fields: [userId], references: [id])
+  userId            String      @db.ObjectId
   label             String
   level             Level
   creation_date     DateTime
@@ -75,9 +75,9 @@ model Issue {
 }
 
 model UserReport {
-  id            String      @id @default(auto()) @map("_id") @db.ObjectId
-  author        User        @relation(fields: [userId], references: [id])
-  userId        String      @db.ObjectId
+  id            String   @id @default(auto()) @map("_id") @db.ObjectId
+  author        User     @relation(fields: [userId], references: [id])
+  userId        String   @db.ObjectId
   label         String
   moderity      Int
   body          String
@@ -85,29 +85,27 @@ model UserReport {
   accepted      Boolean
   seen          Boolean
 }
- 
+
 model User {
-  id            String          @id @default(auto()) @map("_id") @db.ObjectId
-  name          String?
-  email         String?         @unique
-  emailVerified DateTime?
-  image         String?
-  password      String
-  age           Int
-  role          Role
-  bio           String
-  badges        ActivityBadge[]
-  level         Level
-  verified      Boolean
-  TFA           Boolean
-  OTP           String
-  TTL           String
-  links         String[]
-  reports       UserReport[]
-  issues        Issue[]
-  followerIds   Int[]
-  followingIds  Int[]
- 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id                     String          @id @default(auto()) @map("_id") @db.ObjectId
+  name                   String?
+  email                  String?         @unique
+  emailVerified          String?
+  image                  String?
+  password               String
+  token                  String?
+  age                    Int
+  role                   Role
+  bio                    String
+  badges                 ActivityBadge[]
+  level                  Level
+  verified               Boolean
+  TFA                    Boolean
+  links                  String[]
+  reports                UserReport[]
+  issues                 Issue[]
+  followerIds            Int[]
+  followingIds           Int[]
+  createdAt              DateTime        @default(now())
+  updatedAt              DateTime        @updatedAt
 }

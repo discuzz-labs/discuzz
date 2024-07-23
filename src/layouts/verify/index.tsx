@@ -1,172 +1,67 @@
 "use client";
 
-import { getSession, getCsrfToken } from "next-auth/react";
-import Spinner from "@/components/Spinner";
-import { Button } from "@/components/ui/button";
-import {
-  InputOTP,
-  InputOTPGroup,
-  InputOTPSlot,
-} from "@/components/ui/input-otp";
-import { REGEXP_ONLY_DIGITS } from "input-otp";
-import { Check, Verified, X } from "lucide-react";
 import { useState } from "react";
-import sendVerificationEmail from "@/actions/verify/sendVerificationEmail"; 
-import createOtp from "@/actions/verify/createOtp"; 
-import verifyOtp from "@/actions/verify/verifyOtp"; 
+import sendVerificationEmail from "@/actions/verify/sendVerificationEmail";
 import { SUCCESS } from "@/lib/messages";
-import verifyUser from "@/actions/verify/verifyUser";
-import { useSession } from "next-auth/react";
-import {useRouter} from "next/navigation"
-import routes from "@/services/routes";
+import { useSession } from "next-auth/react"
+import Header from "@/components/Header";
+import Alert from "@/components/Alert";
+import createToken from "@/actions/createToken";
+import { VerifyEmailFormSchema } from "@/validations/form";
+import AuthForm from "@/components/AuthForm";
+import { Check } from "lucide-react";
 
 export default function VerifyLayout() {
-  const router = useRouter()
   const { data: userSession } = useSession();
-  const [error, setError] = useState<string>("");
-  const [otp, setOTP] = useState<string>("");
-  const [verificationStatus, setVerificationStatus] = useState<
-    | ""
-    | "emailSending"
-    | "emailSentSuccess"
-    | "emailSentFailed"
-    | "otpVerifying"
-    | "otpVerifiedSuccess"
-    | "otpVerifiedFailed"
-  >("");
+  const [formSubmitted, setFormSubmitted] = useState<boolean>(false);
+  const [message, setMessage] = useState<{ text: string; type: 'success' | 'error' }>({ text: '', type: 'error' });
+
 
   const sendEmail = async () => {
+    setFormSubmitted(true)
     try {
-      const createOTP = await createOtp({ id: userSession?.user.id as string })
-      if (createOTP.success == false) {
-        setVerificationStatus("emailSentFailed");
-        setError(createOTP.error);
+      const createOobAction = await createToken({
+        email: userSession?.user.email as string,
+      });
+      if (createOobAction.success === false) {
+        setMessage({ text: createOobAction.error, type: 'error' });
+        setFormSubmitted(false)
         return;
       }
-
+      
       const sendVerificationEmailAction = await sendVerificationEmail({
         email: userSession?.user.email as string,
         userName: userSession?.user.name as string,
-        otp: createOTP.data?.otp as string
-      });
-      if (sendVerificationEmailAction.success == false) {
-        setVerificationStatus("emailSentFailed");
-        setError(sendVerificationEmailAction.error);
-      } else {
-        setVerificationStatus("emailSentSuccess");
-      }
-    } catch (err) {
-      setVerificationStatus("emailSentFailed");
-      setError(err as string);
-    }
-  };
-
-  const verify = async () => {
-    try {
-      if(otp == ""){
-        setVerificationStatus("")
-        return
-      }
-      const verifyOTP = await verifyOtp({ id: userSession?.user.id as string, otp })
-      if (verifyOTP.success === false) {
-        setVerificationStatus("otpVerifiedFailed");
-        setError(verifyOTP.error);
-        return
-      }
-
-      const verifyUserAction = await verifyUser({
-        id: userSession?.user.id as string,
+        token: createOobAction.data?.token as string,
       });
       
-      if (verifyUserAction.success == false) {
-        setVerificationStatus("otpVerifiedFailed");
-        setOTP("")
-        setError(verifyUserAction.error);
-      } else {
-        setVerificationStatus("otpVerifiedSuccess");
-        const csrfToken = await getCsrfToken();
-        await getSession({
-          req: {
-            body: {
-              csrfToken,
-              data: { user: { verified: true } },
-            },
-          },
-        });
-        router.push(routes.redirects.onAfterVerify)
+      if (sendVerificationEmailAction.success === false) {
+        setMessage({ text: sendVerificationEmailAction.error, type: 'error' });
+        setFormSubmitted(false)
+        return;
       }
+      
+      setMessage({ text: SUCCESS.VERIFICATION_SUCCESS_EMAIL_SENT, type: 'success' });
     } catch (err) {
-      setVerificationStatus("otpVerifiedFailed");
-      setOTP("")
-      setError(err as string);
+      setMessage({ text: err as string, type: 'error' });
     }
-
+    setFormSubmitted(false)
   };
 
   return (
-    <div className="w-full h-[100vh] flex flex-col items-center justify-center dark:decorator">
-      <p className="font-extrabold text-xl">Verify your email.</p>
-      <p className="flex items-center gap-2">
-        {verificationStatus === "emailSentSuccess" && (
-          <>
-            <Check /> {SUCCESS.VERIFICATION_SUCCESS_EMAIL_SENT}
-          </>
-        )}
-        {verificationStatus === "otpVerifiedSuccess" && (
-          <>
-            {userSession?.user.verified}
-            <Verified /> {SUCCESS.VERIFICATION_SUCCESS_VERIFIED}
-          </>
-        )}
-        {(verificationStatus === "emailSending" ||
-          verificationStatus === "otpVerifying") && (
-          <>
-            <Spinner />{" "}
-            {verificationStatus === "otpVerifying"
-              ? "Verifying OTP."
-              : "Sending verification email."}
-          </>
-        )}
-        {(verificationStatus === "emailSentFailed" ||
-          verificationStatus === "otpVerifiedFailed") && (
-          <>
-            <X /> {error}
-          </>
-        )}
-      </p>
-      <div className="flex flex-col gap-2 mt-10 items-start">
-        <InputOTP
-          maxLength={6}
-          value={otp}
-          onChange={(value) => setOTP(value)}
-          pattern={REGEXP_ONLY_DIGITS}
-        >
-          <InputOTPGroup>
-            <InputOTPSlot index={0} />
-            <InputOTPSlot index={1} />
-            <InputOTPSlot index={2} />
-            <InputOTPSlot index={3} />
-            <InputOTPSlot index={4} />
-            <InputOTPSlot index={5} />
-          </InputOTPGroup>
-        </InputOTP>
-        <Button
-          className="w-full"
-          onClick={() => {
-            if (verificationStatus === "emailSentSuccess") {
-              setVerificationStatus("otpVerifying");
-              verify();
-            } else {
-              setVerificationStatus("emailSending");
-              sendEmail();
-            }
-          }}
-        >
-          {verificationStatus === "emailSentSuccess"
-            ? "Verify"
-            : "Send Verification Email"}
-        </Button>
+    <div className="relative w-full h-[100vh] flex flex-col items-center justify-center dark:decorator">
+      <Header content="Verification" caption="Verify your email." />
+      {message.text && message.type == "error" && <Alert message={message.text} type={message.type} />}
+      {message.text && message.type == "success" && <p className="flex items-center gap-5"><Check /> {message.text}</p> }
+      <div className="w-1/2">   <AuthForm
+        schema={VerifyEmailFormSchema}
+        formSubmitted={formSubmitted}
+        fields={[]}
+        callbackFn={sendEmail}
+        submitBtnText="send verification email."
+      />
       </div>
+   
     </div>
   );
 }

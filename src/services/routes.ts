@@ -1,15 +1,22 @@
-const signInRoute = "/sign-in";
-const signUpRoute = "/sign-up";
-const signOutRoute = "/";
-const verifyRoute = "/verify";
-const dashboardRoute = "/dashboard";
+export const homeRoute = "/";
+export const signInRoute = "/sign-in";
+export const signUpRoute = "/sign-up";
+export const signOutRoute = "/";
+export const verifyRoute = "/verify";
+export const resetPasswordRoute = "/reset/password";
+export const dashboardRoute = "/dashboard";
 
 const routes = {
   auth: {
     signIn: { path: signInRoute },
     signUp: { path: signUpRoute },
     verify: { path: verifyRoute },
-    signOut: { path : signOutRoute}
+    signOut: { path : signOutRoute},
+    reset: {
+      password: {
+        path: resetPasswordRoute
+      }
+    }
   },
   user: {
     dashboard: {
@@ -21,7 +28,6 @@ const routes = {
     onAuthenticated: dashboardRoute,
     onVerified: dashboardRoute,
     onUnVerified: verifyRoute,
-    // Middlware will decide if to redirect to dashboardRoute or not
     onAfterSignIn: verifyRoute,
     onAfterSignUp: verifyRoute,
     onAfterVerify: dashboardRoute,

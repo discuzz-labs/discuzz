@@ -4,6 +4,7 @@ interface Config {
   site: {
     url: string;
     appKey: string;
+    supportEmail: string;
   };
   metadata: {
     keywords: string[] | undefined;
@@ -39,6 +40,7 @@ const config: Config = {
     appKey:
       (process.env.APP_KEY as string) ||
       "yE=-CXVXL*5:@uyb8*Yz9tw3%61rFrhs*znF)=Gdp@i?rW9",
+    supportEmail: (process.env.NEXT_PUBLIC_SUPPORT_EMAIL as string) || "support@discuzz.dev",
   },
   metadata: {
     keywords: (process.env.NEXT_PUBLIC_METADATA_KEYWORDS?.split(

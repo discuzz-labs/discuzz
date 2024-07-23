@@ -12,18 +12,18 @@ interface OAuthGithubProps {
   formSubmitted: boolean;
   setFormSubmitted: (state: boolean) => void;
   setError: (state: string) => void;
+  errorParam: string | undefined;
 }
 
 export default function OAuthGithub({
   formSubmitted,
   setFormSubmitted,
-  setError
+  setError,
+  errorParam
 }: OAuthGithubProps) {
-  const searchParams = useSearchParams();
   useEffect(() => {
-    const error = searchParams.get('error');
-    error ? setError(`${ERROR.CALLBACK_ERROR} due to ${error}.`) : ""
-  }, [searchParams])
+    errorParam ? setError(`${ERROR.CALLBACK_ERROR} due to ${errorParam}.`) : ""
+  }, [errorParam])
 
   const loginWithGithub = async () => {
     setFormSubmitted(true);

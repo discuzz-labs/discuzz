@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/react";
 import AuthForm from "@/components/AuthForm";
 import { ThemeProvider } from "@/providers/ThemeProvider";
-import { SignInFormSchema } from "@/validations/validation";
+import { SignInFormSchema } from "@/validations/form";
 
 const meta: Meta<typeof AuthForm> = {
   component: AuthForm,

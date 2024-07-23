@@ -1,19 +1,25 @@
 import { cn } from "@/lib/utils";
 import { Info, TriangleAlert, X, Ban } from "lucide-react";
-import { useRef, useState } from "react";
+import { useRef, useState, ReactNode } from "react";
 
 interface AlertProps {
-  message: string;
+  children?: ReactNode;
+  message?: string;
   type: "error" | "warning" | "info";
   className?: string;
 }
 
-export default function Alert({ message, type, className }: AlertProps) {
+export default function Alert({
+  children,
+  message,
+  type,
+  className,
+}: AlertProps) {
   return (
     <div
       className={cn(
         "cy-alert",
-        "absolute top-2 w-2/3 left-1/2 -translate-x-1/2 items-center justify-between p-5 shadow-md border-l-8 rounded-md",
+        "w-2/3  items-center justify-between p-5 shadow-md border-l-8 rounded-md",
         className,
         `${type == "error" && "border-red-800 bg-destructive text-destructive-foreground"}
         ${type == "info" && "border-zinc-700 bg-muted text-muted-foreground"}
@@ -21,10 +27,17 @@ export default function Alert({ message, type, className }: AlertProps) {
       )}
     >
       <div className="flex items-center gap-2">
-        {type == "info" && <Info />}
-        {type == "error" && <Ban />}
-        {type == "warning" && <TriangleAlert />}
-        <p className="font-bold text-pretty leading-tight">{message}</p>
+        {message && (
+          <>
+            {type == "info" && <Info />}
+            {type == "error" && <Ban />}
+            {type == "warning" && <TriangleAlert />}
+          </>
+        )}
+        {message && (
+          <p className="font-bold text-pretty leading-tight">{message}</p>
+        )}
+        {children && <>{children}</>}
       </div>
     </div>
   );

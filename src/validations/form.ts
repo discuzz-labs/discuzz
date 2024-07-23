@@ -17,4 +17,9 @@ const SignInFormSchema = z.object({
   }),
 });
 
-export { SignUpFormSchema, SignInFormSchema };
+const VerifyEmailFormSchema = z.object({});
+
+
+
+
+export { SignUpFormSchema, SignInFormSchema, VerifyEmailFormSchema };

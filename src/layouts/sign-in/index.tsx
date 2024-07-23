@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 import Alert from "@/components/Alert";
-import { SignInFormSchema } from "@/validations/validation";
+import { SignInFormSchema } from "@/validations/form";
 import { z } from "zod";
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
@@ -10,12 +10,17 @@ import routes from "@/services/routes";
 import { Separator } from "@/components/ui/separator";
 import OAuthGithub from "@/components/OAuth/OAuthGithub";
 import AuthForm from "@/components/AuthForm";
+import Link from "next/link";
+import Header from "@/components/Header";
 
-export default function SignInLayout() {
+interface SignInLayoutProps {
+  errorParam: string | undefined;
+}
+
+export default function SignInLayout({ errorParam }: SignInLayoutProps) {
   const router = useRouter();
   const [formSubmitted, setFormSubmitted] = useState<boolean>(false);
   const [error, setError] = useState<string>("");
-
   const login = async (values: z.infer<typeof SignInFormSchema>) => {
     setFormSubmitted(true);
     try {
@@ -47,14 +52,12 @@ export default function SignInLayout() {
         </div>
         <div className="lg:w-1/2 relative lg:dark:bg-black lg:dark:bg-none dark:decorator w-full flex flex-col items-center justify-center">
           {error && <Alert message={error} type="error" />}
-          <div className="flex flex-col gap-2 items-center justify-center pb-10">
-            <p className="text-2xl font-extrabold">Sign in</p>
-            <p className="text-sm font-thin">Sign in to your account.</p>
-          </div>
+          <Header content="Sign In." caption="Sign in to your account." />
           <OAuthGithub
             formSubmitted={formSubmitted}
             setError={setError}
             setFormSubmitted={setFormSubmitted}
+            errorParam={errorParam}
           />
           <Separator className="w-1/2 my-2" />
           <AuthForm
@@ -73,7 +76,11 @@ export default function SignInLayout() {
                 placeholder: "Password",
               },
             ]}
+            submitBtnText="Sign In"
           />
+          <Link className="font-thin text-xs" href="/recover/password">
+            Forget Password!
+          </Link>
         </div>
       </div>
     </>

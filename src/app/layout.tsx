@@ -5,10 +5,11 @@ import { ThemeProvider } from "@/providers/ThemeProvider";
 import NavBar from "@/components/NavBar";
 import { Toaster } from "@/components/ui/toaster";
 import config from "@/lib/config";
+import AuthProvider from "@/providers/AuthProvider";
 import "../styles/globals.css";
 import "../styles/theme.css";
-import AuthProvider from "@/providers/AuthProvider";
 import build from "@/build";
+import QueryProvider from "@/providers/QueryProvider";
 
 const inter = Roboto({
   subsets: ["latin"],
@@ -78,13 +79,14 @@ export default function RootLayout({
             bg-white
            dark:bg-black`}
       >
-        <AuthProvider>
-          <ThemeProvider>
-            <NavBar />
-            {children}
-           
-          </ThemeProvider>
-        </AuthProvider> 
+        <QueryProvider>
+          <AuthProvider>
+            <ThemeProvider>
+              <NavBar />
+              {children}
+            </ThemeProvider>
+          </AuthProvider>
+        </QueryProvider>
         <Toaster />
       </body>
     </html>
