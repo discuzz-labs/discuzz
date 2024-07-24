@@ -11,6 +11,7 @@ import { ResetPasswordFormSchemaSecondStep } from "@/validations/form";
 import { z } from "zod";
 import AuthForm from "@/components/AuthForm";
 import resetPassword from "@/actions/reset/password/resetPassword";
+import AuthLayoutStyle from "@/styles/AuthLayoutStyle";
 
 interface ResetPasswordTokenLayoutProps {
   token: string;
@@ -54,8 +55,7 @@ export default function ResetPasswordTokenLayout({
   });
 
   return (
-    <div className="relative w-full h-[100vh] flex flex-col items-center justify-center">
-      <div className="lg:w-1/2 w-full">
+    <AuthLayoutStyle>
         <Header content="Verification" caption="Verify your email." />
         {isError && (
           <Alert type="error" className="lg:w-1/3">
@@ -75,7 +75,6 @@ export default function ResetPasswordTokenLayout({
           ]}
           submitBtnText="Reset password."
         />
-      </div>
-    </div>
+    </AuthLayoutStyle>
   );
 }

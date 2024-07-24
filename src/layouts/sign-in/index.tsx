@@ -13,6 +13,7 @@ import Header from "@/components/Header";
 import { useMutation } from "@tanstack/react-query";
 import OAuthProviders from "@/OAuthProviders/OAuthProviders";
 import OAuthButton from "@/OAuthProviders/OAuthButton";
+import AuthLayoutStyle from "@/styles/AuthLayoutStyle";
 
 interface SignInLayoutProps {
   errorParam: string | undefined;
@@ -46,50 +47,39 @@ export default function SignInLayout({ errorParam }: SignInLayoutProps) {
   });
 
   return (
-    <>
-      <div className="w-full h-[100vh] flex">
-        <div className="lg:flex lg:w-1/2 hidden decorator text-white py-10  gap-5 flex-col p-10 justify-end">
-          <p className="font-extrabold text-2xl">
-            “Life is like riding a bicycle. To keep your balance, you must keep
-            moving.”
-          </p>
-          <p className="font-thin text-xl">- Albert Einstein</p>
-        </div>
-        <div className="lg:w-1/2 relative lg:dark:bg-black lg:dark:bg-none dark:decorator w-full flex flex-col items-center justify-center">
-          {isError && <Alert message={error.message} type="error" />}
-          {errorParam && <Alert message={errorParam} type="error" />}
-          <Header content="Sign In." caption="Sign in to your account." />
-          {OAuthProviders.map((OAuthProvider) => (
-            <OAuthButton
-              key={OAuthProvider.name}
-              name={OAuthProvider.name}
-              logo={OAuthProvider.logo}
-            />
-          ))}
-          <Separator className="w-1/2 my-2" />
-          <AuthForm
-            schema={SignInFormSchema}
-            formSubmitted={isPending}
-            callbackFn={mutate}
-            fields={[
-              {
-                name: "email",
-                type: "email",
-                placeholder: "Email",
-              },
-              {
-                name: "password",
-                type: "password",
-                placeholder: "Password",
-              },
-            ]}
-            submitBtnText="Sign In"
-          />
-          <Link className="font-thin text-xs" href="/recover/password">
-            Forget Password!
-          </Link>
-        </div>
-      </div>
-    </>
+    <AuthLayoutStyle>
+      {isError && <Alert message={error.message} type="error" />}
+      {errorParam && <Alert message={errorParam} type="error" />}
+      <Header content="Sign In." caption="Sign in to your account." />
+      {OAuthProviders.map((OAuthProvider) => (
+        <OAuthButton
+          key={OAuthProvider.name}
+          name={OAuthProvider.name}
+          logo={OAuthProvider.logo}
+        />
+      ))}
+      <Separator className="w-1/2 my-2" />
+      <AuthForm
+        schema={SignInFormSchema}
+        formSubmitted={isPending}
+        callbackFn={mutate}
+        fields={[
+          {
+            name: "email",
+            type: "email",
+            placeholder: "Email",
+          },
+          {
+            name: "password",
+            type: "password",
+            placeholder: "Password",
+          },
+        ]}
+        submitBtnText="Sign In"
+      />
+      <Link className="font-thin text-xs" href="/recover/password">
+        Forget Password!
+      </Link>
+    </AuthLayoutStyle>
   );
 }

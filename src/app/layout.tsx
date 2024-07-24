@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Roboto } from "next/font/google";
+import { Montserrat } from "next/font/google";
 
 import { ThemeProvider } from "@/providers/ThemeProvider";
 import NavBar from "@/components/NavBar";
@@ -11,7 +11,7 @@ import "../styles/theme.css";
 import build from "@/build";
 import QueryProvider from "@/providers/QueryProvider";
 
-const inter = Roboto({
+const inter = Montserrat({
   subsets: ["latin"],
   weight: ["100", "300", "400"],
 });

@@ -1,10 +1,10 @@
 export const homeRoute = "/";
-export const signInRoute = "/sign-in";
-export const signUpRoute = "/sign-up";
+export const signInRoute = "/signin";
+export const signUpRoute = "/signup";
 export const signOutRoute = "/";
 export const verifyRoute = "/verify";
 export const resetRoute = "/reset";
-export const dashboardRoute = "/dashboard";
+export const userRoute = "/user";
 
 const routes = {
   auth: {
@@ -20,20 +20,20 @@ const routes = {
   },
   user: {
     dashboard: {
-      path: dashboardRoute,
+      path: userRoute,
     },
   },
   redirects: {
     onUnAuthenticated: signInRoute,
-    onAuthenticated: dashboardRoute,
-    onVerified: dashboardRoute,
+    onAuthenticated: userRoute,
+    onVerified: userRoute,
     onUnVerified: verifyRoute,
     onAfterSignIn: verifyRoute,
     onAfterSignUp: verifyRoute,
-    onAfterVerify: dashboardRoute,
+    onAfterVerify: userRoute,
     onAfterResetPassword: signInRoute,
   },
-  isProtected: (route: string) => [dashboardRoute].includes(route),
+  isProtected: (route: string) => [userRoute].includes(route),
   isVerifyRoute: (route: string) => [verifyRoute].includes(route),
   isAuth: (route: string) => [signInRoute, signUpRoute, resetRoute].some(authRoute => route.startsWith(authRoute)),
 };

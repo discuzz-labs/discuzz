@@ -10,6 +10,7 @@ import routes from "@/services/routes";
 import AuthForm from "@/components/AuthForm";
 import Header from "@/components/Header";
 import { useMutation } from "@tanstack/react-query";
+import AuthLayoutStyle from "@/styles/AuthLayoutStyle";
 
 export default function SignUpLayout() {
   const router = useRouter();
@@ -43,55 +44,43 @@ export default function SignUpLayout() {
   });
 
   return (
-    <>
-      <div className="w-full relative min-h-[100vh] flex">
-        <div className="lg:flex lg:w-1/2 hidden decorator text-white py-10  gap-5 flex-col p-10 justify-end">
-          <p className="font-extrabold text-2xl">
-            “Life is like riding a bicycle. To keep your balance, you must keep
-            moving.”
-          </p>
-          <p className="font-thin text-xl">- Albert Einstein</p>
-        </div>
-
-        <div className="lg:w-1/2 lg:dark:bg-black lg:dark:bg-none dark:decorator w-full flex flex-col items-center justify-center">
-          {isError && <Alert message={error.message} type="error" />}
-          <Header content="Sign Up." caption="Create a new account." />
-          <AuthForm
-            schema={SignUpFormSchema}
-            formSubmitted={isPending}
-            callbackFn={mutate}
-            fields={[
-              {
-                name: "email",
-                type: "email",
-                placeholder: "Email - use grevater email!",
-              },
-              {
-                name: "name",
-                type: "text",
-                placeholder: "Fullname",
-              },
-              {
-                name: "password",
-                type: "password",
-                placeholder: "Password",
-              },
-            ]}
-            submitBtnText="Create an account"
-          />
-
-          <p className="mt-10 w-1/2 font-thin text-zinc-600 text-sm text-center">
-            By clicking continue, you agree to our &nbsp;
-            <Link href="/terms" className="underline hover:text-white">
-              Terms of Service &nbsp;
-            </Link>
-            and &nbsp;
-            <Link href="/privacy" className="underline hover:text-white">
-              Privacy Policy.
-            </Link>
-          </p>
-        </div>
-      </div>
-    </>
+    <AuthLayoutStyle>
+      {" "}
+      {isError && <Alert message={error.message} type="error" />}
+      <Header content="Sign Up." caption="Create a new account." />
+      <AuthForm
+        schema={SignUpFormSchema}
+        formSubmitted={isPending}
+        callbackFn={mutate}
+        fields={[
+          {
+            name: "email",
+            type: "email",
+            placeholder: "Email - use grevater email!",
+          },
+          {
+            name: "name",
+            type: "text",
+            placeholder: "Fullname",
+          },
+          {
+            name: "password",
+            type: "password",
+            placeholder: "Password",
+          },
+        ]}
+        submitBtnText="Create an account"
+      />
+      <p className="mt-10 w-1/2 font-thin text-zinc-600 text-sm text-center">
+        By clicking continue, you agree to our &nbsp;
+        <Link href="/terms" className="underline hover:text-white">
+          Terms of Service &nbsp;
+        </Link>
+        and &nbsp;
+        <Link href="/privacy" className="underline hover:text-white">
+          Privacy Policy.
+        </Link>
+      </p>
+    </AuthLayoutStyle>
   );
 }

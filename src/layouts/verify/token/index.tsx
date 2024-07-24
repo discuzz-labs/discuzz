@@ -12,6 +12,7 @@ import routes from "@/services/routes";
 import { useSession } from "next-auth/react";
 import { useQuery } from "@tanstack/react-query";
 import { useEffect } from "react";
+import AuthLayoutStyle from "@/styles/AuthLayoutStyle";
 
 interface VerifyTokenLayoutProps {
   token: string;
@@ -59,7 +60,7 @@ export default function VerifyTokenLayout({ token }: VerifyTokenLayoutProps) {
   }, [isSuccess]);
 
   return (
-    <div className="relative w-full h-[100vh] flex flex-col items-center justify-center">
+   <AuthLayoutStyle>
       <Header content="Verification" caption="Verify your email." />
       {isError && (
         <Alert type="error" className="lg:w-1/3">
@@ -72,6 +73,6 @@ export default function VerifyTokenLayout({ token }: VerifyTokenLayoutProps) {
           <Spinner /> {PENDING.VERIFICATION_VERIFYING_EMAIL}
         </div>
       )}
-    </div>
+    </AuthLayoutStyle>
   );
 }

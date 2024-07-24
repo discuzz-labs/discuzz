@@ -9,6 +9,7 @@ export default function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
+  throw new Error("hello")
   return (
     <>
       <main className="flex items-center justify-center w-full h-[100vh]">
