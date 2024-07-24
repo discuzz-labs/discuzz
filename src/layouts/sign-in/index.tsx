@@ -1,6 +1,5 @@
 "use client";
 
-import React, { useState } from "react";
 import Alert from "@/components/Alert";
 import { SignInFormSchema } from "@/validations/form";
 import { z } from "zod";
@@ -8,10 +7,12 @@ import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import routes from "@/services/routes";
 import { Separator } from "@/components/ui/separator";
-import OAuthGithub from "@/components/OAuth/OAuthGithub";
 import AuthForm from "@/components/AuthForm";
 import Link from "next/link";
 import Header from "@/components/Header";
+import { useMutation } from "@tanstack/react-query";
+import OAuthProviders from "@/OAuthProviders/OAuthProviders";
+import OAuthButton from "@/OAuthProviders/OAuthButton";
 
 interface SignInLayoutProps {
   errorParam: string | undefined;
@@ -19,26 +20,30 @@ interface SignInLayoutProps {
 
 export default function SignInLayout({ errorParam }: SignInLayoutProps) {
   const router = useRouter();
-  const [formSubmitted, setFormSubmitted] = useState<boolean>(false);
-  const [error, setError] = useState<string>("");
-  const login = async (values: z.infer<typeof SignInFormSchema>) => {
-    setFormSubmitted(true);
-    try {
-      const signInRequest = await signIn("login", {
-        email: values.email,
-        password: values.password,
-        redirect: false,
-      });
-      if (!signInRequest?.ok) {
-        setError(signInRequest?.error as string);
-      } else {
-        router.push(routes.redirects.onAfterSignIn);
-      }
-    } catch (e) {
-      setError(e as string);
+  const login = async (
+    values: z.infer<typeof SignInFormSchema>
+  ): Promise<boolean> => {
+    const signInRequest = await signIn("login", {
+      email: values.email,
+      password: values.password,
+      redirect: false,
+    });
+    if (!signInRequest?.ok) {
+      throw new Error(signInRequest?.error as string);
     }
-    setFormSubmitted(false);
+    return true;
   };
+
+  const { isError, error, isPending, mutate } = useMutation<
+    boolean,
+    Error,
+    z.infer<typeof SignInFormSchema>
+  >({
+    mutationFn: login,
+    onSuccess: () => {
+      router.push(routes.redirects.onAfterSignIn)
+    }
+  });
 
   return (
     <>
@@ -51,19 +56,20 @@ export default function SignInLayout({ errorParam }: SignInLayoutProps) {
           <p className="font-thin text-xl">- Albert Einstein</p>
         </div>
         <div className="lg:w-1/2 relative lg:dark:bg-black lg:dark:bg-none dark:decorator w-full flex flex-col items-center justify-center">
-          {error && <Alert message={error} type="error" />}
+          {isError && <Alert message={error.message} type="error" />}
+          {errorParam && <Alert message={errorParam} type="error" />}
           <Header content="Sign In." caption="Sign in to your account." />
-          <OAuthGithub
-            formSubmitted={formSubmitted}
-            setError={setError}
-            setFormSubmitted={setFormSubmitted}
-            errorParam={errorParam}
-          />
+          {OAuthProviders.map((OAuthProvider) => (
+            <OAuthButton 
+              name={OAuthProvider.name}
+              logo={OAuthProvider.logo}
+            />
+          ))}
           <Separator className="w-1/2 my-2" />
           <AuthForm
             schema={SignInFormSchema}
-            formSubmitted={formSubmitted}
-            callbackFn={login}
+            formSubmitted={isPending}
+            callbackFn={mutate}
             fields={[
               {
                 name: "email",

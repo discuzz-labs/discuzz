@@ -9,7 +9,7 @@ import { InputForm } from "@/components/InputForm";
 interface FormProps<T extends z.ZodType<any, any, any>> {
   schema: T;
   formSubmitted: boolean;
-  callbackFn: (values: z.infer<T>) => void;
+  callbackFn: (values: z.infer<T>) => void
   fields: Array<{ name: Path<z.infer<T>>, type: string, placeholder: string, label?: string }>;
   submitBtnText?: string | undefined;
 }
@@ -30,7 +30,7 @@ export default function AuthForm<T extends z.ZodType<any, any>>({
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(callbackFn)}
-        className="w-full flex flex-col items-center justify-center gap-5"
+        className="w-full flex flex-col my-3 items-center justify-center gap-5"
       >
         {fields.map((field) => (
           <InputForm<T>

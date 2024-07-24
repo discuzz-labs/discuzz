@@ -2,7 +2,6 @@
 
 import { z } from "zod";
 import { SignUpFormSchema } from "@/validations/form";
-import { useState } from "react";
 import Link from "next/link";
 import Alert from "@/components/Alert";
 import { signIn } from "next-auth/react";
@@ -10,39 +9,42 @@ import { useRouter } from "next/navigation";
 import routes from "@/services/routes";
 import AuthForm from "@/components/AuthForm";
 import Header from "@/components/Header";
+import { useMutation } from "@tanstack/react-query";
 
 export default function SignUpLayout() {
   const router = useRouter();
-  const [formSubmitted, setFormSubmitted] = useState<boolean>(false);
-  const [error, setError] = useState<string>("");
-  const [profileImageProvidedByGravater, setprofileImageProvidedByGravater] =
-    useState<string>("https://www.gravatar.com/avatar/placeholder");
 
-  const register = async (values: z.infer<typeof SignUpFormSchema>) => {
-    setFormSubmitted(true);
-    try {
-      const signUpRequest = await signIn("signup", {
-        email: values.email,
-        password: values.password,
-        name: values.name,
-        image: profileImageProvidedByGravater,
-        redirect: false,
-      });
-      if (!signUpRequest?.ok) {
-        setError(signUpRequest?.error as string);
-      } else {
-        router.push(routes.redirects.onAfterSignUp);
-      }
-    } catch (e) {
-      setError(e as string);
+  const register = async (
+    values: z.infer<typeof SignUpFormSchema>
+  ): Promise<boolean> => {
+    const signUpRequest = await signIn("signup", {
+      email: values.email,
+      password: values.password,
+      name: values.name,
+      image: "https://www.gravatar.com/avatar/placeholder",
+      redirect: false,
+    });
+    if (!signUpRequest?.ok) {
+      throw new Error(signUpRequest?.error as string);
     }
-    setFormSubmitted(false);
+
+    return true;
   };
+
+  const { isError, error, isPending, mutate } = useMutation<
+    boolean,
+    Error,
+    z.infer<typeof SignUpFormSchema>
+  >({
+    mutationFn: register,
+    onSuccess: () => {
+      router.push(routes.redirects.onAfterSignUp);
+    },
+  });
 
   return (
     <>
       <div className="w-full relative min-h-[100vh] flex">
-        {error && <Alert message={error} type="error" />}
         <div className="lg:flex lg:w-1/2 hidden decorator text-white py-10  gap-5 flex-col p-10 justify-end">
           <p className="font-extrabold text-2xl">
             “Life is like riding a bicycle. To keep your balance, you must keep
@@ -52,11 +54,12 @@ export default function SignUpLayout() {
         </div>
 
         <div className="lg:w-1/2 lg:dark:bg-black lg:dark:bg-none dark:decorator w-full flex flex-col items-center justify-center">
+          {isError && <Alert message={error.message} type="error" />}
           <Header content="Sign Up." caption="Create a new account." />
           <AuthForm
             schema={SignUpFormSchema}
-            formSubmitted={formSubmitted}
-            callbackFn={register}
+            formSubmitted={isPending}
+            callbackFn={mutate}
             fields={[
               {
                 name: "email",

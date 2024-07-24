@@ -1,10 +1,9 @@
 import signInWithCred from "@/actions/sign-in/signInWithCred";
 import NextAuth from "next-auth";
-import GithubProvider, { GithubProfile } from "next-auth/providers/github";
 import CredentialsProvider from "next-auth/providers/credentials";
 import signUpWithCred from "@/actions/sign-up/signUpWithCred";
 import routes from "@/services/routes";
-import { ERROR } from "@/lib/messages";
+import OAuthProviders from "@/OAuthProviders/OAuthProviders";
 
 export const authOptions = {
   // Configure one or more authentication providers
@@ -55,36 +54,7 @@ export const authOptions = {
         }
       },
     }),
-    GithubProvider({
-      clientId: process.env.GITHUB_CLIENT_ID as string,
-      clientSecret: process.env.GITHUB_CLIENT_SECRET as string,
-      async profile(profile: GithubProfile) {
-        const signUpWithCredAction = await signUpWithCred({
-          email: profile.email as string,
-          password: "github",
-          name: profile.name ?? profile.login,
-          image: profile.avatar_url,
-        });
-
-        return {
-          id: profile.id.toString(),
-          email: profile.email,
-          name: profile.login ?? profile.name,
-          image: profile.avatar_url,
-          verified: true,
-          success:
-            signUpWithCredAction.success === false &&
-            signUpWithCredAction.error !==
-              ERROR.REGISTRATION_FAILED_EMAIL_ALREADY_EXISTS,
-          error:
-            signUpWithCredAction.success === false &&
-            signUpWithCredAction.error !==
-              ERROR.REGISTRATION_FAILED_EMAIL_ALREADY_EXISTS
-              ? signUpWithCredAction.error
-              : null,
-        };
-      },
-    }),
+    OAuthProviders.map(providerConfig => providerConfig.provider)
   ],
   // debug: process.env.NODE_ENV === "development",
   secret: process.env.APP_KEY,
@@ -93,9 +63,9 @@ export const authOptions = {
   },
   callbacks: {
     // @ts-ignore
-    async signIn({ user, profile, account }) {
-      if(account.provider === "github" && profile.success === false) {
-        throw new Error(profile.error)
+    async signIn({profile, account }) {
+      if (profile.success === false) {
+        throw new Error(profile.error);
       }
       return true;
     },
@@ -104,21 +74,18 @@ export const authOptions = {
     async session({ session, token }) {
       if (session?.user) {
         session.user.verified = token.verified;
-        session.user.name = token.name;
-        session.user.image = token.image;
-        session.user.email = token.email;
         session.user.id = token.id;
       }
       return session;
     },
     // @ts-ignore
     async jwt({ session, trigger, token, user }) {
+      if(trigger === "update" && session?.verified){
+        token.verified = session.verified
+      }
       if (user) {
         token.verified = user.verified;
-        token.name = user.name;
-        token.image = user.image;
         token.id = user.id;
-        token.email = user.email;
       }
       return token;
     },

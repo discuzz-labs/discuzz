@@ -1,6 +1,5 @@
 "use client";
 
-import { useEffect, useState } from "react";
 import Header from "@/components/Header";
 import Alert from "@/components/Alert";
 import { useRouter } from "next/navigation";
@@ -8,9 +7,11 @@ import { ShieldAlert } from "lucide-react";
 import Spinner from "@/components/Spinner";
 import { PENDING } from "@/lib/messages";
 import verifyToken from "@/actions/verifyToken";
-import verifyUser from '@/actions/verify/verifyUser';
-import routes from "@/services/routes"
+import verifyUser from "@/actions/verify/verifyUser";
+import routes from "@/services/routes";
 import { useSession } from "next-auth/react";
+import { useQuery } from "@tanstack/react-query";
+import { useEffect } from "react";
 
 interface VerifyTokenLayoutProps {
   token: string;
@@ -18,73 +19,55 @@ interface VerifyTokenLayoutProps {
 
 export default function VerifyTokenLayout({ token }: VerifyTokenLayoutProps) {
   const router = useRouter();
-  const [status, setStatus] = useState<{state: boolean | undefined, message: string}>({
-    state: undefined,
-    message: ""
-  });
-  const { data : userSession, update } = useSession()
+  const { data: userSession, update } = useSession();
 
-  const isVlaidToken = async () => {
-    try {
-      const verifyTokenAction = await verifyToken({
-        token,
-      });
-      if (verifyTokenAction.success === false) {
-        setStatus({message: verifyTokenAction.error, state: false});
-        return;
-      }
-      setStatus({ message: "", state: true})
-      return {
-        email: verifyTokenAction.data?.email
-      }
-    } catch (err) {
-      setStatus({message: err as string,  state: false});
+  const verifyUserEmail = async (): Promise<boolean> => {
+    const verifyTokenAction = await verifyToken({
+      token,
+    });
+    if (verifyTokenAction.success === false || !verifyTokenAction.data) {
+      throw new Error(verifyTokenAction.error);
     }
+
+    const verifyUserAction = await verifyUser({
+      email: verifyTokenAction.data.email,
+    });
+    if (verifyUserAction.success === false) {
+      throw new Error(verifyUserAction.error);
+    }
+    return true;
   };
-  
-  const verifyUserEmail = async (email: string) => {
-    try{
-      const verifyUserAction = await verifyUser({email})
-      if (verifyUserAction.success === false) {
-        setStatus({message: verifyUserAction.error, state: false});
-        return;
-      }
-      if(userSession?.user) update({verified: true}) 
-      router.push(routes.redirects.onVerified)
-    }catch(err){
-      setStatus({message: err as string,  state: false});
-    }
-  }
 
+  const { isError, isSuccess, isPending, error } = useQuery({
+    queryKey: ["verifyUserEmail"],
+    queryFn: verifyUserEmail,
+    retry: false,
+    refetchOnReconnect: true,
+  });
 
   useEffect(() => {
-    const handleVerification = async () => {
-      const payload = await isVlaidToken();
-      if (payload?.email) {
-        await verifyUserEmail(payload.email);
+    const handleUpdateSession = async () => {
+      if (isSuccess) {
+        if (userSession) {
+          console.log("hello")
+          await update({ verified: true });
+          router.push(routes.redirects.onAfterVerify)
+        }
       }
     };
-
-    handleVerification();
-  }, [token]);
-
+    handleUpdateSession();
+  }, [isSuccess]);
 
   return (
-    <div className="relative w-full h-[100vh] flex flex-col items-center justify-center dark:decorator">
+    <div className="relative w-full h-[100vh] flex flex-col items-center justify-center">
       <Header content="Verification" caption="Verify your email." />
-      {status.state === false && (
+      {isError && (
         <Alert type="error" className="lg:w-1/3">
-          <ShieldAlert /> {status.message}
+          <ShieldAlert /> {error.message}
         </Alert>
       )}
 
-      {status.state === undefined && (
-        <div className="flex gap-2">
-          <Spinner /> {PENDING.IDENTIFICATION_VERIFYING_TOKEN}
-        </div>
-      )}
-
-      {status.state === true && (
+      {isPending === true && (
         <div className="flex gap-2">
           <Spinner /> {PENDING.VERIFICATION_VERIFYING_EMAIL}
         </div>

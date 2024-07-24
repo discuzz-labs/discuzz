@@ -9,7 +9,7 @@ export default function Banner({ name }: BannerProps) {
   return (
     <div className="relative">
       <Image
-        src={"/assets/banner.jpg"}
+        src={"assets/banner.jpg"}
         alt="Banner image"
         width={0}
         height={0}
