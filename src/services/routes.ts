@@ -3,7 +3,7 @@ export const signInRoute = "/sign-in";
 export const signUpRoute = "/sign-up";
 export const signOutRoute = "/";
 export const verifyRoute = "/verify";
-export const resetPasswordRoute = "/reset/password";
+export const resetRoute = "/reset";
 export const dashboardRoute = "/dashboard";
 
 const routes = {
@@ -14,7 +14,7 @@ const routes = {
     signOut: { path : signOutRoute},
     reset: {
       password: {
-        path: resetPasswordRoute
+        path: resetRoute
       }
     }
   },
@@ -31,10 +31,11 @@ const routes = {
     onAfterSignIn: verifyRoute,
     onAfterSignUp: verifyRoute,
     onAfterVerify: dashboardRoute,
+    onAfterResetPassword: signInRoute,
   },
   isProtected: (route: string) => [dashboardRoute].includes(route),
   isVerifyRoute: (route: string) => [verifyRoute].includes(route),
-  isAuth: (route: string) => [signInRoute, signUpRoute].some(authRoute => route.startsWith(authRoute)),
+  isAuth: (route: string) => [signInRoute, signUpRoute, resetRoute].some(authRoute => route.startsWith(authRoute)),
 };
 
 export default routes;

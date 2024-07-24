@@ -18,6 +18,7 @@ export enum ERROR {
   VERIFICATION_FAILED_USER_CANNOT_BE_VERIFIED = "We cannot verify your account at the moment. Try again later.",
   
   RESETPASSWORD_FAILED_EMAIL_CANNOT_BE_SENT = "We cannot send you the reset password email at the moment. Try again later.",
+  RESETPASSWORD_FAILED_PASSWORD_CANNOT_BE_CHANGED = "We cannot reset your password at the moment. Try again later.",
 
   LOGIN_FAILED_WRONG_CREDENTIALS = "Invalid email or password. Please check your credentials and try again.",
   
@@ -31,6 +32,8 @@ export enum ERROR {
 export enum SUCCESS {
   VERIFICATION_SUCCESS_EMAIL_SENT = "A verification email has been sent. Please check your inbox and spam folder.",
   VERIFICATION_SUCCESS_VERIFIED = "Email verified successfully.",
+
+  RESETPASSWORD_SUCCESS_EMAIL_SENT = "A reset password email has been sent. Please check your inbox and spam folder.",
 }
 
 export enum PENDING {

@@ -22,6 +22,7 @@ export enum ProfileErrorType {
   CannotLoginWithProfile = "CannotLoginWithProfile",
   LoginFailed = "LoginFailed",
   UpdateProfileFailed = "UpdateProfileFailed",
+  changePassword = "changePasswordFailed",
   InvalidArgs = "InvalidArgs",
 }
 
@@ -237,7 +238,78 @@ export default class Profile {
         };
       }
     } else {
-      log("database", ProfileErrorType.InvalidArgs, "DATABASE profile.updateProfile");
+      log("database", ProfileErrorType.InvalidArgs, "DATABASE profile.updateProfileByEmail");
+      return {
+        success: false,
+        data: undefined,
+        error: {
+          type: ProfileErrorType.InvalidArgs,
+          origin: ProfileErrorType.InvalidArgs,
+        },
+      };
+    }
+  }
+
+  async updateProfileById(): Promise<DatabaseResponse<undefined | User | null>> {
+    if (this.valuesToUpdate &&  this.id) {
+      try {
+        const user = await prisma.user.update({
+          where: { 
+            id: this.id
+          },
+          data: this.valuesToUpdate,
+        });
+        return {
+          success: true,
+          data: user,
+          error: null,
+        };
+      } catch (err) {
+        return {
+          success: false,
+          data: undefined,
+          error: { type: ProfileErrorType.UpdateProfileFailed, origin: err },
+        };
+      }
+    } else {
+      log("database", ProfileErrorType.InvalidArgs, "DATABASE profile.updateProfileById");
+      return {
+        success: false,
+        data: undefined,
+        error: {
+          type: ProfileErrorType.InvalidArgs,
+          origin: ProfileErrorType.InvalidArgs,
+        },
+      };
+    }
+  }
+
+  async changePassword(): Promise<DatabaseResponse<undefined>> {
+    if (this.email && this.password) {
+      try {
+        let hashedPassword = bcrypt.hashSync(this.password, 10);
+        const user = await prisma.user.update({
+          where: { 
+            email: this.email
+          },
+          data: {
+            password: hashedPassword
+          },
+        });
+        return {
+          success: true,
+          data: undefined,
+          error: null,
+        };
+      } catch (err) {
+        return {
+          success: false,
+          data: undefined,
+          error: { type: ProfileErrorType.changePassword, origin: err },
+        };
+      }
+    } else {
+      log("database", ProfileErrorType.InvalidArgs, "DATABASE profile.changePassword");
       return {
         success: false,
         data: undefined,

@@ -41,8 +41,8 @@ export default function SignInLayout({ errorParam }: SignInLayoutProps) {
   >({
     mutationFn: login,
     onSuccess: () => {
-      router.push(routes.redirects.onAfterSignIn)
-    }
+      router.push(routes.redirects.onAfterSignIn);
+    },
   });
 
   return (
@@ -60,7 +60,8 @@ export default function SignInLayout({ errorParam }: SignInLayoutProps) {
           {errorParam && <Alert message={errorParam} type="error" />}
           <Header content="Sign In." caption="Sign in to your account." />
           {OAuthProviders.map((OAuthProvider) => (
-            <OAuthButton 
+            <OAuthButton
+              key={OAuthProvider.name}
               name={OAuthProvider.name}
               logo={OAuthProvider.logo}
             />

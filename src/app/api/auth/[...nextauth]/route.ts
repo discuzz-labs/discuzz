@@ -54,7 +54,7 @@ export const authOptions = {
         }
       },
     }),
-    OAuthProviders.map(providerConfig => providerConfig.provider)
+    OAuthProviders.map((providerConfig) => providerConfig.provider),
   ],
   // debug: process.env.NODE_ENV === "development",
   secret: process.env.APP_KEY,
@@ -63,8 +63,13 @@ export const authOptions = {
   },
   callbacks: {
     // @ts-ignore
-    async signIn({profile, account }) {
-      if (profile.success === false) {
+    async signIn({ profile, account }) {
+      if (
+        OAuthProviders.map((providerConfig) => providerConfig.name).includes(
+          account.provider
+        ) &&
+        profile.success === false
+      ) {
         throw new Error(profile.error);
       }
       return true;
@@ -80,8 +85,8 @@ export const authOptions = {
     },
     // @ts-ignore
     async jwt({ session, trigger, token, user }) {
-      if(trigger === "update" && session?.verified){
-        token.verified = session.verified
+      if (trigger === "update" && session?.verified) {
+        token.verified = session.verified;
       }
       if (user) {
         token.verified = user.verified;
@@ -95,6 +100,7 @@ export const authOptions = {
     signOut: routes.auth.signOut.path,
     error: routes.auth.signIn.path,
   },
+  debug: true,
 };
 
 // @ts-ignore

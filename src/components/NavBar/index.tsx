@@ -6,7 +6,7 @@ import UserActions from "./UserActions";
 
 export default function NavBar() {
   return (
-    <div className="z-20 bg-background px-2 py-2 items-center flex sticky  top-0 h-[10vh]">
+    <div className="px-5 z-20 bg-background px-2 py-2 items-center flex sticky top-0 h-[10vh]">
       <div className="flex gap-5 items-center">
         <Logo />
       </div>

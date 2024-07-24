@@ -50,7 +50,7 @@ async function createToken({
       data: {token: generatedToken.payload.token},
     };
   } catch (err) {
-    log("actions", err, "ACTIONS /createtoken");
+    log("actions", err, "ACTIONS /createToken");
     return {
       error: ERROR.SERVER_ERROR,
       success: false,
