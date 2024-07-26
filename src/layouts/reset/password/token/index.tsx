@@ -5,13 +5,14 @@ import Alert from "@/components/Alert";
 import { useRouter } from "next/navigation";
 import { ShieldAlert } from "lucide-react";
 import verifyToken from "@/actions/verifyToken";
-import routes from "@/services/routes";
+import routes, { resetPasswordTokenRoute } from "@/services/routes";
 import { useMutation } from "@tanstack/react-query";
 import { ResetPasswordFormSchemaSecondStep } from "@/validations/form";
 import { z } from "zod";
 import AuthForm from "@/components/AuthForm";
 import resetPassword from "@/actions/reset/password/resetPassword";
 import AuthLayoutStyle from "@/styles/AuthLayoutStyle";
+import { useTranslations } from "next-intl";
 
 interface ResetPasswordTokenLayoutProps {
   token: string;
@@ -20,6 +21,9 @@ interface ResetPasswordTokenLayoutProps {
 export default function ResetPasswordTokenLayout({
   token,
 }: ResetPasswordTokenLayoutProps) {
+  const t = useTranslations(resetPasswordTokenRoute)
+  const e = useTranslations("error")
+
   const router = useRouter();
 
   const resetUserPassword = async (
@@ -56,10 +60,10 @@ export default function ResetPasswordTokenLayout({
 
   return (
     <AuthLayoutStyle>
-        <Header content="Verification" caption="Verify your email." />
+        <Header content={t("title")} caption={t("titleCaption")} />
         {isError && (
           <Alert type="error" className="lg:w-1/3">
-            <ShieldAlert /> {error.message}
+            <ShieldAlert /> {e(error.message)}
           </Alert>
         )}
         <AuthForm
@@ -70,10 +74,10 @@ export default function ResetPasswordTokenLayout({
             {
               name: "newPassword",
               type: "password",
-              placeholder: "New password",
+              placeholder: t("passwordPlaceholder"),
             },
           ]}
-          submitBtnText="Reset password."
+          submitBtnText={t("submitBtnText")}
         />
     </AuthLayoutStyle>
   );

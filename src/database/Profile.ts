@@ -68,18 +68,14 @@ export default class Profile {
             email: this.email,
             name: this.name,
             image: this.image,
-            age: 0,
             role: Role.USER,
             password: hashedPassword,
             badges: [],
             level: Level.BRONZE,
             verified: false,
-            TFA: false,
             token: "",
             bio: "",
-            links: [],
-            followerIds: [],
-            followingIds: [],
+            links: []
           },
         });
         return {

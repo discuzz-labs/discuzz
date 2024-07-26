@@ -10,8 +10,10 @@ import {
 import { useTheme } from "next-themes";
 import { Sun, Moon, Monitor } from "lucide-react";
 import { useEffect, useState } from "react";
+import { useTranslations } from "next-intl";
 
 export default function ThemeSwitch() {
+  const t = useTranslations("NavBar")
   const { resolvedTheme, setTheme } = useTheme();
   const [mounted, setMounted] = useState(false);
   useEffect(() => {
@@ -35,30 +37,30 @@ export default function ThemeSwitch() {
               onClick={() => {
                 setTheme("light");
               }}
-              className="FLEX items-center gap-2"
+              className="flex items-center gap-2"
             >
               <Sun />
-              Light
+              {t("light")}
             </DropdownMenuCheckboxItem>
             <DropdownMenuCheckboxItem
               checked={resolvedTheme === "dark"}
               onClick={() => {
                 setTheme("dark");
               }}
-              className="FLEX items-center gap-2"
+              className="flex items-center gap-2"
             >
               <Moon />
-              Dark
+              {t("dark")}
             </DropdownMenuCheckboxItem>
             <DropdownMenuCheckboxItem
               checked={resolvedTheme === "system"}
               onClick={() => {
                 setTheme("system");
               }}
-              className="FLEX items-center gap-2"
+              className="flex items-center gap-2"
             >
               <Monitor />
-              System
+              {t("system")}
             </DropdownMenuCheckboxItem>
           </DropdownMenuContent>
         </DropdownMenu>

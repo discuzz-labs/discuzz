@@ -12,6 +12,7 @@ import {
   Section,
   Text,
 } from "@react-email/components";
+import { useTranslations } from "next-intl";
 
 interface VerificationEmailTemplateProps {
   userName: string;
@@ -22,7 +23,7 @@ const VerificationEmailTemplate = ({ userName, token }: VerificationEmailTemplat
   return (
     <Html>
       <Head />
-      <Preview>{config.metadata.title as string} verify your email</Preview>
+      <Preview>{config.metadata.title as string} - verify your email</Preview>
       <Body style={main}>
         <Container style={container}>
           <div style={{  padding: "45px" }}>
@@ -34,16 +35,15 @@ const VerificationEmailTemplate = ({ userName, token }: VerificationEmailTemplat
           />
 
           <Section>
-            <Text style={text}>Hi {userName},</Text>
-            <Text style={text}>Verify your email.</Text>
+            <Text style={text}>Hello {userName},</Text>
             <Button
               style={button}
-              href={`${config.site.url}${routes.auth.verify.path}/${token}`}
+              href={`${config.site.url}${routes.auth.verify.token.path}/${token}`}
               >
-              Verify your email.
+              Verify your email
             </Button>
               <Text>
-                Conformation link: {`${config.site.url}${routes.auth.verify.path}/${token}`}
+              Verification Link: {`${config.site.url}${routes.auth.verify.token.path}/${token}`}
               </Text>
             <Text style={text}>
               To keep your account secure, please don&apos;t forward this email

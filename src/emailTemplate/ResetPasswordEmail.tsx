@@ -43,15 +43,15 @@ const ResetPasswordEmailTemplate = ({
               <Text>click the button below to reset your password:</Text>
               <Button
                 style={button}
-                href={`${config.site.url}${routes.auth.reset.password.path}/${token}`}
+                href={`${config.site.url}${routes.auth.reset.password.token.path}/${token}`}
               >
                 Reset Password.
               </Button>
               <Text>or click the link below:</Text>
               <Link
-                href={`${config.site.url}${routes.auth.reset.password.path}/${token}`}
+                href={`${config.site.url}${routes.auth.reset.password.token.path}/${token}`}
               >
-                {`${config.site.url}${routes.auth.reset.password.path}/${token}`}
+                {`${config.site.url}${routes.auth.reset.password.token.path}/${token}`}
               </Link>
               <Text style={text}>
                 To keep your account secure, please don&apos;t forward this

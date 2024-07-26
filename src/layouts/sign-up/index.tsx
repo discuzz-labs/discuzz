@@ -6,13 +6,17 @@ import Link from "next/link";
 import Alert from "@/components/Alert";
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
-import routes from "@/services/routes";
+import routes, { signUpRoute } from "@/services/routes";
 import AuthForm from "@/components/AuthForm";
 import Header from "@/components/Header";
 import { useMutation } from "@tanstack/react-query";
 import AuthLayoutStyle from "@/styles/AuthLayoutStyle";
+import { useTranslations } from "next-intl";
 
 export default function SignUpLayout() {
+  const t = useTranslations(signUpRoute);
+  const e = useTranslations("error")
+
   const router = useRouter();
 
   const register = async (
@@ -46,39 +50,35 @@ export default function SignUpLayout() {
   return (
     <AuthLayoutStyle>
       {" "}
-      {isError && <Alert message={error.message} type="error" />}
-      <Header content="Sign Up." caption="Create a new account." />
+      {isError && <Alert message={e(error.message)} type="error" />}
+      <Header content={t("title")} caption={t("titleCaption")} />
       <AuthForm
         schema={SignUpFormSchema}
         formSubmitted={isPending}
         callbackFn={mutate}
         fields={[
           {
-            name: "email",
-            type: "email",
-            placeholder: "Email - use grevater email!",
-          },
-          {
             name: "name",
             type: "text",
-            placeholder: "Fullname",
+            placeholder: t("fullnamePlaceholder"),
+          },
+          {
+            name: "email",
+            type: "email",
+            placeholder: t("emailPlaceholder"),
           },
           {
             name: "password",
             type: "password",
-            placeholder: "Password",
+            placeholder: t("passwordPlaceholder"),
           },
         ]}
-        submitBtnText="Create an account"
+        submitBtnText={t("submitBtnText")}
       />
       <p className="mt-10 w-1/2 font-thin text-zinc-600 text-sm text-center">
-        By clicking continue, you agree to our &nbsp;
+        {t("disclaimerText")} &nbsp;
         <Link href="/terms" className="underline hover:text-white">
-          Terms of Service &nbsp;
-        </Link>
-        and &nbsp;
-        <Link href="/privacy" className="underline hover:text-white">
-          Privacy Policy.
+          {t("termsOfService")} &nbsp;
         </Link>
       </p>
     </AuthLayoutStyle>

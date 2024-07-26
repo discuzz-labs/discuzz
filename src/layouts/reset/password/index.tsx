@@ -7,12 +7,18 @@ import { ResetPasswordFormSchemaFirstStep } from "@/validations/form";
 import { z } from "zod";
 import { useMutation } from "@tanstack/react-query";
 import { Check } from "lucide-react";
-import { SUCCESS } from "@/lib/messages";
+import { SUCCESS } from "@/services/messages";
 import Alert from "@/components/Alert";
 import sendResetPasswordEmail from "@/actions/reset/password/sendResetPasswordEmail";
 import AuthLayoutStyle from "@/styles/AuthLayoutStyle";
+import { useTranslations } from "next-intl";
+import { resetPasswordRoute } from "@/services/routes";
 
 export default function ResetPasswordLayout() {
+  const t = useTranslations(resetPasswordRoute)
+  const e = useTranslations("error")
+  const s = useTranslations("success")
+  
   const sendEmail = async (
     values: z.infer<typeof ResetPasswordFormSchemaFirstStep>
   ): Promise<boolean> => {
@@ -47,13 +53,13 @@ export default function ResetPasswordLayout() {
   return (
     <AuthLayoutStyle>
       <Header
-        content="Reset Password"
-        caption="Enter your email, that you used before."
+        content={t("title")}
+        caption={t("titleCaption")}
       />
-      {isError && <Alert message={error.message} type="error" />}
+      {isError && <Alert message={e(error.message)} type="error" />}
       {isSuccess && (
         <p className="flex items-center gap-5">
-          <Check /> {SUCCESS.RESETPASSWORD_SUCCESS_EMAIL_SENT}{" "}
+          <Check /> {s(SUCCESS.RESETPASSWORD_SUCCESS_EMAIL_SENT)}{" "}
         </p>
       )}
 
@@ -64,11 +70,11 @@ export default function ResetPasswordLayout() {
         fields={[
           {
             name: "email",
-            placeholder: "Email",
+            placeholder: t("emailPlaceholder"),
             type: "email",
           },
         ]}
-        submitBtnText="Reset Password"
+        submitBtnText={t("submitBtnText")}
       />
     </AuthLayoutStyle>
   );

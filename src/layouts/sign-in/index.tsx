@@ -5,7 +5,7 @@ import { SignInFormSchema } from "@/validations/form";
 import { z } from "zod";
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
-import routes from "@/services/routes";
+import routes, { signInRoute } from "@/services/routes";
 import { Separator } from "@/components/ui/separator";
 import AuthForm from "@/components/AuthForm";
 import Link from "next/link";
@@ -14,12 +14,16 @@ import { useMutation } from "@tanstack/react-query";
 import OAuthProviders from "@/OAuthProviders/OAuthProviders";
 import OAuthButton from "@/OAuthProviders/OAuthButton";
 import AuthLayoutStyle from "@/styles/AuthLayoutStyle";
+import {useTranslations} from 'next-intl';
 
 interface SignInLayoutProps {
   errorParam: string | undefined;
 }
 
 export default function SignInLayout({ errorParam }: SignInLayoutProps) {
+  const t = useTranslations(signInRoute);
+  const e = useTranslations("error")
+
   const router = useRouter();
   const login = async (
     values: z.infer<typeof SignInFormSchema>
@@ -48,9 +52,9 @@ export default function SignInLayout({ errorParam }: SignInLayoutProps) {
 
   return (
     <AuthLayoutStyle>
-      {isError && <Alert message={error.message} type="error" />}
+      {isError && <Alert message={e(error.message)} type="error" />}
       {errorParam && <Alert message={errorParam} type="error" />}
-      <Header content="Sign In." caption="Sign in to your account." />
+      <Header content={t("title")} caption={t("titleCaption")} />
       {OAuthProviders.map((OAuthProvider) => (
         <OAuthButton
           key={OAuthProvider.name}
@@ -67,18 +71,18 @@ export default function SignInLayout({ errorParam }: SignInLayoutProps) {
           {
             name: "email",
             type: "email",
-            placeholder: "Email",
+            placeholder: t("emailPlaceholder"),
           },
           {
             name: "password",
             type: "password",
-            placeholder: "Password",
+            placeholder: t("passwordPlaceholder"),
           },
         ]}
-        submitBtnText="Sign In"
+        submitBtnText={t("submitBtnText")}
       />
       <Link className="font-thin text-xs" href="/recover/password">
-        Forget Password!
+        {t("forgetPasswordText")}!
       </Link>
     </AuthLayoutStyle>
   );
