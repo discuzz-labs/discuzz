@@ -1,10 +1,10 @@
 "use server";
 
-import { ERROR } from "@/lib/messages";
-import type { ACTIONResponse } from "@/types/types";
+import type { ActionResponse } from "@/types/types";
 import { generatetoken } from "@/services/token";
 import Profile, { ProfileErrorType } from "@/database/Profile";
 import log from "@/lib/log";
+import { ERROR } from '@/services/messages';
 
 interface createResetTokenProps {
   email: string;
@@ -12,9 +12,9 @@ interface createResetTokenProps {
 
 async function createToken({
   email,
-}: createResetTokenProps): Promise<ACTIONResponse<{ token: string }>> {
+}: createResetTokenProps): Promise<ActionResponse<{ token: string }>> {
   try {
-    const generatedToken = generatetoken(email, 1);
+    const generatedToken = generatetoken(email, Date.now() + 600000);
 
     if (generatedToken.success === false || !generatedToken.payload) {
       return {
@@ -38,8 +38,8 @@ async function createToken({
       return {
         error:
           updateResult.error?.type === ProfileErrorType.UpdateProfileFailed
-            ? ERROR.IDENTIFICATION_FAILED_TOKEN_CANNOT_BE_CREATED
-            : updateResult.error.origin,
+            ?ERROR.IDENTIFICATION_FAILED_TOKEN_CANNOT_BE_CREATED
+            : ERROR.IDENTIFICATION_FAILED,
         success: false,
         data: undefined,
       };

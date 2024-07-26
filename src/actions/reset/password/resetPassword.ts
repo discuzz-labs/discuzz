@@ -2,8 +2,8 @@
 
 import Profile, { ProfileErrorType } from "@/database/Profile";
 import log from "@/lib/log";
-import { ERROR } from "@/lib/messages";
-import type { ACTIONResponse } from "@/types/types";
+import { ERROR } from "@/services/messages";
+import type { ActionResponse } from "@/types/types";
 
 interface resetPasswordProps {
   email: string;
@@ -13,7 +13,7 @@ interface resetPasswordProps {
 async function resetPassword({
   email,
   password,
-}: resetPasswordProps): Promise<ACTIONResponse<undefined>> {
+}: resetPasswordProps): Promise<ActionResponse<undefined>> {
   try {
     const userProfile = new Profile({
       email,
@@ -23,11 +23,11 @@ async function resetPassword({
     const passwordChangeResult = await userProfile.changePassword();
     if (passwordChangeResult.success === false && passwordChangeResult.error) {
       return {
-        error:
+        error: 
           passwordChangeResult.error?.type ===
           ProfileErrorType.changePassword
             ? ERROR.RESETPASSWORD_FAILED_PASSWORD_CANNOT_BE_CHANGED
-            : passwordChangeResult.error.origin,
+            : ERROR.RESETPASSWORD_FAILED,
         success: false,
         data: undefined,
       };

@@ -7,35 +7,6 @@ generator client {
   provider = "prisma-client-js"
 }
 
-enum ActivityBadge {
-  BRONZE_1_POST
-  BRONZE_10_POSTS
-  SILVER_50_POSTS
-  SILVER_100_POSTS
-  GOLD_200_POSTS
-  GOLD_300_POSTS
-  PLATINUM_750_POSTS
-  PLATINUM_1000_POSTS
-  LEGEND_1200_POSTS
-  BRONZE_1_VOTES
-  BRONZE_10_VOTES
-  SILVER_50_VOTES
-  SILVER_100_VOTES
-  GOLD_200_VOTES
-  GOLD_500_VOTES
-  PLATINUM_750_VOTES
-  PLATINUM_1000_VOTES
-  LEGEND_2000_VOTES
-  BRONZE_1_COMMENT
-  BRONZE_10_COMMENTS
-  SILVER_50_COMMENTS
-  SILVER_100_COMMENTS
-  GOLD_200_COMMENTS
-  GOLD_500_COMMENTS
-  PLATINUM_750_COMMENTS
-  PLATINUM_1000_COMMENTS
-  LEGEND_2000_COMMENTS
-}
 
 enum Issuestatus {
   OPEN
@@ -94,18 +65,12 @@ model User {
   image                  String?
   password               String
   token                  String?
-  age                    Int
   role                   Role
   bio                    String
-  badges                 ActivityBadge[]
-  level                  Level
   verified               Boolean
-  TFA                    Boolean
   links                  String[]
   reports                UserReport[]
   issues                 Issue[]
-  followerIds            Int[]
-  followingIds           Int[]
   createdAt              DateTime        @default(now())
   updatedAt              DateTime        @updatedAt
 }

@@ -96,9 +96,9 @@ export const authOptions = {
     },
   },
   pages: {
-    signIn: routes.auth.signIn.path,
-    signOut: routes.auth.signOut.path,
-    error: routes.auth.signIn.path,
+    signIn: routes.auth.signIn.index.path,
+    signOut: routes.auth.signOut.index.path,
+    error: routes.auth.signIn.index.path,
   },
   debug: true,
 };

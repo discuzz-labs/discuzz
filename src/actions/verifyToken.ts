@@ -2,9 +2,9 @@
 
 import Profile, { ProfileErrorType } from "@/database/Profile";
 import log from "@/lib/log";
-import { ERROR } from "@/lib/messages";
+import { ERROR } from "@/services/messages";
 import { checktoken } from "@/services/token";
-import type { ACTIONResponse } from "@/types/types";
+import type { ActionResponse } from "@/types/types";
 
 interface verifyUserResetTokenProps {
   token: string;
@@ -12,7 +12,7 @@ interface verifyUserResetTokenProps {
 
 async function verifyToken({
   token,
-}: verifyUserResetTokenProps): Promise<ACTIONResponse<{email: string}>> {
+}: verifyUserResetTokenProps): Promise<ActionResponse<{email: string}>> {
   try {
     const verifiedToken = checktoken(token);
 
@@ -26,6 +26,9 @@ async function verifyToken({
 
     const userProfile = new Profile({
       email: verifiedToken.payload.token.email,
+      valuesToUpdate : {
+        token: ""
+      }
     });
 
     const userFetchResult = await userProfile.findByEmail();
@@ -34,8 +37,20 @@ async function verifyToken({
       return {
         error:
           userFetchResult.error?.type === ProfileErrorType.CannotFindProfile
-            ? ERROR.IDENTIFICATION__FAILED_Token_CANNOT_BE_VERIFIED
-            : userFetchResult.error.origin,
+            ? ERROR.IDENTIFICATION_FAILED_TOKEN_CANNOT_BE_VERIFIED
+            :  ERROR.IDENTIFICATION_FAILED,
+        success: false,
+        data: undefined,
+      };
+    }
+    
+    const deleteTokenResult = await userProfile.updateProfileByEmail()
+    if (deleteTokenResult.success === false && deleteTokenResult.error) {
+      return {
+        error:
+        deleteTokenResult.error?.type === ProfileErrorType.UpdateProfileFailed
+            ? ERROR.IDENTIFICATION_FAILED_TOKEN_CANNOT_BE_VERIFIED
+            :  ERROR.IDENTIFICATION_FAILED,
         success: false,
         data: undefined,
       };
@@ -49,7 +64,7 @@ async function verifyToken({
   } catch (err) {
     log("actions", err, "ACTIONS /verifyToken");
     console.log(err)
-    return { error: ERROR.SERVER_ERROR, success: false, data: undefined };
+    return { error: ERROR.SERVER_ERROR , success: false, data: undefined };
   }
 }
 

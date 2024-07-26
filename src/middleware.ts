@@ -1,6 +1,6 @@
 import { withAuth } from "next-auth/middleware";
 import { NextResponse } from "next/server";
-import routes, { signUpRoute, signInRoute, userRoute, verifyRoute } from "@/services/routes";
+import routes from "@/services/routes";
 
 export default withAuth(
   async function middleware(req) {
@@ -33,11 +33,11 @@ export default withAuth(
     },
     secret: process.env.APP_KEY,
     pages: {
-      signIn: routes.auth.signIn.path,
+      signIn: routes.auth.signIn.index.path,
     },
   }
 );
 
 export const config = {
-  matcher: [signInRoute, signUpRoute , userRoute , verifyRoute , "/"],
+  matcher: ["/signin", "/signuo" , "/user" , "/verify" , "/"],
 };

@@ -2,8 +2,8 @@
 
 import Profile, { ProfileErrorType } from "@/database/Profile";
 import log from "@/lib/log";
-import { ERROR } from "@/lib/messages";
-import type { ACTIONResponse } from "@/types/types";
+import { ERROR } from "@/services/messages";
+import type { ActionResponse } from "@/types/types";
 
 interface verifyUserProps {
   email: string;
@@ -11,7 +11,7 @@ interface verifyUserProps {
 
 async function verifyUser({
   email,
-}: verifyUserProps): Promise<ACTIONResponse<undefined>> {
+}: verifyUserProps): Promise<ActionResponse<undefined>> {
   try {
 
     const userProfile = new Profile({
@@ -28,7 +28,7 @@ async function verifyUser({
         error:
           userVerification.error?.type === ProfileErrorType.UpdateProfileFailed
             ? ERROR.VERIFICATION_FAILED_USER_CANNOT_BE_VERIFIED
-            : userVerification.error.origin,
+            : ERROR.VERIFICATION_FAILED,
         success: false,
         data: undefined,
       };

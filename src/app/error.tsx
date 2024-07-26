@@ -1,6 +1,5 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
 import { homeRoute } from "@/services/routes";
 import config from "@/lib/config";
 import Link from "next/link";

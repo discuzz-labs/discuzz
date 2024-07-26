@@ -1,7 +1,7 @@
 "use server";
 
-import { ERROR } from "@/lib/messages";
-import type { ACTIONResponse } from "@/types/types";
+import { ERROR } from "@/services/messages";
+import type { ActionResponse } from "@/types/types";
 import type { UserSessionInterface } from "@/providers/AuthProvider";
 import log from "@/lib/log";
 import Profile, { ProfileErrorType } from "@/database/Profile";
@@ -18,7 +18,7 @@ async function signUpWithCred({
   password,
   image,
   name,
-}: signUpWithCredArgs): Promise<ACTIONResponse<UserSessionInterface>> {
+}: signUpWithCredArgs): Promise<ActionResponse<UserSessionInterface>> {
   try {
     const userProfile = new Profile({
       email,
@@ -33,7 +33,7 @@ async function signUpWithCred({
         error:
           userRegisteration.error.type === ProfileErrorType.UserAlreadyExists
             ? ERROR.REGISTRATION_FAILED_EMAIL_ALREADY_EXISTS
-            : userRegisteration.error.origin,
+            : ERROR.REGISTRATION_FAILED,
         data: undefined,
       };
     }

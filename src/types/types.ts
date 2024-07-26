@@ -1,6 +1,5 @@
 import { ProfileErrorType } from "@/database/Profile";
-import { ProviderName } from "@/oAuth/OAuthProviders";
-import { ReactElement } from "react";
+import { ProviderName } from "@/OAuthProviders/OAuthProviders";
 
 export type DatabaseResponse<T> = {
   error: {
@@ -11,8 +10,8 @@ export type DatabaseResponse<T> = {
   data: T;
 };
 
-export type ACTIONResponse<T> = {
-  error: any | null;
+export type ActionResponse<T> = {
+  error: any;
   success: boolean;
   data: T | undefined;
 };

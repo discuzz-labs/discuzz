@@ -1,7 +1,7 @@
 "use client";
 
 import sendVerificationEmail from "@/actions/verify/sendVerificationEmail";
-import { SUCCESS } from "@/lib/messages";
+import { SUCCESS } from "@/services/messages";
 import { useSession } from "next-auth/react";
 import Header from "@/components/Header";
 import Alert from "@/components/Alert";
@@ -11,8 +11,14 @@ import AuthForm from "@/components/AuthForm";
 import { Check } from "lucide-react";
 import { useMutation } from "@tanstack/react-query";
 import AuthLayoutStyle from "@/styles/AuthLayoutStyle";
+import { useTranslations } from "next-intl";
+import { verifyRoute } from "@/services/routes";
 
 export default function VerifyLayout() {
+  const t = useTranslations(verifyRoute)
+  const e = useTranslations("error")
+  const s = useTranslations("success")
+
   const { data: userSession } = useSession();
 
   const sendEmail = async (): Promise<boolean> => {
@@ -46,11 +52,11 @@ export default function VerifyLayout() {
 
   return (
     <AuthLayoutStyle>
-      <Header content="Verification" caption="Verify your email." />
-      {isError && <Alert message={error.message} type="error" />}
+      <Header content={t("title")} caption={t("titleCaption")} />
+      {isError && <Alert message={e(error.message)} type="error" />}
       {isSuccess && (
         <p className="flex items-center gap-5">
-          <Check /> {SUCCESS.VERIFICATION_SUCCESS_EMAIL_SENT}{" "}
+          <Check /> {s(SUCCESS.VERIFICATION_SUCCESS_EMAIL_SENT)}{" "}
         </p>
       )}
       <AuthForm
@@ -58,7 +64,7 @@ export default function VerifyLayout() {
         formSubmitted={isPending}
         fields={[]}
         callbackFn={() => mutate()}
-        submitBtnText="send verification email."
+        submitBtnText={t("submitBtnText")}
       />
     </AuthLayoutStyle>
   );

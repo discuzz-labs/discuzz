@@ -1,8 +1,8 @@
 "use server";
 
-import { ERROR } from "@/lib/messages";
+import { ERROR } from "@/services/messages";
 import sendEmail from "@/services/sendEmail";
-import type { ACTIONResponse } from "@/types/types";
+import type { ActionResponse } from "@/types/types";
 import VerificationEmailTemplate, {
   subject,
 } from "@/emailTemplate/VerificationEmail";
@@ -17,7 +17,7 @@ async function sendVerificationEmail({
   userName,
   email,
   token,
-}: sendVerificationEmailProps): Promise<ACTIONResponse<undefined>> {
+}: sendVerificationEmailProps): Promise<ActionResponse<undefined>> {
   try {
     await sendEmail({
       email,

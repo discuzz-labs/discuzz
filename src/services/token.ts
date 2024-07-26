@@ -4,7 +4,7 @@ const jwt = require("jsonwebtoken");
 
 function generatetoken(
   email: string,
-  hour: number
+  expirationDate: number
 ): {
   success: boolean;
   payload: {
@@ -14,7 +14,7 @@ function generatetoken(
   try {
     var token = jwt.sign({ email }, config.site.appKey, {
       algorithm: "HS512",
-      expiresIn: `${hour}h`,
+      expiresIn: expirationDate,
     });
     return {
       success: true,

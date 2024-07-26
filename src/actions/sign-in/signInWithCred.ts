@@ -1,7 +1,7 @@
 "use server";
 
-import { ERROR } from "@/lib/messages";
-import type { ACTIONResponse } from "@/types/types";
+import { ERROR } from "@/services/messages";
+import type { ActionResponse } from "@/types/types";
 import type { UserSessionInterface } from "@/providers/AuthProvider";
 import log from "@/lib/log";
 import Profile, { ProfileErrorType } from "@/database/Profile";
@@ -14,7 +14,7 @@ interface signInWithCredArgs {
 async function signInWithCred({
   email,
   password,
-}: signInWithCredArgs): Promise<ACTIONResponse<UserSessionInterface>> {
+}: signInWithCredArgs): Promise<ActionResponse<UserSessionInterface>> {
   try {
     const userProfile = new Profile({
       email,
@@ -27,8 +27,8 @@ async function signInWithCred({
         success: false,
         error:
           userLogin.error.type === ProfileErrorType.CannotLoginWithProfile
-            ? ERROR.LOGIN_FAILED_WRONG_CREDENTIALS
-            : userLogin.error.origin,
+            ? ERROR.LOGIN_FAILED_INVALID_CREDENTIALS
+            : ERROR.LOGIN_FAILED,
         data: undefined,
       };
     }

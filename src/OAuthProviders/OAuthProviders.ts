@@ -1,7 +1,7 @@
 import GithubProvider, { GithubProfile } from "next-auth/providers/github";
 import signUpWithCred from "@/actions/sign-up/signUpWithCred";
 import { OAuthProviderConfig, OAuthUserProfile } from "@/types/types";
-import { ERROR } from "@/lib/messages";
+import { ERROR } from "@/services/messages";
 import OAuthButton from "./OAuthButton";
 
 

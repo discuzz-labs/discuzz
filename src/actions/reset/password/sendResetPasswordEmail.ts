@@ -1,8 +1,8 @@
 "use server";
 
-import { ERROR } from "@/lib/messages";
+import { ERROR } from "@/services/messages";
 import sendEmail from "@/services/sendEmail";
-import type { ACTIONResponse } from "@/types/types";
+import type { ActionResponse } from "@/types/types";
 import ResetPasswordEmailTemplate, {subject} from "@/emailTemplate/ResetPasswordEmail";
 
 
@@ -16,7 +16,7 @@ async function sendResetPasswordEmail({
   userName,
   email,
   token
-}: sendResetPasswordEmailProps): Promise<ACTIONResponse<undefined>> {
+}: sendResetPasswordEmailProps): Promise<ActionResponse<undefined>> {
   try {
     await sendEmail({
       email,

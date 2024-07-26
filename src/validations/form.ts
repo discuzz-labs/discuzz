@@ -1,4 +1,4 @@
-import { ERROR } from "@/lib/messages";
+import { ERROR } from "@/services/messages";
 import { z } from "zod";
 
 const passwordSchema = z

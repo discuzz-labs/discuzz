@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Montserrat } from "next/font/google";
-
+import { NextIntlClientProvider } from "next-intl";
+import { getLocale, getMessages } from "next-intl/server";
 import { ThemeProvider } from "@/providers/ThemeProvider";
 import NavBar from "@/components/NavBar";
 import { Toaster } from "@/components/ui/toaster";
@@ -13,7 +14,7 @@ import QueryProvider from "@/providers/QueryProvider";
 
 const inter = Montserrat({
   subsets: ["latin"],
-  weight: ["100", "300", "400"],
+  weight: ["100", "300", "400", "800"],
 });
 
 export const metadata: Metadata = {
@@ -61,7 +62,7 @@ export const metadata: Metadata = {
   category: config.metadata.category,
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
@@ -71,7 +72,11 @@ export default function RootLayout({
    * Only runs in dev mode.
    */
   build();
+  const locale = await getLocale();
 
+  // Providing all messages to the client
+  // side is the easiest way to get started
+  const messages = await getMessages();
   return (
     <html lang="en" suppressHydrationWarning>
       <body
@@ -82,8 +87,10 @@ export default function RootLayout({
         <QueryProvider>
           <AuthProvider>
             <ThemeProvider>
-              <NavBar />
-              {children}
+              <NextIntlClientProvider messages={messages}>
+                <NavBar />
+                {children}
+              </NextIntlClientProvider>
             </ThemeProvider>
           </AuthProvider>
         </QueryProvider>
