@@ -54,9 +54,8 @@ export default function VerifyTokenLayout({ token }: VerifyTokenLayoutProps) {
     const handleUpdateSession = async () => {
       if (isSuccess) {
         if (userSession) {
-          console.log("hello")
           await update({ verified: true });
-          router.push(routes.redirects.onAfterVerify)
+          router.push(`${routes.redirects.onAfterVerify}/${userSession.user.id}`)
         }
       }
     };

@@ -5,9 +5,9 @@ export const signOutRoute = "/";
 export const verifyRoute = "/verify";
 export const resetRoute = "/reset";
 export const verifyTokenRoute = "/verify/token";
-export const resetPasswordRoute = `/reset/password`;
-export const resetPasswordTokenRoute = `/reset/password/token`;
-export const dashboardRoute = "/dashboard";
+export const resetPasswordRoute = "/reset/password";
+export const resetPasswordTokenRoute = "/reset/password/token";
+export const userRoute = "/user";
 
 const routes = {
   auth: {
@@ -26,22 +26,22 @@ const routes = {
     },
   },
   user: {
-    dashboard: {
-      index: { path: dashboardRoute, translation: `${dashboardRoute}.json` },
+    index: {
+      index: { path: userRoute, translation: `${userRoute}.json` },
       // Future nested routes can be added here if needed
     },
   },
   redirects: {
     onUnAuthenticated: signInRoute,
-    onAuthenticated: dashboardRoute,
-    onVerified: dashboardRoute,
+    onAuthenticated: userRoute,
+    onVerified: userRoute,
     onUnVerified: verifyRoute,
     onAfterSignIn: verifyRoute,
     onAfterSignUp: verifyRoute,
-    onAfterVerify: dashboardRoute,
+    onAfterVerify: userRoute,
     onAfterResetPassword: signInRoute,
   },
-  isProtected: (route: string) => [dashboardRoute].includes(route),
+  isProtected: (route: string) => [userRoute].includes(route),
   isVerifyRoute: (route: string) => [verifyRoute].includes(route),
   isAuth: (route: string) =>
     [signInRoute, signUpRoute, resetRoute, verifyRoute].some((authRoute) =>

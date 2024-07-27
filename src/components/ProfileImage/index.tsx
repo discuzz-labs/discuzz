@@ -4,21 +4,24 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Image as ImgIcon } from "lucide-react";
 import { useSession } from "next-auth/react";
 
+interface ProfileImageProps {
+  img?: string | undefined;
+  className?: string;
+  size: number;
+}
+
 export default function ProfileImage({
   img,
   className,
   size,
-}: {
-  img?: string | undefined;
-  className?: string;
-  size: number;
-}) {
+}: ProfileImageProps) {
   const { data: userSession } = useSession();
 
   return (
     <div className={className}>
-      <Avatar className={`h-${size} w-${size} border-4 border-input`}>
+      <Avatar className={`border-4 border-input`}>
         <AvatarImage
+          className={`h-${size} w-${size}`}
           src={
             img ||
             userSession?.user.image ||
@@ -27,7 +30,7 @@ export default function ProfileImage({
           alt="Profile Image"
         />
         <AvatarFallback>
-          <ImgIcon size={40} />
+          <ImgIcon  className={`h-${size} w-${size}`} />
         </AvatarFallback>
       </Avatar>
     </div>

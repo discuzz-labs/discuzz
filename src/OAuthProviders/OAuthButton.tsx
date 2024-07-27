@@ -2,11 +2,12 @@
 
 import routes from "@/services/routes";
 import { Button } from "@/components/ui/button";
-import { signIn } from "next-auth/react";
+import { signIn, useSession } from "next-auth/react";
 import { useMutation } from "@tanstack/react-query";
 import Image from 'next/image';
 import { ProviderName } from "./OAuthProviders";
 import { ReactElement } from "react";
+import { useRouter } from "next/navigation";
 
 interface OAuthButtonProps{
   name: ProviderName,
@@ -17,10 +18,11 @@ export default function OAuthButton({
   name,
   logo,
 } : OAuthButtonProps) : ReactElement {
+  const { data: userSession } = useSession()
+  const router = useRouter()
+  
   const loginWithGithub = async (): Promise<boolean> => {
-    const signInRequestWithOAuth = await signIn(name, {
-      callbackUrl: routes.redirects.onAfterVerify,
-    });
+    const signInRequestWithOAuth = await signIn(name)
     if (!signInRequestWithOAuth?.ok) {
       throw new Error(signInRequestWithOAuth?.error as string);
     }
@@ -33,6 +35,9 @@ export default function OAuthButton({
     void
   >({
     mutationFn: loginWithGithub,
+    onSuccess() {
+      if(userSession) router.push(`${routes.redirects.onAfterVerify}/${userSession.user.id}`)
+    },
   });
 
   return (

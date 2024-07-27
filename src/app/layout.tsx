@@ -80,9 +80,10 @@ export default async function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body
-        className={`${inter.className}
+        className={`
+          ${inter.className}
             bg-white
-           dark:bg-black`}
+           dark:bg-background`}
       >
         <QueryProvider>
           <AuthProvider>
