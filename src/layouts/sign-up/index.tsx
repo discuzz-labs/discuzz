@@ -1,7 +1,7 @@
 "use client";
 
 import { z } from "zod";
-import { SignUpFormSchema } from "@/validations/form";
+import { SignUpFormSchema } from "@/services/schemas";
 import Link from "next/link";
 import Alert from "@/components/Alert";
 import { signIn } from "next-auth/react";
@@ -20,7 +20,7 @@ export default function SignUpLayout() {
   const router = useRouter();
 
   const register = async (
-    values: z.infer<typeof SignUpFormSchema>
+    values: z.infer<ReturnType<typeof SignUpFormSchema>>
   ): Promise<boolean> => {
     const signUpRequest = await signIn("signup", {
       email: values.email,
@@ -39,7 +39,7 @@ export default function SignUpLayout() {
   const { isError, error, isPending, mutate } = useMutation<
     boolean,
     Error,
-    z.infer<typeof SignUpFormSchema>
+    z.infer<ReturnType<typeof SignUpFormSchema>>
   >({
     mutationFn: register,
     onSuccess: () => {

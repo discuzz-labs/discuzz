@@ -79,12 +79,7 @@ export default async function RootLayout({
   const messages = await getMessages();
   return (
     <html lang="en" suppressHydrationWarning>
-      <body
-        className={`
-          ${inter.className}
-            bg-white
-           dark:bg-background`}
-      >
+      <body className={`${inter.className}bg-background`}>
         <QueryProvider>
           <AuthProvider>
             <ThemeProvider>

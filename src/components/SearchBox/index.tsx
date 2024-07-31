@@ -7,8 +7,7 @@ import {
   CommandInput,
   CommandItem,
   CommandList,
-  CommandSeparator,
-  CommandShortcut,
+  CommandSeparator
 } from "@/components/ui/command";
 import { useState } from "react";
 
@@ -31,12 +30,12 @@ export default function SearchBox({
             <CommandItem>
               <User className="mr-2 h-4 w-4" />
               <span>Profile</span>
-              <CommandShortcut>⌘P</CommandShortcut>
+        
             </CommandItem>
             <CommandItem>
               <Settings className="mr-2 h-4 w-4" />
               <span>Settings</span>
-              <CommandShortcut>⌘S</CommandShortcut>
+
             </CommandItem>
           </CommandGroup>
           <CommandSeparator />
@@ -44,12 +43,12 @@ export default function SearchBox({
             <CommandItem>
               <Plus className="mr-2 h-4 w-4" />
               <span>New Post</span>
-              <CommandShortcut>⌘P</CommandShortcut>
+              
             </CommandItem>
             <CommandItem>
               <MessageSquare className="mr-2 h-4 w-4" />
               <span>Posts</span>
-              <CommandShortcut>⌘S</CommandShortcut>
+    
             </CommandItem>
           </CommandGroup>
         </CommandList>

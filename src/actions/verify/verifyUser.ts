@@ -1,47 +1,31 @@
 "use server";
 
-import Profile, { ProfileErrorType } from "@/database/Profile";
+import Profile from "@/database/Profile";
 import log from "@/lib/log";
-import { ERROR } from "@/services/messages";
-import type { ActionResponse } from "@/types/types";
+import error from "@/services/error";
 
-interface verifyUserProps {
+interface verifyUserArgs {
   email: string;
 }
 
-async function verifyUser({
-  email,
-}: verifyUserProps): Promise<ActionResponse<undefined>> {
+async function verifyUser({ email }: verifyUserArgs): Promise<null> {
   try {
-
-    const userProfile = new Profile({
+    const profileUpdate = await new Profile({
       email,
       valuesToUpdate: {
         verified: true,
-        emailVerified: Date.now().toString()
+        emailVerified: new Date(),
       },
-    });
-    
-    const userVerification = await userProfile.updateProfileByEmail();
-    if (userVerification.success === false && userVerification.error) {
-      return {
-        error:
-          userVerification.error?.type === ProfileErrorType.UpdateProfileFailed
-            ? ERROR.VERIFICATION_FAILED_USER_CANNOT_BE_VERIFIED
-            : ERROR.VERIFICATION_FAILED,
-        success: false,
-        data: undefined,
-      };
+    }).updateProfile();
+
+    if (profileUpdate.success) {
+      throw new Error(error("VERIFICATION_FAILED_USER_CANNOT_BE_VERIFIED"));
     }
 
-    return {
-      error: null,
-      success: true,
-      data: undefined,
-    };
+    return null;
   } catch (err) {
     log("actions", err, "ACTIONS verify/verifyUser");
-    return { error: ERROR.SERVER_ERROR, success: false, data: undefined };
+    throw new Error(error("SERVER_ERROR"));
   }
 }
 

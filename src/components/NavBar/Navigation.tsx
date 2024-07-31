@@ -1,4 +1,4 @@
-import { Bell, LayoutGrid, Pen, Search } from "lucide-react";
+import { Bell, LayoutGrid, Trophy, Search } from "lucide-react";
 
 interface NavigationProps {
   setOpen: (state: boolean) => void;
@@ -16,7 +16,7 @@ export default function Navigation({
       </div>
 
       <div className="p-2 rounded-sm hover:bg-muted">
-        <Pen className="h-4 w-4" />
+        <Trophy className="h-4 w-4" />
       </div>
 
       <div className="p-2 rounded-sm hover:bg-muted">

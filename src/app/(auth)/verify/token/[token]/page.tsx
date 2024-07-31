@@ -5,7 +5,7 @@ import { withParamValidation } from "next-typesafe-url/app/hoc";
 
 type TokenPageProps = InferPagePropsType<RouteType>;
 
-function VerifyTokenPage({ routeParams, searchParams } : TokenPageProps) {
+function VerifyTokenPage({ routeParams } : TokenPageProps) {
   return <VerifyTokenLayout token={routeParams.token} />;
 }
 

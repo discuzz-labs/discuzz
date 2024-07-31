@@ -1,8 +1,7 @@
-import { Level, Role, User } from "@prisma/client";
+import { Follow, Role, User } from "@prisma/client";
 import prisma from "@/lib/prisma";
 import bcrypt from "bcrypt";
-import { DatabaseResponse } from "@/types/types";
-import log from "@/lib/log";
+import { DatabaseResponse, UserWithCounts } from "@/types/types";
 
 // Define the ProfileConstructor interface
 interface ProfileConstructor {
@@ -14,16 +13,14 @@ interface ProfileConstructor {
   valuesToUpdate?: Partial<User>;
 }
 
-// Define an enum for ProfileError types
-export enum ProfileErrorType {
-  UserAlreadyExists = "UserAlreadyExists",
-  ProfileCreationFailed = "ProfileCreationFailed",
-  CannotFindProfile = "CannotFindProfile",
-  CannotLoginWithProfile = "CannotLoginWithProfile",
-  LoginFailed = "LoginFailed",
-  UpdateProfileFailed = "UpdateProfileFailed",
-  changePassword = "changePasswordFailed",
-  InvalidArgs = "InvalidArgs",
+// Define the ProfileConstructor interface
+interface ProfileConstructor {
+  email?: string;
+  password?: string;
+  name?: string;
+  image?: string;
+  id?: string;
+  valuesToUpdate?: Partial<User>;
 }
 
 // Define the Profile class
@@ -43,7 +40,7 @@ export default class Profile {
     id,
     valuesToUpdate,
   }: ProfileConstructor) {
-    this.email = email ? email.trim().toLowerCase() : null;
+    this.email = email ? email : null;
     this.password = password ? password : null;
     this.name = name ? name : null;
     this.image = image ? image : null;
@@ -51,269 +48,169 @@ export default class Profile {
     this.valuesToUpdate = valuesToUpdate ? valuesToUpdate : null;
   }
 
-  async save(): Promise<DatabaseResponse<undefined | { id: string }>> {
-    if (this.password && this.email && this.name && this.image) {
-      let hashedPassword = bcrypt.hashSync(this.password, 10);
-      try {
-        const userResult = await this.findByEmail();
-        if (userResult.data !== null) {
-          return {
-            success: false,
-            data: undefined,
-            error: { type: ProfileErrorType.UserAlreadyExists, origin: null },
-          };
-        }
-        const createdUser = await prisma.user.create({
-          data: {
-            email: this.email,
-            name: this.name,
-            image: this.image,
-            role: Role.USER,
-            password: hashedPassword,
-            badges: [],
-            level: Level.BRONZE,
-            verified: false,
-            token: "",
-            bio: "",
-            links: []
-          },
-        });
-        return {
-          success: true,
-          data: { id: createdUser.id },
-          error: null,
-        };
-      } catch (err) {
-        return {
-          success: false,
-          data: undefined,
-          error: { type: ProfileErrorType.ProfileCreationFailed, origin: err },
-        };
-      }
-    } else {
-      log("database", ProfileErrorType.InvalidArgs, "DATABASE profile.save");
+  public async save(): Promise<DatabaseResponse<{ id: string } | null>> {
+    let hashedPassword = bcrypt.hashSync(this.password as string, 10);
+    if ((await this.find()).data)
       return {
         success: false,
-        data: undefined,
-        error: {
-          type: ProfileErrorType.InvalidArgs,
-          origin: ProfileErrorType.InvalidArgs,
-        },
+        data: null,
+        error: null,
       };
-    }
+
+    const createdUser = await prisma.user.create({
+      data: {
+        email: this.email as string,
+        name: this.name as string,
+        image: this.image as string,
+        password: hashedPassword,
+        verified: false,
+        token: "",
+        isBanned: false,
+        isBannedUntil: new Date(),
+        emailVerified: new Date(),
+        role: Role.USER,
+        bio: "",
+        links: [],
+        points: 10,
+      },
+    });
+    return {
+      success: true,
+      data: { id: createdUser.id },
+      error: null,
+    };
   }
 
-  async findByEmail(): Promise<DatabaseResponse<undefined | User | null>> {
-    if (this.email) {
-      try {
-        const user: User | null = await prisma.user.findUnique({
-          where: {
-            email: this.email,
-          },
-        });
-        return {
-          data: user,
-          success: true,
-          error: null,
-        };
-      } catch (err) {
-        return {
-          success: false,
-          data: undefined,
-          error: { type: ProfileErrorType.CannotFindProfile, origin: err },
-        };
-      }
-    } else {
-      log("database", ProfileErrorType.InvalidArgs, "DATABASE profile.findByEmail");
+  public async saveOAuth(): Promise<DatabaseResponse<{ id: string }>> {
+    const existingUser = await this.find();
+
+    if (existingUser.data) {
       return {
-        success: false,
-        data: undefined,
-        error: {
-          type: ProfileErrorType.InvalidArgs,
-          origin: ProfileErrorType.InvalidArgs,
-        },
+        success: true,
+        data: { id: existingUser.data.id },
+        error: null,
       };
     }
+
+    const createdUser = await prisma.user.create({
+      data: {
+        email: this.email as string,
+        name: this.name as string,
+        image: this.image as string,
+        password: "", // OAuth users don't need a password
+        verified: true, // Assuming OAuth users are verified by the provider
+        token: "",
+        isBannedUntil: new Date(),
+        emailVerified: new Date(),
+        bio: "",
+        links: [],
+      },
+    });
+
+    return {
+      success: true,
+      data: { id: createdUser.id },
+      error: null,
+    };
   }
 
-  async findById(): Promise<DatabaseResponse<undefined | User | null>> {
-    if (this.id) {
-      try {
-        const user: User | null = await prisma.user.findUnique({
-          where: {
-            email: this.id,
+  public async find(): Promise<DatabaseResponse<UserWithCounts | null>> {
+    const where = this.email
+      ? { email: this.email as string }
+      : { id: this.id as string };
+    const user: UserWithCounts | null = await prisma.user.findUnique({
+      where: {
+        ...where,
+      },
+      select: {
+        email: true,
+        image: true,
+        name: true,
+        verified: true,
+        id: true,
+        emailVerified: true,
+        password: true,
+        token: true,
+        role: true,
+        bio: true,
+        links: true,
+        points: true,
+        isBanned: true,
+        isBannedUntil: true,
+        createdAt: true,
+        updatedAt: true,
+        _count: {
+          select: {
+            followers: true,
+            following: true,
           },
-        });
-        return {
-          data: user,
-          success: true,
-          error: null,
-        };
-      } catch (err) {
-        return {
-          success: false,
-          data: undefined,
-          error: { type: ProfileErrorType.CannotFindProfile, origin: err },
-        };
-      }
-    } else {
-      log("database", ProfileErrorType.InvalidArgs, "DATABASE profile.findById");
-      return {
-        success: false,
-        data: undefined,
-        error: {
-          type: ProfileErrorType.InvalidArgs,
-          origin: ProfileErrorType.InvalidArgs,
         },
-      };
-    }
+      },
+    });
+
+    return {
+      data: user,
+      success: true,
+      error: null,
+    };
   }
 
-  async login(): Promise<DatabaseResponse<undefined | User | null>> {
-    if (this.password && this.email) {
-      try {
-        var passwordMatches = false;
-        const user = await this.findByEmail();
+  public async login(): Promise<DatabaseResponse<User | null>> {
+    var passwordMatches = false;
+    const user = await this.find();
 
-        if (user && user.data) {
-          passwordMatches = await bcrypt.compare(
-            this.password,
-            user.data.password as string
-          );
-        }
-
-        return {
-          data: passwordMatches ? user.data : undefined,
-          success: passwordMatches ? true : false,
-          error: passwordMatches
-            ? null
-            : {
-                type: ProfileErrorType.CannotLoginWithProfile,
-                origin: null,
-              },
-        };
-      } catch (err) {
-        return {
-          success: false,
-          data: undefined,
-          error: { type: ProfileErrorType.LoginFailed, origin: err },
-        };
-      }
-    } else {
-      log("database", ProfileErrorType.InvalidArgs, "DATABASE profile.login");
-      return {
-        success: false,
-        data: undefined,
-        error: {
-          type: ProfileErrorType.InvalidArgs,
-          origin: ProfileErrorType.InvalidArgs,
-        },
-      };
+    if (user && user.data) {
+      passwordMatches = await bcrypt.compare(
+        this.password as string,
+        user.data.password as string
+      );
     }
+
+    return {
+      data: passwordMatches ? user.data : null,
+      success: passwordMatches ? true : false,
+      error: null,
+    };
   }
 
-  async updateProfileByEmail(): Promise<DatabaseResponse<undefined | User | null>> {
-    if (this.valuesToUpdate &&  this.email) {
-      try {
-        const user = await prisma.user.update({
-          where: { 
-            email: this.email
-          },
-          data: this.valuesToUpdate,
-        });
-        return {
-          success: true,
-          data: user,
-          error: null,
-        };
-      } catch (err) {
-        return {
-          success: false,
-          data: undefined,
-          error: { type: ProfileErrorType.UpdateProfileFailed, origin: err },
-        };
-      }
-    } else {
-      log("database", ProfileErrorType.InvalidArgs, "DATABASE profile.updateProfileByEmail");
-      return {
-        success: false,
-        data: undefined,
-        error: {
-          type: ProfileErrorType.InvalidArgs,
-          origin: ProfileErrorType.InvalidArgs,
-        },
-      };
-    }
+  public async updateProfile(): Promise<DatabaseResponse<User>> {
+    const where = this.email
+      ? { email: this.email as string }
+      : { id: this.id as string };
+
+    const user = await prisma.user.update({
+      where,
+      data: this.valuesToUpdate as Partial<User>,
+    });
+    return { success: true, data: user, error: null };
   }
 
-  async updateProfileById(): Promise<DatabaseResponse<undefined | User | null>> {
-    if (this.valuesToUpdate &&  this.id) {
-      try {
-        const user = await prisma.user.update({
-          where: { 
-            id: this.id
-          },
-          data: this.valuesToUpdate,
-        });
-        return {
-          success: true,
-          data: user,
-          error: null,
-        };
-      } catch (err) {
-        return {
-          success: false,
-          data: undefined,
-          error: { type: ProfileErrorType.UpdateProfileFailed, origin: err },
-        };
-      }
-    } else {
-      log("database", ProfileErrorType.InvalidArgs, "DATABASE profile.updateProfileById");
-      return {
-        success: false,
-        data: undefined,
-        error: {
-          type: ProfileErrorType.InvalidArgs,
-          origin: ProfileErrorType.InvalidArgs,
-        },
-      };
-    }
+  public async resetPassword(): Promise<DatabaseResponse> {
+    let hashedPassword = bcrypt.hashSync(this.password as string, 10);
+    await prisma.user.update({
+      where: {
+        email: this.email as string,
+      },
+      data: {
+        password: hashedPassword,
+      },
+    });
+    return {
+      success: true,
+      data: null,
+      error: null,
+    };
   }
 
-  async changePassword(): Promise<DatabaseResponse<undefined>> {
-    if (this.email && this.password) {
-      try {
-        let hashedPassword = bcrypt.hashSync(this.password, 10);
-        const user = await prisma.user.update({
-          where: { 
-            email: this.email
-          },
-          data: {
-            password: hashedPassword
-          },
-        });
-        return {
-          success: true,
-          data: undefined,
-          error: null,
-        };
-      } catch (err) {
-        return {
-          success: false,
-          data: undefined,
-          error: { type: ProfileErrorType.changePassword, origin: err },
-        };
-      }
-    } else {
-      log("database", ProfileErrorType.InvalidArgs, "DATABASE profile.changePassword");
-      return {
-        success: false,
-        data: undefined,
-        error: {
-          type: ProfileErrorType.InvalidArgs,
-          origin: ProfileErrorType.InvalidArgs,
-        },
-      };
-    }
+  public async following(): Promise<DatabaseResponse<Partial<Follow>[]>> {
+    const following = await prisma.follow.findMany({
+      where: { followerId: this.id as string },
+      select: { followingId: true },
+    });
+    return {
+      success: true,
+      data: following,
+      error: null,
+    };
   }
 }

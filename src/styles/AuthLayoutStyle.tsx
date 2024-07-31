@@ -12,7 +12,7 @@ export default function AuthLayoutStyle({ children }: { children: ReactNode }) {
         </p>
         <p className="font-thin text-xl">- Albert Einstein</p>
       </div>
-      <div className="relative lg:w-1/2 lg:dark:bg-black lg:dark:bg-none dark:decorator w-full flex flex-col items-center justify-center">
+      <div className="relative lg:w-1/2 lg:dark:bg-black lg:dark:bg-none w-full flex flex-col items-center justify-center">
         {children}
       </div>
     </div>

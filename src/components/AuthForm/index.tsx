@@ -5,9 +5,10 @@ import { useForm, UseFormReturn, Path } from "react-hook-form";
 import { Button } from "@/components/ui/button";
 import Spinner from "@/components/Spinner";
 import { InputForm } from "@/components/InputForm";
+import { useTranslations } from "next-intl";
 
 interface FormProps<T extends z.ZodType<any, any, any>> {
-  schema: T;
+  schema: (t: (arg: string) => string) => T;
   formSubmitted: boolean;
   callbackFn: (values: z.infer<T>) => void
   fields: Array<{ name: Path<z.infer<T>>, type: string, placeholder: string, label?: string }>;
@@ -21,9 +22,11 @@ export default function AuthForm<T extends z.ZodType<any, any>>({
   fields,
   submitBtnText
 }: FormProps<T>) {
-  const form = useForm<z.infer<T>>({
+  const t = useTranslations("error")
+  
+  const form = useForm<z.infer<ReturnType<typeof schema>>>({
     mode: "onSubmit",
-    resolver: zodResolver(schema),
+    resolver: zodResolver(schema(t)),
   });
 
   return (

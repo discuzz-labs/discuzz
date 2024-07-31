@@ -1,13 +1,12 @@
 "use server";
 
-import { ERROR } from "@/services/messages";
+import error from "@/services/error";
 import sendEmail from "@/services/sendEmail";
-import type { ActionResponse } from "@/types/types";
 import VerificationEmailTemplate, {
   subject,
 } from "@/emailTemplate/VerificationEmail";
 
-interface sendVerificationEmailProps {
+interface sendVerificationEmailArgs {
   token: string;
   email: string;
   userName: string;
@@ -17,7 +16,7 @@ async function sendVerificationEmail({
   userName,
   email,
   token,
-}: sendVerificationEmailProps): Promise<ActionResponse<undefined>> {
+}: sendVerificationEmailArgs): Promise<null> {
   try {
     await sendEmail({
       email,
@@ -28,17 +27,9 @@ async function sendVerificationEmail({
       subject: subject,
     });
 
-    return {
-      error: null,
-      success: true,
-      data: undefined,
-    };
+    return null;
   } catch (err) {
-    return {
-      error: ERROR.VERIFICATION_FAILED_EMAIL_CANNOT_BE_SENT,
-      success: false,
-      data: undefined,
-    };
+    throw new Error(error("VERIFICATION_FAILED_EMAIL_CANNOT_BE_SENT"));
   }
 }
 

@@ -1,12 +1,12 @@
 "use server";
 
-import { ERROR } from "@/services/messages";
+import error from "@/services/error";
 import sendEmail from "@/services/sendEmail";
-import type { ActionResponse } from "@/types/types";
-import ResetPasswordEmailTemplate, {subject} from "@/emailTemplate/ResetPasswordEmail";
+import ResetPasswordEmailTemplate, {
+  subject,
+} from "@/emailTemplate/ResetPasswordEmail";
 
-
-interface sendResetPasswordEmailProps {
+interface sendResetPasswordEmailArgs {
   email: string;
   userName: string;
   token: string;
@@ -15,8 +15,8 @@ interface sendResetPasswordEmailProps {
 async function sendResetPasswordEmail({
   userName,
   email,
-  token
-}: sendResetPasswordEmailProps): Promise<ActionResponse<undefined>> {
+  token,
+}: sendResetPasswordEmailArgs): Promise<null> {
   try {
     await sendEmail({
       email,
@@ -27,17 +27,9 @@ async function sendResetPasswordEmail({
       subject: subject,
     });
 
-    return {
-      error: null,
-      success: true,
-      data: undefined,
-    };
+    return null;
   } catch (err) {
-    return {
-      error: ERROR.RESETPASSWORD_FAILED_EMAIL_CANNOT_BE_SENT,
-      success: false,
-      data: undefined,
-    };
+    throw new Error(error("RESETPASSWORD_FAILED_EMAIL_CANNOT_BE_SENT"));
   }
 }
 

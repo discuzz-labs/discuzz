@@ -1,10 +1,9 @@
 "use server";
 
-import { ERROR } from "@/services/messages";
-import type { ActionResponse } from "@/types/types";
+import error from "@/services/error";
 import type { UserSessionInterface } from "@/providers/AuthProvider";
 import log from "@/lib/log";
-import Profile, { ProfileErrorType } from "@/database/Profile";
+import Profile from "@/database/Profile";
 
 interface signUpWithCredArgs {
   email: string;
@@ -18,33 +17,28 @@ async function signUpWithCred({
   password,
   image,
   name,
-}: signUpWithCredArgs): Promise<ActionResponse<UserSessionInterface>> {
+}: signUpWithCredArgs): Promise<UserSessionInterface> {
   try {
-    const userProfile = new Profile({
+    const save = await new Profile({
       email,
       password,
       name,
       image,
-    });
-    const userRegisteration = await userProfile.save();
-    if (userRegisteration.success === false && userRegisteration.error) {
-      return {
-        success: false,
-        error:
-          userRegisteration.error.type === ProfileErrorType.UserAlreadyExists
-            ? ERROR.REGISTRATION_FAILED_EMAIL_ALREADY_EXISTS
-            : ERROR.REGISTRATION_FAILED,
-        data: undefined,
-      };
+    }).save();
+
+    if (save.success === false) {
+      throw new Error(error("REGISTRATION_FAILED_EMAIL_ALREADY_EXISTS"));
     }
     return {
-      success: true,
-      error: null,
-      data: { email, name, image, verified: false , id: userRegisteration.data?.id as string },
+      email,
+      name,
+      image,
+      verified: false,
+      id: save.data?.id as string,
     };
   } catch (err) {
-    log("actions", err, "ACTIONS sign-up/signUpWithCred");
-    return { error: ERROR.SERVER_ERROR, success: false, data: undefined };
+    log("actions", err, `ACTIONS ${__filename}`);
+    throw new Error(error("SERVER_ERROR"));
   }
 }
 

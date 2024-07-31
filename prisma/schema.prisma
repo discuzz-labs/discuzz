@@ -7,6 +7,120 @@ generator client {
   provider = "prisma-client-js"
 }
 
+model Post {
+  id          String     @id @default(auto()) @map("_id") @db.ObjectId
+  title       String
+  content     String
+  createdAt   DateTime   @default(now())
+  viewsNumber Int
+  likes       Int
+  disLikes    Int
+  language    String
+  isRestricted Boolean
+  reason      ReportType
+  updatedAt   DateTime   @updatedAt
+  author      User       @relation("UserPosts", fields: [authorId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  authorId    String     @db.ObjectId
+  comments    Comment[]  @relation("PostComments")
+  bookmarks   Bookmark[] @relation("PostBookmarks")
+}
+
+model Report {
+  id                   String     @id @default(auto()) @map("_id") @db.ObjectId
+  description          String
+  reportType           ReportType
+  severity             Severity
+  status               String     @default("Pending")
+  resolutionDetails    String
+  reportedUser         User       @relation("ReportedUser", fields: [reportedUserId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  reportedUserId       String     @db.ObjectId
+  reportingModerator   User       @relation("ReportingModerator", fields: [reportingModeratorId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  reportingModeratorId String     @db.ObjectId
+  createdAt            DateTime   @default(now())
+  updatedAt            DateTime   @updatedAt
+}
+
+model Comment {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  content   String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  author    User     @relation("UserComments", fields: [authorId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  authorId  String   @db.ObjectId
+  post      Post     @relation("PostComments", fields: [postId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  postId    String   @db.ObjectId
+}
+
+model User {
+  id            String       @id @default(auto()) @map("_id") @db.ObjectId
+  name          String
+  email         String       @unique
+  emailVerified DateTime
+  image         String
+  password      String
+  token         String
+  role          Role         @default(USER)
+  bio           String
+  verified      Boolean
+  links         String[]
+  points        Int          @default(100)
+  isBanned      Boolean      @default(false)
+  isBannedUntil DateTime
+  createdAt     DateTime     @default(now())
+  updatedAt     DateTime     @updatedAt
+  posts         Post[]       @relation("UserPosts")
+  comments      Comment[]    @relation("UserComments")
+  following     Follow[]     @relation("Following")
+  followers     Follow[]     @relation("Followers")
+  reportedBy    Report[]     @relation("ReportingModerator")
+  reports       Report[]     @relation("ReportedUser")
+  preferences   Preferences?
+  bookmarks     Bookmark[]   @relation("UserBookmarks")
+}
+
+model Bookmark {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  user      User     @relation("UserBookmarks", fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  userId    String   @db.ObjectId
+  post      Post     @relation("PostBookmarks", fields: [postId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  postId    String   @db.ObjectId
+  createdAt DateTime @default(now())
+
+  @@unique([userId, postId])
+}
+
+model Preferences {
+  id                   String  @id @default(auto()) @map("_id") @db.ObjectId
+  user                 User    @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  userId               String  @unique @db.ObjectId
+  theme                String?
+  notificationsEnabled Boolean @default(true)
+}
+
+model Follow {
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  follower    User     @relation("Followers", fields: [followerId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  followerId  String   @db.ObjectId
+  following   User     @relation("Following", fields: [followingId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  followingId String   @db.ObjectId
+  createdAt   DateTime @default(now())
+
+  @@unique([followerId, followingId])
+}
+
+enum ReportType {
+  ABUSE
+  SPAM
+  HARASSMENT
+  OTHER
+}
+
+enum Severity {
+  LOW
+  MEDIUM
+  HIGH
+  CRITICAL
+}
 
 enum Issuestatus {
   OPEN
@@ -16,61 +130,8 @@ enum Issuestatus {
   INAPPROPRIATE
 }
 
-enum Level {
-  BRONZE
-  SILVER
-  GOLD
-  PLATINUM
-  LEGEND
-}
-
 enum Role {
   USER
   MODERATOR
   ADMIN
-}
-
-model Issue {
-  id                String      @id @default(auto()) @map("_id") @db.ObjectId
-  author            User        @relation(fields: [userId], references: [id])
-  userId            String      @db.ObjectId
-  label             String
-  level             Level
-  creation_date     DateTime
-  update_date       DateTime
-  comments          Int
-  issue_status      Issuestatus
-  title             String
-  body              String
-  issue_contributer String[] // This will be a JSON string containing the id and the name of the user. Because mongodb doensot support many-to-many
-}
-
-model UserReport {
-  id            String   @id @default(auto()) @map("_id") @db.ObjectId
-  author        User     @relation(fields: [userId], references: [id])
-  userId        String   @db.ObjectId
-  label         String
-  moderity      Int
-  body          String
-  creation_date DateTime
-  accepted      Boolean
-  seen          Boolean
-}
-
-model User {
-  id                     String          @id @default(auto()) @map("_id") @db.ObjectId
-  name                   String?
-  email                  String?         @unique
-  emailVerified          String?
-  image                  String?
-  password               String
-  token                  String?
-  role                   Role
-  bio                    String
-  verified               Boolean
-  links                  String[]
-  reports                UserReport[]
-  issues                 Issue[]
-  createdAt              DateTime        @default(now())
-  updatedAt              DateTime        @updatedAt
 }

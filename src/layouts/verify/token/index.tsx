@@ -5,7 +5,6 @@ import Alert from "@/components/Alert";
 import { useRouter } from "next/navigation";
 import { ShieldAlert } from "lucide-react";
 import Spinner from "@/components/Spinner";
-import { PENDING } from "@/services/messages";
 import verifyToken from "@/actions/verifyToken";
 import verifyUser from "@/actions/verify/verifyUser";
 import routes from "@/services/routes";
@@ -21,33 +20,21 @@ interface VerifyTokenLayoutProps {
 
 export default function VerifyTokenLayout({ token }: VerifyTokenLayoutProps) {
   const router = useRouter();
-  const e = useTranslations("error")
-  const p = useTranslations("pending")
-  
+  const e = useTranslations("error");
+  const p = useTranslations("pending");
+
   const { data: userSession, update } = useSession();
-
-  const verifyUserEmail = async (): Promise<boolean> => {
-    const verifyTokenAction = await verifyToken({
-      token,
-    });
-    if (verifyTokenAction.success === false || !verifyTokenAction.data) {
-      throw new Error(verifyTokenAction.error);
-    }
-
-    const verifyUserAction = await verifyUser({
-      email: verifyTokenAction.data.email,
-    });
-    if (verifyUserAction.success === false) {
-      throw new Error(verifyUserAction.error);
-    }
-    return true;
-  };
 
   const { isError, isSuccess, isPending, error } = useQuery({
     queryKey: ["verifyUserEmail"],
-    queryFn: verifyUserEmail,
-    retry: false,
-    refetchOnReconnect: true,
+    queryFn: async () => {
+      const email = await verifyToken({
+        token,
+      });
+      await verifyUser({
+        email,
+      });
+    },
   });
 
   useEffect(() => {
@@ -55,7 +42,9 @@ export default function VerifyTokenLayout({ token }: VerifyTokenLayoutProps) {
       if (isSuccess) {
         if (userSession) {
           await update({ verified: true });
-          router.push(`${routes.redirects.onAfterVerify}/${userSession.user.id}`)
+          router.push(
+            `${routes.redirects.onAfterVerify}/${userSession.user.id}`
+          );
         }
       }
     };
@@ -63,7 +52,7 @@ export default function VerifyTokenLayout({ token }: VerifyTokenLayoutProps) {
   }, [isSuccess]);
 
   return (
-   <AuthLayoutStyle>
+    <AuthLayoutStyle>
       <Header content="Verification" caption="Verify your email." />
       {isError && (
         <Alert type="error" className="lg:w-1/3">
@@ -73,7 +62,7 @@ export default function VerifyTokenLayout({ token }: VerifyTokenLayoutProps) {
 
       {isPending === true && (
         <div className="flex gap-2">
-          <Spinner /> {p(PENDING.VERIFICATION_VERIFYING_EMAIL)}
+          <Spinner /> {p("VERIFICATION_VERIFYING_EMAIL")}
         </div>
       )}
     </AuthLayoutStyle>

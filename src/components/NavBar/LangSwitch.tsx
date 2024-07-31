@@ -8,7 +8,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Earth } from "lucide-react";
 import { getCookie, setCookie } from "@/actions/cookie";
-import { avilableLocales } from "@/i18n";
+import { availableLocales } from "@/i18n";
 import { useRouter } from "next/navigation";
 
 export default function LangSwitch() {
@@ -36,7 +36,7 @@ export default function LangSwitch() {
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent>
-            {avilableLocales.map((locale) => (
+            {availableLocales.map((locale : string) => (
               <DropdownMenuCheckboxItem
                 key={locale}
                 checked={locale == lang}

@@ -1,7 +1,7 @@
 "use client";
 
 import Alert from "@/components/Alert";
-import { SignInFormSchema } from "@/validations/form";
+import { SignInFormSchema } from "@/services/schemas";
 import { z } from "zod";
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
@@ -14,7 +14,7 @@ import { useMutation } from "@tanstack/react-query";
 import OAuthProviders from "@/OAuthProviders/OAuthProviders";
 import OAuthButton from "@/OAuthProviders/OAuthButton";
 import AuthLayoutStyle from "@/styles/AuthLayoutStyle";
-import {useTranslations} from 'next-intl';
+import { useTranslations } from 'next-intl';
 
 interface SignInLayoutProps {
   errorParam: string | undefined;
@@ -22,12 +22,11 @@ interface SignInLayoutProps {
 
 export default function SignInLayout({ errorParam }: SignInLayoutProps) {
   const t = useTranslations(signInRoute);
-  const e = useTranslations("error")
+  const e = useTranslations("error");
 
   const router = useRouter();
-  const login = async (
-    values: z.infer<typeof SignInFormSchema>
-  ): Promise<boolean> => {
+
+  const login = async (values: z.infer<ReturnType<typeof SignInFormSchema>>): Promise<boolean> => {
     const signInRequest = await signIn("login", {
       email: values.email,
       password: values.password,
@@ -39,11 +38,7 @@ export default function SignInLayout({ errorParam }: SignInLayoutProps) {
     return true;
   };
 
-  const { isError, error, isPending, mutate } = useMutation<
-    boolean,
-    Error,
-    z.infer<typeof SignInFormSchema>
-  >({
+  const { isError, error, isPending, mutate } = useMutation<boolean, Error, z.infer<ReturnType<typeof SignInFormSchema>>>({
     mutationFn: login,
     onSuccess: () => {
       router.push(routes.redirects.onAfterSignIn);

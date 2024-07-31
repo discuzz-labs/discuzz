@@ -1,10 +1,9 @@
 "use server";
 
-import { ERROR } from "@/services/messages";
-import type { ActionResponse } from "@/types/types";
+import error from "@/services/error";
 import type { UserSessionInterface } from "@/providers/AuthProvider";
 import log from "@/lib/log";
-import Profile, { ProfileErrorType } from "@/database/Profile";
+import Profile from "@/database/Profile";
 
 interface signInWithCredArgs {
   email: string;
@@ -14,39 +13,27 @@ interface signInWithCredArgs {
 async function signInWithCred({
   email,
   password,
-}: signInWithCredArgs): Promise<ActionResponse<UserSessionInterface>> {
+}: signInWithCredArgs): Promise<UserSessionInterface> {
   try {
-    const userProfile = new Profile({
+    const login = await new Profile({
       email,
       password,
-    });
-    const userLogin = await userProfile.login()
-    
-    if(userLogin.success === false && userLogin.error){
-      return {
-        success: false,
-        error:
-          userLogin.error.type === ProfileErrorType.CannotLoginWithProfile
-            ? ERROR.LOGIN_FAILED_INVALID_CREDENTIALS
-            : ERROR.LOGIN_FAILED,
-        data: undefined,
-      };
+    }).login();
+
+    if (login.success === false) {
+      throw new Error(error("LOGIN_FAILED_INVALID_CREDENTIALS"));
     }
 
     return {
-      success: true,
-      error: null,
-      data: {
-        email,
-        image: userLogin.data?.image as string,
-        name: userLogin.data?.name as string,
-        verified: userLogin.data?.verified as boolean,
-        id: userLogin.data?.id as string
-      },
+      email,
+      image: login.data?.image as string,
+      name: login.data?.name as string,
+      verified: login.data?.verified as boolean,
+      id: login.data?.id as string,
     };
   } catch (err) {
-    log("actions", err, "ACTIONS sign-in/signInWithCred");
-    return { error: ERROR.SERVER_ERROR, success: false, data: undefined };
+    log("actions", err, `ACTIONS ${__filename}`);
+    throw new Error(error("SERVER_ERROR"));
   }
 }
 

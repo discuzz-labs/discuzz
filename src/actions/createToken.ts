@@ -1,61 +1,37 @@
 "use server";
 
-import type { ActionResponse } from "@/types/types";
 import { generatetoken } from "@/services/token";
-import Profile, { ProfileErrorType } from "@/database/Profile";
+import Profile from "@/database/Profile";
 import log from "@/lib/log";
-import { ERROR } from '@/services/messages';
+import error from "@/services/error";
 
-interface createResetTokenProps {
+interface createResetTokenArgs {
   email: string;
 }
 
-async function createToken({
-  email,
-}: createResetTokenProps): Promise<ActionResponse<{ token: string }>> {
+async function createToken({ email }: createResetTokenArgs): Promise<string> {
   try {
-    const generatedToken = generatetoken(email, Date.now() + 600000);
+    const tokenGenerate = generatetoken(email, Date.now() + 600000);
 
-    if (generatedToken.success === false || !generatedToken.payload) {
-      return {
-        error: ERROR.IDENTIFICATION_FAILED_TOKEN_INVALID,
-        success: false,
-        data: undefined,
-      };
+    if (tokenGenerate.success === false || !tokenGenerate.payload) {
+      throw new Error(error("IDENTIFICATION_FAILED_TOKEN_CANNOT_BE_CREATED"));
     }
 
-
-    const userProfile = new Profile({
+    const profileUpdate = await new Profile({
       email,
       valuesToUpdate: {
-        token: generatedToken.payload.token,
+        token: tokenGenerate.payload.token,
       },
-    });
+    }).updateProfile();
 
-    const updateResult = await userProfile.updateProfileByEmail();
-
-    if (updateResult.success === false && updateResult.error) {
-      return {
-        error:
-          updateResult.error?.type === ProfileErrorType.UpdateProfileFailed
-            ?ERROR.IDENTIFICATION_FAILED_TOKEN_CANNOT_BE_CREATED
-            : ERROR.IDENTIFICATION_FAILED,
-        success: false,
-        data: undefined,
-      };
+    if (profileUpdate.success === false) {
+      throw new Error(error("IDENTIFICATION_FAILED_TOKEN_CANNOT_BE_CREATED"));
     }
-    return {
-      error: null,
-      success: true,
-      data: {token: generatedToken.payload.token},
-    };
+
+    return tokenGenerate.payload.token;
   } catch (err) {
-    log("actions", err, "ACTIONS /createToken");
-    return {
-      error: ERROR.SERVER_ERROR,
-      success: false,
-      data: undefined,
-    };
+    log("actions", err, `ACTIONS ${__filename}`);
+    throw new Error(error("SERVER_ERROR"));
   }
 }
 

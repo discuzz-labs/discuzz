@@ -10,23 +10,27 @@ export const authOptions = {
   providers: [
     CredentialsProvider({
       id: "login",
-      // @ts-ignore
       // see: https://github.com/nextauthjs/next-auth/issues/2701
-      async authorize(credentials, req) {
-        const signInWithCredAction = await signInWithCred({
-          email: credentials?.email as string,
-          password: credentials?.password as string,
-        });
-        if (signInWithCredAction.success === true) {
+      credentials: {
+        email: { type: "text" },
+        password: { type: "password" }
+      },
+      async authorize(credentials) {
+        try {
+          const signInWithCredAction = await signInWithCred({
+            email: credentials?.email as string,
+            password: credentials?.password as string,
+          });
+
           return {
-            email: signInWithCredAction.data?.email,
-            name: signInWithCredAction.data?.name,
-            image: signInWithCredAction.data?.image,
-            verified: signInWithCredAction.data?.verified,
-            id: signInWithCredAction.data?.id,
+            email: signInWithCredAction.email,
+            name: signInWithCredAction.name,
+            image: signInWithCredAction.image,
+            verified: signInWithCredAction.verified,
+            id: signInWithCredAction.id,
           };
-        } else {
-          throw new Error(signInWithCredAction.error);
+        } catch (err) {
+          throw new Error(err as string);
         }
       },
     }),
@@ -34,24 +38,31 @@ export const authOptions = {
       id: "signup",
       // @ts-ignore
       // see: https://github.com/nextauthjs/next-auth/issues/2701
+      credentials: {
+        email: { type: "text" },
+        password: { type: "password" },
+        name: { type: "name" },
+        image: { type: "file" }
+      },
       async authorize(credentials) {
+        try{
         const signUpWithCredAction = await signUpWithCred({
           email: credentials?.email as string,
           password: credentials?.password as string,
           name: credentials?.name as string,
           image: credentials?.image as string,
         });
-        if (signUpWithCredAction.success === true) {
+        
           return {
-            email: signUpWithCredAction.data?.email,
-            name: signUpWithCredAction.data?.name,
-            image: signUpWithCredAction.data?.image,
-            verified: signUpWithCredAction.data?.verified,
-            id: signUpWithCredAction.data?.id,
+            email: signUpWithCredAction.email,
+            name: signUpWithCredAction.name,
+            image: signUpWithCredAction.image,
+            verified: signUpWithCredAction.verified,
+            id: signUpWithCredAction.id,
           };
-        } else {
-          throw new Error(signUpWithCredAction.error);
-        }
+        }catch (err) {
+            throw new Error(err as string);
+          }
       },
     }),
     OAuthProviders.map((providerConfig) => providerConfig.provider),

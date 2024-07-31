@@ -1,90 +1,109 @@
 import {
-    BellIcon,
-    Cloud,
-    LifeBuoy,
-    LogOut,
-    MessageSquare,
-    Plus,
-    Settings,
-    User,
-  } from "lucide-react"
-  
-  import { Button } from "@/components/ui/button"
-  import {
-    DropdownMenu,
-    DropdownMenuContent,
-    DropdownMenuGroup,
-    DropdownMenuItem,
-    DropdownMenuLabel,
-    DropdownMenuSeparator,
-    DropdownMenuShortcut,
-    DropdownMenuTrigger,
-  } from "@/components/ui/dropdown-menu"
-import ProfileImage from "../ProfileImage"
-  
+  BellIcon,
+  Cloud,
+  LogOut,
+  MessageSquare,
+  Pen,
+  Trophy,
+  Settings,
+  User,
+} from "lucide-react";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuGroup,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import ProfileImage from "../ProfileImage";
+import { useSession, signOut } from "next-auth/react";
+import routes from "@/services/routes";
+import Link from "next/link";
+import { Button } from "../ui/button";
+
 interface UserActionsProps {
   userName: string;
 }
 
-  export function UserActions({userName} : UserActionsProps) {
-    return (
-      <DropdownMenu>
-        <DropdownMenuTrigger asChild>
-          <div>
-           <ProfileImage size={10} />
-          </div>
-        </DropdownMenuTrigger>
-        <DropdownMenuContent className="w-56">
-          <DropdownMenuLabel className="truncate">{userName} Account</DropdownMenuLabel>
-          <DropdownMenuSeparator />
-          <DropdownMenuGroup>
+export function UserActions({ userName }: UserActionsProps) {
+  const { data: userSession } = useSession();
+
+  return (
+    <DropdownMenu>
+      <DropdownMenuTrigger asChild>
+        <div>
+          <ProfileImage size={10} />
+        </div>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent className="w-56">
+        <DropdownMenuLabel className="truncate">
+          {userName} Account
+        </DropdownMenuLabel>
+        <DropdownMenuSeparator />
+        <DropdownMenuGroup>
+          <Link href={`${routes.user.index.path}/${userSession?.user.id}`}>
             <DropdownMenuItem>
               <User className="mr-2 h-4 w-4" />
-              <span>Profile</span>
-              <DropdownMenuShortcut>⇧⌘P</DropdownMenuShortcut>
+              Profile
             </DropdownMenuItem>
+          </Link>
+
+          <Link href={`${routes.user.notifications.path}`}>
             <DropdownMenuItem>
               <BellIcon className="mr-2 h-4 w-4" />
-              <span>Notifications</span>
-              <DropdownMenuShortcut>⌘S</DropdownMenuShortcut>
+              Notifications
             </DropdownMenuItem>
+          </Link>
+
+          <Link href={`${routes.user.settings.path}`}>
             <DropdownMenuItem>
               <Settings className="mr-2 h-4 w-4" />
-              <span>Settings</span>
-              <DropdownMenuShortcut>⌘S</DropdownMenuShortcut>
+              Settings
             </DropdownMenuItem>
-          </DropdownMenuGroup>
-          <DropdownMenuSeparator />
-          
-          <DropdownMenuGroup>
+          </Link>
+        </DropdownMenuGroup>
+        <DropdownMenuSeparator />
+
+        <DropdownMenuGroup>
+          <Link href={`${routes.user.index.path}/${userSession?.user.id}`}>
             <DropdownMenuItem>
               <MessageSquare className="mr-2 h-4 w-4" />
-              <span>Posts</span>
+              Posts
             </DropdownMenuItem>
+          </Link>
+          <Link href={`${routes.post.new.path}`}>
             <DropdownMenuItem>
-              <Plus className="mr-2 h-4 w-4" />
-              <span>New Post</span>
-              <DropdownMenuShortcut>⌘+T</DropdownMenuShortcut>
+              <Pen className="mr-2 h-4 w-4" />
+              New Post
             </DropdownMenuItem>
-          </DropdownMenuGroup>
+          </Link>
+        </DropdownMenuGroup>
 
-          <DropdownMenuSeparator />
-          <DropdownMenuItem>
-            <LifeBuoy className="mr-2 h-4 w-4" />
-            <span>Support</span>
-          </DropdownMenuItem>
+        <DropdownMenuSeparator />
+        <Link href={`${routes.user.history.path}`}>
           <DropdownMenuItem>
             <Cloud className="mr-2 h-4 w-4" />
-            <span>History</span>
+            History
           </DropdownMenuItem>
-          <DropdownMenuSeparator />
+        </Link>
+        <Link href={`${routes.user.leaderboard.path}`}>
           <DropdownMenuItem>
-            <LogOut className="mr-2 h-4 w-4" />
-            <span>Log out</span>
-            <DropdownMenuShortcut>⇧⌘Q</DropdownMenuShortcut>
+            <Trophy className="mr-2 h-4 w-4" />
+            Leaderboard
           </DropdownMenuItem>
-        </DropdownMenuContent>
-      </DropdownMenu>
-    )
-  }
-  
+        </Link>
+        <DropdownMenuSeparator />
+        <DropdownMenuItem>
+          <Button
+            className="w-full text-destructive-foreground bg-destructive p-0"
+            onClick={() => signOut()}
+          >
+            Log out
+          </Button>
+        </DropdownMenuItem>
+      </DropdownMenuContent>
+    </DropdownMenu>
+  );
+}

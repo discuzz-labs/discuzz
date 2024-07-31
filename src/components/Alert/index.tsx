@@ -19,7 +19,7 @@ export default function Alert({
     <div
       className={cn(
         "cy-alert",
-        "w-2/3 items-center justify-between p-5 shadow-md border-l-8 rounded-md mb-10",
+        "w-2/3 items-center justify-between p-5 shadow-md border-l-8 rounded-md",
         className,
         `${type == "error" && "border-red-800 bg-destructive text-destructive-foreground"}
         ${type == "info" && "border-zinc-700 bg-muted text-muted-foreground"}
@@ -27,13 +27,11 @@ export default function Alert({
       )}
     >
       <div className="flex items-center gap-2">
-        {message && (
           <>
             {type == "info" && <Info />}
             {type == "error" && <Ban />}
             {type == "warning" && <TriangleAlert />}
           </>
-        )}
         {message && (
           <p className="font-bold text-pretty leading-tight">{message}</p>
         )}

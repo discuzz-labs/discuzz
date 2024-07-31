@@ -7,21 +7,21 @@ export default withAuth(
     const { nextUrl: { pathname }, nextauth: { token } } = req;
 
     // // Caution: if-statements order matters
-    // if (routes.isAuth(pathname) && token && token.verified === false) {
-    //   return NextResponse.redirect(new URL(routes.redirects.onUnVerified, req.url));
-    // }
+    if (routes.isAuth(pathname) && token && token.verified === false) {
+      return NextResponse.redirect(new URL(routes.redirects.onUnVerified, req.url));
+    }
 
-    // if (routes.isAuth(pathname) && token) {
-    //   return NextResponse.redirect(new URL(routes.redirects.onAuthenticated, req.url));
-    // }
+    if (routes.isAuth(pathname) && token) {
+      return NextResponse.redirect(new URL(routes.redirects.onAuthenticated, req.url));
+    }
 
-    // if (routes.isProtected(pathname) && !token) {
-    //   return NextResponse.redirect(new URL(routes.redirects.onUnAuthenticated, req.url));
-    // }
+    if (routes.isProtected(pathname) && !token) {
+      return NextResponse.redirect(new URL(routes.redirects.onUnAuthenticated, req.url));
+    }
 
-    // if (routes.isVerifyRoute(pathname) && token && token.verified === true) {
-    //   return NextResponse.redirect(new URL(routes.redirects.onVerified, req.url));
-    // }
+    if (routes.isVerifyRoute(pathname) && token && token.verified === true) {
+      return NextResponse.redirect(new URL(routes.redirects.onVerified, req.url));
+    }
 
   },
   {

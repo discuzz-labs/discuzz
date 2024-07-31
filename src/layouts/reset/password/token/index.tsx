@@ -7,7 +7,7 @@ import { ShieldAlert } from "lucide-react";
 import verifyToken from "@/actions/verifyToken";
 import routes, { resetPasswordTokenRoute } from "@/services/routes";
 import { useMutation } from "@tanstack/react-query";
-import { ResetPasswordFormSchemaSecondStep } from "@/validations/form";
+import { ResetPasswordFormSchemaSecondStep } from "@/services/schemas";
 import { z } from "zod";
 import AuthForm from "@/components/AuthForm";
 import resetPassword from "@/actions/reset/password/resetPassword";
@@ -26,33 +26,20 @@ export default function ResetPasswordTokenLayout({
 
   const router = useRouter();
 
-  const resetUserPassword = async (
-    values: z.infer<typeof ResetPasswordFormSchemaSecondStep>
-  ): Promise<boolean> => {
-    const verifyTokenAction = await verifyToken({
-      token,
-    });
-    if (verifyTokenAction.success === false || !verifyTokenAction.data) {
-      throw new Error(verifyTokenAction.error);
-    }
-
-    const resetPasswordAction = await resetPassword({
-      email: verifyTokenAction.data.email,
-      password: values.newPassword,
-    });
-    if (resetPasswordAction.success === false) {
-      throw new Error(resetPasswordAction.error);
-    }
-
-    return true;
-  };
-
   const { isError, error, isPending, mutate } = useMutation<
-    boolean,
+    void,
     Error,
-    z.infer<typeof ResetPasswordFormSchemaSecondStep>
+    z.infer<ReturnType<typeof ResetPasswordFormSchemaSecondStep>>
   >({
-    mutationFn: resetUserPassword,
+    mutationFn: async (values:  z.infer<ReturnType<typeof ResetPasswordFormSchemaSecondStep>>) => {
+      const email = await verifyToken({
+        token,
+      });
+      const resetPasswordAction = await resetPassword({
+        email,
+        password: values.newPassword,
+      });
+    },
     onSuccess: () => {
       router.push(routes.redirects.onAfterResetPassword);
     },

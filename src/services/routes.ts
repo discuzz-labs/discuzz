@@ -8,6 +8,11 @@ export const verifyTokenRoute = "/verify/token";
 export const resetPasswordRoute = "/reset/password";
 export const resetPasswordTokenRoute = "/reset/password/token";
 export const userRoute = "/user";
+export const settingsRoute = "/settings"
+export const notificationsRoute = "/notifications"
+export const newPostRoute = "/post/new"
+export const historyRoute = "/history"
+export const leaderboardRoute = "/leaderboard"
 
 const routes = {
   auth: {
@@ -27,8 +32,24 @@ const routes = {
   },
   user: {
     index: {
-      index: { path: userRoute, translation: `${userRoute}.json` },
-      // Future nested routes can be added here if needed
+      path: userRoute, translation: null,
+    },
+    settings : {
+      path: settingsRoute, translation: null,
+    },
+    notifications : {
+      path: notificationsRoute, translation: null,
+    },
+    history : {
+      path: historyRoute, translation: null,
+    },
+    leaderboard : {
+      path: leaderboardRoute, translation: null,
+    }
+  },
+  post : {
+    new: {
+      path: newPostRoute, translation: null,
     },
   },
   redirects: {

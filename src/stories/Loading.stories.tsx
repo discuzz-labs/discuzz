@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react";
-import Loading from "@/components/Loading";
+import Loading from "@/components/LoadingBoundary";
 import { ThemeProvider } from "@/providers/ThemeProvider";
 
 const meta: Meta<typeof Loading> = {
