@@ -3,7 +3,6 @@
 import Header from "@/components/Header";
 import Alert from "@/components/Alert";
 import { useRouter } from "next/navigation";
-import { ShieldAlert } from "lucide-react";
 import Spinner from "@/components/Spinner";
 import verifyToken from "@/actions/verifyToken";
 import verifyUser from "@/actions/verify/verifyUser";
@@ -25,7 +24,7 @@ export default function VerifyTokenLayout({ token }: VerifyTokenLayoutProps) {
 
   const { data: userSession, update } = useSession();
 
-  const { isError, isSuccess, isPending, error } = useQuery({
+  const { isError, isSuccess, isPending, data, error } = useQuery({
     queryKey: ["verifyUserEmail"],
     queryFn: async () => {
       const email = await verifyToken({
@@ -33,7 +32,8 @@ export default function VerifyTokenLayout({ token }: VerifyTokenLayoutProps) {
       });
       await verifyUser({
         email,
-      });
+      })
+      return true
     },
   });
 
@@ -50,13 +50,13 @@ export default function VerifyTokenLayout({ token }: VerifyTokenLayoutProps) {
     };
     handleUpdateSession();
   }, [isSuccess]);
-
+  console.log(error)
   return (
     <AuthLayoutStyle>
       <Header content="Verification" caption="Verify your email." />
       {isError && (
         <Alert type="error" className="lg:w-1/3">
-          <ShieldAlert /> {translateError(error.message)}
+          {translateError(error.message)}
         </Alert>
       )}
 

@@ -18,12 +18,13 @@ async function verifyUser({ email }: verifyUserArgs): Promise<null> {
       },
     }).updateProfile();
 
-    if (profileUpdate.success) {
+    if (profileUpdate.success === false) {
       throw new AppError("VERIFICATION_FAILED_USER_CANNOT_BE_VERIFIED");
     }
 
     return null;
   } catch (err : any) {
+    console.log(err)
     if(err instanceof AppError) throw err
     log("actions", err, "ACTIONS verify/verifyUser");
     throw new AppError("SERVER_ERROR");
