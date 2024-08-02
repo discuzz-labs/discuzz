@@ -10,7 +10,7 @@ import { useMutation } from "@tanstack/react-query";
 import { ResetPasswordFormSchemaSecondStep } from "@/services/schemas";
 import { z } from "zod";
 import AuthForm from "@/components/AuthForm";
-import resetPassword from "@/actions/reset/password/resetPassword";
+import resetPassword from "@/actions/verify/password/resetPassword";
 import AuthLayoutStyle from "@/styles/AuthLayoutStyle";
 import { useTranslations } from "next-intl";
 

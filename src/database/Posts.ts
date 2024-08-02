@@ -11,6 +11,7 @@ interface PostsConstructor {
   postId?: string;
   onlyBookMarked?: boolean;
   onlyFollowingPosts?: boolean;
+  isOwner: boolean;
 }
 
 export default class Posts {
@@ -21,6 +22,8 @@ export default class Posts {
   private postId?: string;
   public onlyBookMarked?: boolean;
   public onlyFollowingPosts?: boolean;
+  public isOwner: boolean;
+
 
   constructor({
     currentCursor,
@@ -30,6 +33,7 @@ export default class Posts {
     postId,
     onlyBookMarked,
     onlyFollowingPosts,
+    isOwner
   }: PostsConstructor) {
     this.postsPerPage = postsPerPage ? postsPerPage : undefined;
     this.orderBy = orderBy;
@@ -38,6 +42,7 @@ export default class Posts {
     this.postId = postId;
     this.onlyBookMarked = onlyBookMarked ? onlyBookMarked : false;
     this.onlyFollowingPosts = onlyFollowingPosts ? onlyFollowingPosts : false;
+    this.isOwner = isOwner
   }
 
   public async fetchPosts(): Promise<
@@ -75,11 +80,12 @@ export default class Posts {
               }
             : {}),
         }),
-        ...(this.userId && {
-          authorId: this.userId
-        }),
+        ...(this.userId && !this.onlyBookMarked && { authorId: this.userId }),
         ...(this.onlyFollowingPosts && {
           authorId: { in: followingIds },
+          isRestricted: false
+        }),
+        ...(this.isOwner === false && {
           isRestricted: false
         })
       },

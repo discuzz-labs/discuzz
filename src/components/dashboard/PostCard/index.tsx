@@ -14,6 +14,7 @@ import PostActions from "./PostActions";
 import PostContent from "./PostContent";
 import PostStats from "./PostStats";
 import { TABS } from "@/app/(user)/user/[userId]/routeType";
+import { useSession } from "next-auth/react";
 
 interface DashboardPostCardProps {
   postId: string;
@@ -32,6 +33,7 @@ interface DashboardPostCardProps {
   reason: string;
   image: string;
   activeTab: keyof typeof TABS;
+  isOwner: boolean
 }
 
 export default function DashboardPostCard({
@@ -50,10 +52,12 @@ export default function DashboardPostCard({
   ref,
   reason,
   activeTab,
-  image
+  image,
+  isOwner
 }: DashboardPostCardProps) {
   const queryClient = useQueryClient();
   const { toast } = useToast();
+  const { data: userSession } = useSession()
   const [bookmarked, setBookmarked] = useState<boolean>(isBookMarked);
 
   const deletePostMutation = useMutation<null, Error, deleteUserPostArgs>({
@@ -119,11 +123,12 @@ export default function DashboardPostCard({
   });
 
   const toggleBookmark = () => {
-    if (bookmarked) {
-      unBookmarkMutation.mutate({ userId, postId });
-    } else {
-      bookmarkMutation.mutate({ postId, userId });
-    }
+    if(userSession)
+      if (bookmarked) {
+        unBookmarkMutation.mutate({ userId: userSession?.user.id, postId });
+      } else {
+        bookmarkMutation.mutate({ userId: userSession?.user.id, postId });
+      }
   };
 
   return (
@@ -146,6 +151,7 @@ export default function DashboardPostCard({
             <div className="flex items-center gap-5">
             <ProfileHeader userId={userId} image={image} name={name} email={email} createdAt={createdAt} reason={reason} isRestricted={isRestricted}/>
             <PostActions
+            isOwner={isOwner}
               isBookMarked={bookmarked}
               onToggleBookmark={toggleBookmark}
               onDelete={() => deletePostMutation.mutate({ postId, userId })}

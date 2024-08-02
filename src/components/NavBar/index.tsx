@@ -1,3 +1,5 @@
+"use client"
+
 import Logo from "../Logo";
 import ThemeSwitch from "./ThemeSwitch";
 import LangSwitch from "./LangSwitch";

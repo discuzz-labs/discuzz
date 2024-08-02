@@ -12,9 +12,10 @@ interface getUserPostsArgs {
   onlyBookMarked: boolean;
   orderBy: { [K in keyof Post]?: "asc" | "desc" };
   onlyFollowingPosts: boolean;
+  isOwner: boolean;
 }
 
-async function getUserPosts({ userId, cursor, onlyBookMarked, orderBy, onlyFollowingPosts }: getUserPostsArgs): Promise<
+async function getUserPosts({ isOwner, userId, cursor, onlyBookMarked, orderBy, onlyFollowingPosts }: getUserPostsArgs): Promise<
   {
     posts: PostsWithCounts[];
     metaData: {
@@ -30,7 +31,8 @@ async function getUserPosts({ userId, cursor, onlyBookMarked, orderBy, onlyFollo
       orderBy,
       userId: userId,
       onlyBookMarked,
-      onlyFollowingPosts
+      onlyFollowingPosts,
+      isOwner
     }).fetchPosts();
 
     if (postsFetch.success === false) {

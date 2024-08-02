@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import getUserPosts from "@/actions/posts/getUserPosts";
 import LoadingBoundary from "@/components/LoadingBoundary";
@@ -16,13 +16,15 @@ interface DashboardPostsProps {
   activeTab: keyof typeof TABS;
   filter: keyof typeof FILTER;
   order: keyof typeof ORDER;
+  isOwner: boolean;
 }
 
 export default function DashboardPosts({
   userId,
   activeTab,
   filter,
-  order
+  order,
+  isOwner,
 }: DashboardPostsProps) {
   const { ref, inView } = useInView();
 
@@ -36,17 +38,21 @@ export default function DashboardPosts({
     data,
   } = useInfiniteQuery({
     queryKey: ["userPosts", userId, activeTab, filter, order],
-    queryFn: ({ pageParam }) =>
-      getUserPosts({
+    queryFn: async ({ pageParam }) => {
+      const t = await getUserPosts({
         userId,
         cursor: pageParam,
         onlyBookMarked: activeTab === TABS.BOOKMARKED,
         onlyFollowingPosts: activeTab === TABS.FOLLOWING,
-        orderBy: filter ? { [filter]: order } : { createdAt: "asc" }
-      }),
+        orderBy: filter ? { [filter]: order } : { createdAt: "asc" },
+        isOwner
+      })
+      return t
+    },
     initialPageParam: "",
     getNextPageParam: (lastPage) => lastPage?.metaData.lastCursor,
   });
+  
 
   useEffect(() => {
     console.log(inView);
@@ -64,23 +70,25 @@ export default function DashboardPosts({
     noPostsMessage =
       "You are not following anyone. Follow users to see their posts here!";
   }
-  console.log(filter, order)
+
   return (
     <div className="flex flex-col p-2 pt-10">
-      {!isPending  && !data?.pages.some(page => page?.posts.length || -1 > 0) && (
-        <div className="flex flex-col gap-5 items-center justify-center py-10">
-          {noPostsMessage}
-          <Button variant={"default"} className="flex items-center gap-2">
-            <Pen className="h-4 w-4" /> New Post
-          </Button>
-        </div>
-      )}
+      {!isPending &&
+        !data?.pages.some((page) => page?.posts.length || -1 > 0) && (
+          <div className="flex flex-col gap-5 items-center justify-center py-10">
+            {noPostsMessage}
+            <Button variant={"default"} className="flex items-center gap-2">
+              <Pen className="h-4 w-4" /> New Post
+            </Button>
+          </div>
+        )}
 
       {data &&
         data.pages &&
         data.pages.map((page) =>
           page?.posts.map((postData, idx) => (
             <DashboardPostCard
+              isOwner={isOwner}
               key={idx}
               postId={postData.id}
               userId={postData.author.id}

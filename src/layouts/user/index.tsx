@@ -1,7 +1,7 @@
 "use client";
 
 import MainLayoutStyle from "@/styles/MainLayoutStyle";
-import { useQuery } from "@tanstack/react-query";
+import {  useQuery } from "@tanstack/react-query";
 import getUserInfo from "@/actions/user/getUserInfo";
 import { UserWithCounts } from "@/types/types";
 import DashboardMenu from "@/components/dashboard/Menu";
@@ -10,6 +10,7 @@ import DashboardPosts from "@/components/dashboard/Posts/index";
 import LoadingBoundary from "@/components/LoadingBoundary";
 import ErrorBoundary from "@/components/ErrorBoundary";
 import { TABS,FILTER,ORDER } from "@/app/(user)/user/[userId]/routeType";
+import { useSession } from "next-auth/react";
 
 interface UserLayoutProps {
   userId: string;
@@ -20,11 +21,12 @@ interface UserLayoutProps {
 
 
 export default function UserLayout({ userId, activeTab, order, filter }: UserLayoutProps) {
-
+  
   const { isError, error, isPending, data } = useQuery<UserWithCounts, Error, UserWithCounts>({
     queryKey: ["userInfo", userId],
     queryFn: () => getUserInfo({ id: userId }),
   });
+  const { data : userSession } = useSession()
 
   return (
     <MainLayoutStyle>
@@ -35,6 +37,8 @@ export default function UserLayout({ userId, activeTab, order, filter }: UserLay
             <DashboardProfileHeader
               name={data.name}
               email={data.email}
+              isOwner={userSession?.user.id === userId}
+              userId={userId}
               bio={data.bio}
               createdAt={data.createdAt}
               links={data.links}
@@ -44,7 +48,7 @@ export default function UserLayout({ userId, activeTab, order, filter }: UserLay
               points={data.points}
             />
             <DashboardMenu activeTab={activeTab} />
-            <DashboardPosts activeTab={activeTab} filter={filter} order={order} userId={userId} />
+            <DashboardPosts isOwner={userSession?.user.id === userId} activeTab={activeTab} filter={filter} order={order} userId={userId} />
           </>
         )}
       </ErrorBoundary>

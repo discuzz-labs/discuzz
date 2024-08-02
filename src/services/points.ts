@@ -6,12 +6,12 @@ interface PointsSystem {
   follower: number;
 }
 
-const pointsSystem: PointsSystem = {
+export const pointsSystem: PointsSystem = {
   newPost: 100,
   newComment: 10,
   likeOnPost: 200,
   likeOnComment: 50,
-  follower: 500,
+  follower: 50000,
 };
 
 interface Level {

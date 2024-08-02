@@ -1,4 +1,4 @@
-import { Follow, Role, User } from "@prisma/client";
+import { Follow, Prisma, Role, User } from "@prisma/client";
 import prisma from "@/lib/prisma";
 import bcrypt from "bcryptjs";
 import { DatabaseResponse, UserWithCounts } from "@/types/types";
@@ -29,7 +29,7 @@ export default class Profile {
   public password: string | null;
   public name: string | null;
   public id: string | null;
-  public valuesToUpdate: Partial<User> | null;
+  public valuesToUpdate: Partial<Prisma.UserUpdateInput> | null;
 
   public image: string | null;
   constructor({
@@ -180,7 +180,7 @@ export default class Profile {
 
     const user = await prisma.user.update({
       where,
-      data: this.valuesToUpdate as Partial<User>,
+      data: this.valuesToUpdate as Partial<Prisma.UserUpdateInput>,
     });
     return { success: true, data: user, error: null };
   }
@@ -213,4 +213,60 @@ export default class Profile {
       error: null,
     };
   }
+
+  public async followers(): Promise<DatabaseResponse<Partial<Follow>[]>> {
+    const followers = await prisma.follow.findMany({
+      where: { followerId: this.id as string },
+      select: { followerId: true },
+    });
+    return {
+      success: true,
+      data: followers,
+      error: null,
+    };
+  }
+
+  public async isFollowing(followingId: string): Promise<boolean> {
+    const existingFollow = await prisma.follow.findUnique({
+      where: {
+        followerId_followingId: {
+          followerId: this.id as string,
+          followingId,
+        },
+      },
+    });
+  
+    return !!existingFollow;
+  }
+
+  public async follow(followingId: string): Promise<DatabaseResponse<Follow>> {
+      const newFollow = await prisma.follow.create({
+        data: {
+          followerId: this.id as string,
+          followingId,
+        },
+      });
+  
+      return {
+        success: true,
+        data: newFollow,
+        error: null,
+      };
+  }
+
+  public async unfollow(followingId: string): Promise<DatabaseResponse<null>> {
+    await prisma.follow.deleteMany({
+      where: {
+          followerId: this.id as string,
+          followingId,
+        },
+      });
+  
+      return {
+        success: true,
+        data: null,
+        error: null,
+      };
+  }
+  
 }

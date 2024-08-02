@@ -6,9 +6,10 @@ interface PostActionsProps {
   onToggleBookmark: () => void;
   onDelete: () => void;
   activeTab: keyof typeof TABS;
+  isOwner: boolean;
 }
 
-const PostActions: React.FC<PostActionsProps> = ({ activeTab, isBookMarked, onToggleBookmark, onDelete }) => {
+const PostActions: React.FC<PostActionsProps> = ({ isOwner, activeTab, isBookMarked, onToggleBookmark, onDelete }) => {
   return (
     <div className="ml-auto flex items-center gap-2 ">
       <Bookmark
@@ -19,7 +20,7 @@ const PostActions: React.FC<PostActionsProps> = ({ activeTab, isBookMarked, onTo
         }`}
         onClick={onToggleBookmark}
       />
-      {activeTab !== TABS.FOLLOWING &&
+      {activeTab !== TABS.FOLLOWING && isOwner &&
       <Trash2
         className="w-5 h-5 hover:fill-destructive hover:text-foreground"
         onClick={onDelete}

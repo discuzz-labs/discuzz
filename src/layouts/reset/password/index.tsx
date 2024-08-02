@@ -8,7 +8,7 @@ import { z } from "zod";
 import { useMutation } from "@tanstack/react-query";
 import { Check } from "lucide-react";
 import Alert from "@/components/Alert";
-import sendResetPasswordEmail from "@/actions/reset/password/sendResetPasswordEmail";
+import sendResetPasswordEmail from "@/actions/verify/password/sendResetPasswordEmail";
 import AuthLayoutStyle from "@/styles/AuthLayoutStyle";
 import { useTranslations } from "next-intl";
 import { resetPasswordRoute } from "@/services/routes";
