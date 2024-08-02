@@ -14,9 +14,10 @@ import { useTranslations } from "next-intl";
 import { resetPasswordRoute } from "@/services/routes";
 
 export default function ResetPasswordLayout() {
-  const t = useTranslations(resetPasswordRoute)
-  const e = useTranslations("error")
-  const s = useTranslations("success")
+  const translate = useTranslations("reset.password")
+  const translateError = useTranslations("messages.error")
+  const translateSuccess = useTranslations("messages.success")
+
 
   const { isError, error, isPending, isSuccess, mutate } = useMutation<
     void,
@@ -38,13 +39,13 @@ export default function ResetPasswordLayout() {
   return (
     <AuthLayoutStyle>
       <Header
-        content={t("title")}
-        caption={t("titleCaption")}
+        content={translate("title")}
+        caption={translate("titleCaption")}
       />
-      {isError && <Alert message={e(error.message)} type="error" />}
+      {isError && <Alert message={translateError(error.message)} type="error" />}
       {isSuccess && (
         <p className="flex items-center gap-5">
-          <Check /> {s("RESETPASSWORD_SUCCESS_EMAIL_SENT")}{" "}
+          <Check /> {translateSuccess("RESETPASSWORD_SUCCESS_EMAIL_SENT")}{" "}
         </p>
       )}
 
@@ -55,11 +56,11 @@ export default function ResetPasswordLayout() {
         fields={[
           {
             name: "email",
-            placeholder: t("emailPlaceholder"),
+            placeholder: translate("emailPlaceholder"),
             type: "email",
           },
         ]}
-        submitBtnText={t("submitBtnText")}
+        submitBtnText={translate("submitBtnText")}
       />
     </AuthLayoutStyle>
   );

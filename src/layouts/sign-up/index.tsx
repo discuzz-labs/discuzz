@@ -14,8 +14,8 @@ import AuthLayoutStyle from "@/styles/AuthLayoutStyle";
 import { useTranslations } from "next-intl";
 
 export default function SignUpLayout() {
-  const t = useTranslations(signUpRoute);
-  const e = useTranslations("error")
+  const translate = useTranslations("signin");
+  const translateError = useTranslations("messages.error")
 
   const router = useRouter();
 
@@ -50,8 +50,8 @@ export default function SignUpLayout() {
   return (
     <AuthLayoutStyle>
       {" "}
-      {isError && <Alert message={e(error.message)} type="error" />}
-      <Header content={t("title")} caption={t("titleCaption")} />
+      {isError && <Alert message={translateError(error.message)} type="error" />}
+      <Header content={translate("title")} caption={translate("titleCaption")} />
       <AuthForm
         schema={SignUpFormSchema}
         formSubmitted={isPending}
@@ -60,25 +60,25 @@ export default function SignUpLayout() {
           {
             name: "name",
             type: "text",
-            placeholder: t("fullnamePlaceholder"),
+            placeholder: translate("fullnamePlaceholder"),
           },
           {
             name: "email",
             type: "email",
-            placeholder: t("emailPlaceholder"),
+            placeholder: translate("emailPlaceholder"),
           },
           {
             name: "password",
             type: "password",
-            placeholder: t("passwordPlaceholder"),
+            placeholder: translate("passwordPlaceholder"),
           },
         ]}
-        submitBtnText={t("submitBtnText")}
+        submitBtnText={translate("submitBtnText")}
       />
       <p className="mt-10 w-1/2 font-thin text-zinc-600 text-sm text-center">
-        {t("disclaimerText")} &nbsp;
+        {translate("disclaimerText")} &nbsp;
         <Link href="/terms" className="underline hover:text-white">
-          {t("termsOfService")} &nbsp;
+          {translate("termsOfService")} &nbsp;
         </Link>
       </p>
     </AuthLayoutStyle>

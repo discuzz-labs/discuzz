@@ -1,10 +1,9 @@
 {
-    "/signin": {
+
       "title": "Sign In",
       "titleCaption": "Sign in to your account.",
       "emailPlaceholder" : "Email",
       "passwordPlaceholder" : "Password",
       "submitBtnText" : "Sign In.",
       "forgetPasswordText" : "Forget Password" 
-    }
 }

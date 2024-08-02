@@ -1,7 +1,7 @@
 {
-    "/verify": {
+
       "title": "Verification",
       "titleCaption": "Verify your email",
       "submitBtnText" : "Send verification email."
-    }
+
 }

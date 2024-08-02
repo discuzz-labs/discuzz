@@ -2,7 +2,7 @@
 
 import Profile from "@/database/Profile";
 import log from "@/lib/log";
-import error from "@/services/error";
+import AppError from "@/services/error";
 
 interface verifyUserArgs {
   email: string;
@@ -19,13 +19,14 @@ async function verifyUser({ email }: verifyUserArgs): Promise<null> {
     }).updateProfile();
 
     if (profileUpdate.success) {
-      throw new Error(error("VERIFICATION_FAILED_USER_CANNOT_BE_VERIFIED"));
+      throw new AppError("VERIFICATION_FAILED_USER_CANNOT_BE_VERIFIED");
     }
 
     return null;
-  } catch (err) {
+  } catch (err : any) {
+    if(err instanceof AppError) throw err
     log("actions", err, "ACTIONS verify/verifyUser");
-    throw new Error(error("SERVER_ERROR"));
+    throw new AppError("SERVER_ERROR");
   }
 }
 

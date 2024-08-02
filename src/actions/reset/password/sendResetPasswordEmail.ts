@@ -1,6 +1,6 @@
 "use server";
 
-import error from "@/services/error";
+import AppError from "@/services/error";
 import sendEmail from "@/services/sendEmail";
 import ResetPasswordEmailTemplate, {
   subject,
@@ -29,7 +29,7 @@ async function sendResetPasswordEmail({
 
     return null;
   } catch (err) {
-    throw new Error(error("RESETPASSWORD_FAILED_EMAIL_CANNOT_BE_SENT"));
+    throw new AppError("RESETPASSWORD_FAILED_EMAIL_CANNOT_BE_SENT");
   }
 }
 

@@ -2,7 +2,7 @@
 
 import Profile from "@/database/Profile";
 import log from "@/lib/log";
-import error from "@/services/error";
+import AppError from "@/services/error";
 
 interface resetPasswordArgs {
   email: string;
@@ -20,13 +20,14 @@ async function resetPassword({
     }).resetPassword();
 
     if (passwordReset.success === false) {
-      throw new Error(error("RESETPASSWORD_FAILED_PASSWORD_CANNOT_BE_CHANGED"));
+      throw new AppError("RESETPASSWORD_FAILED_PASSWORD_CANNOT_BE_CHANGED")
     }
 
     return null;
-  } catch (err) {
+  } catch (err : any) {
+    if(err instanceof AppError) throw err
     log("actions", err, `ACTIONS ${__filename}`);
-    throw new Error(error("SERVER_ERROR"));
+    throw new AppError("SERVER_ERROR")
   }
 }
 

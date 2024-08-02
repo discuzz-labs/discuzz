@@ -20,8 +20,8 @@ interface VerifyTokenLayoutProps {
 
 export default function VerifyTokenLayout({ token }: VerifyTokenLayoutProps) {
   const router = useRouter();
-  const e = useTranslations("error");
-  const p = useTranslations("pending");
+  const translateError = useTranslations("messages.error");
+  const translatePending = useTranslations("messages.pending");
 
   const { data: userSession, update } = useSession();
 
@@ -56,13 +56,13 @@ export default function VerifyTokenLayout({ token }: VerifyTokenLayoutProps) {
       <Header content="Verification" caption="Verify your email." />
       {isError && (
         <Alert type="error" className="lg:w-1/3">
-          <ShieldAlert /> {e(error.message)}
+          <ShieldAlert /> {translateError(error.message)}
         </Alert>
       )}
 
       {isPending === true && (
         <div className="flex gap-2">
-          <Spinner /> {p("VERIFICATION_VERIFYING_EMAIL")}
+          <Spinner /> {translatePending("VERIFICATION_VERIFYING_EMAIL")}
         </div>
       )}
     </AuthLayoutStyle>

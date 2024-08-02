@@ -1,6 +1,6 @@
 "use server";
 
-import error from "@/services/error";
+import AppError from "@/services/error";
 import type { PostsWithCounts } from "@/types/types";
 import log from "@/lib/log";
 import Posts from "@/database/Posts";
@@ -21,7 +21,7 @@ async function getUserPosts({ userId, cursor, onlyBookMarked, orderBy, onlyFollo
       lastCursor: undefined | string;
       hasNextPage: boolean;
     };
-  }
+  } | null
 > {
   try {
     const postsFetch = await new Posts({
@@ -34,14 +34,15 @@ async function getUserPosts({ userId, cursor, onlyBookMarked, orderBy, onlyFollo
     }).fetchPosts();
 
     if (postsFetch.success === false) {
-      throw new Error(error("POST_FETCH_FAILED"))
+      throw new AppError("POST_FETCH_FAILED")
     }
 
     return postsFetch.data
 
-  } catch (err) {
+  } catch (err: any) {
+    if(err instanceof AppError) throw err
     log("actions", err, `ACTIONS ${__filename}`);
-    throw new Error(error("SERVER_ERROR"))
+    throw new AppError("SERVER_ERROR")
   }
 }
 

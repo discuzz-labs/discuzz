@@ -1,3 +1,5 @@
+"use client"
+
 import getUserPosts from "@/actions/posts/getUserPosts";
 import LoadingBoundary from "@/components/LoadingBoundary";
 import DashboardPostCard from "@/components/dashboard/PostCard";
@@ -43,7 +45,7 @@ export default function DashboardPosts({
         orderBy: filter ? { [filter]: order } : { createdAt: "asc" }
       }),
     initialPageParam: "",
-    getNextPageParam: (lastPage) => lastPage.metaData.lastCursor,
+    getNextPageParam: (lastPage) => lastPage?.metaData.lastCursor,
   });
 
   useEffect(() => {
@@ -65,7 +67,7 @@ export default function DashboardPosts({
   console.log(filter, order)
   return (
     <div className="flex flex-col p-2 pt-10">
-      {!isPending  && !data?.pages.some(page => page.posts.length > 0) && (
+      {!isPending  && !data?.pages.some(page => page?.posts.length || -1 > 0) && (
         <div className="flex flex-col gap-5 items-center justify-center py-10">
           {noPostsMessage}
           <Button variant={"default"} className="flex items-center gap-2">
@@ -77,7 +79,7 @@ export default function DashboardPosts({
       {data &&
         data.pages &&
         data.pages.map((page) =>
-          page.posts.map((postData, idx) => (
+          page?.posts.map((postData, idx) => (
             <DashboardPostCard
               key={idx}
               postId={postData.id}

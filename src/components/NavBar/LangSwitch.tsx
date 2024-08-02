@@ -1,3 +1,5 @@
+"use client"
+
 import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import {
@@ -8,7 +10,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Earth } from "lucide-react";
 import { getCookie, setCookie } from "@/actions/cookie";
-import { availableLocales } from "@/i18n";
+import { availableLocales } from "@/i18n.settings";
 import { useRouter } from "next/navigation";
 
 export default function LangSwitch() {

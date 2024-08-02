@@ -1,39 +1,33 @@
-import {getRequestConfig} from 'next-intl/server';
-import { getCookie } from './actions/cookie';
-import routes from './services/routes';
-import { loadLangErrorsToCache } from './services/error';
+import { getRequestConfig } from 'next-intl/server';
+import { getCookie } from '@/actions/cookie';
+import { translationPath, availableLocales, defaultLocale } from '@/i18n.settings';
 
-export const availableLocales = ["English", "Deutsch", "francaise", "Espanol", "Italiano"]
-export const defaultLocale = "english"
+// Ensure translationFolder is relative to the project root
+const translationFolder = './lang'; 
 
 export default getRequestConfig(async () => {
-  const lang = await getCookie("lang")
-  const locale = lang && availableLocales.includes(lang) ? lang.toLowerCase() : defaultLocale ;
+  const lang = await getCookie("lang");
+  const locale = lang && availableLocales.includes(lang) ? lang : defaultLocale;
 
-  const signInPageTranslations = await import(`../lang/${locale}${routes.auth.signIn.index.translation}`);
-  const signUpPageTranslations = await import(`../lang/${locale}${routes.auth.signUp.index.translation}`);
-  const verifyPageTranslations = await import(`../lang/${locale}${routes.auth.verify.index.translation}`);
-  const resetPasswordPageTranslations = await import(`../lang/${locale}${routes.auth.reset.password.index.translation}`);
-  const resetPasswordPageTokenTranslations = await import(`../lang/${locale}${routes.auth.reset.password.token.translation}`);
-  const error = await import(`../lang/${locale}/error.json`);
-  const success = await import(`../lang/${locale}/success.json`);
-  const pending = await import(`../lang/${locale}/pending.json`);
-  const global = await import(`../lang/${locale}/global.json`);
+  // Create an array of promises for importing translation files
+  const importPromises = translationPath.map(async (path) => {
+    try {
+      const module = await import(`${translationFolder}/${locale}${path}`);
+      return { [path.replace('.json', '').replace('/', '')]: module.default };
+    } catch (error) {
+      console.error(`Error importing ${locale}${path}:`, error);
+      return {}; // Return empty object if import fails
+    }
+  });
 
-  await loadLangErrorsToCache(locale)
+  // Wait for all imports to complete
+  const imports = await Promise.all(importPromises);
+
+  // Merge all imported objects into one messages object
+  const messages = imports.reduce((acc, curr) => ({ ...acc, ...curr }), {});
 
   return {
     locale,
-    messages: {
-      ...signInPageTranslations,
-      ...signUpPageTranslations,
-      ...verifyPageTranslations,
-      ...resetPasswordPageTranslations,
-      ...resetPasswordPageTokenTranslations,
-      ...global,
-      ...error,
-      ...success,
-      ...pending
-    },
+    messages
   };
 });

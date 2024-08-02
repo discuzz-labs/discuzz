@@ -12,7 +12,6 @@ import {
   Section,
   Text,
 } from "@react-email/components";
-import { useTranslations } from "next-intl";
 
 interface VerificationEmailTemplateProps {
   userName: string;

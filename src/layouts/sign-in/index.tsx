@@ -21,8 +21,8 @@ interface SignInLayoutProps {
 }
 
 export default function SignInLayout({ errorParam }: SignInLayoutProps) {
-  const t = useTranslations(signInRoute);
-  const e = useTranslations("error");
+  const translate = useTranslations("signin")
+  const translateError = useTranslations("messages.error")
 
   const router = useRouter();
 
@@ -47,9 +47,9 @@ export default function SignInLayout({ errorParam }: SignInLayoutProps) {
 
   return (
     <AuthLayoutStyle>
-      {isError && <Alert message={e(error.message)} type="error" />}
+      {isError && <Alert message={translateError(error.message)} type="error" />}
       {errorParam && <Alert message={errorParam} type="error" />}
-      <Header content={t("title")} caption={t("titleCaption")} />
+      <Header content={translate("title")} caption={translate("titleCaption")} />
       {OAuthProviders.map((OAuthProvider) => (
         <OAuthButton
           key={OAuthProvider.name}
@@ -66,18 +66,18 @@ export default function SignInLayout({ errorParam }: SignInLayoutProps) {
           {
             name: "email",
             type: "email",
-            placeholder: t("emailPlaceholder"),
+            placeholder: translate("emailPlaceholder"),
           },
           {
             name: "password",
             type: "password",
-            placeholder: t("passwordPlaceholder"),
+            placeholder: translate("passwordPlaceholder"),
           },
         ]}
-        submitBtnText={t("submitBtnText")}
+        submitBtnText={translate("submitBtnText")}
       />
       <Link className="font-thin text-xs" href="/recover/password">
-        {t("forgetPasswordText")}!
+        {translate("forgetPasswordText")}!
       </Link>
     </AuthLayoutStyle>
   );

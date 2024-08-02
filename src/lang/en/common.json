@@ -1,0 +1,14 @@
+{
+  "global": {
+    "quote": "Life is like riding a bicycle. To keep your balance, you must keep moving."
+  },
+  "components": {
+    "NavBar": {
+      "light": "Light",
+      "dark": "Dark",
+      "system": "System",
+      "signUpBtn": "Sign Up",
+      "signInBtn": "Sign In"
+    }
+  }
+}

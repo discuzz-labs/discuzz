@@ -29,8 +29,8 @@ export const authOptions = {
             verified: signInWithCredAction.verified,
             id: signInWithCredAction.id,
           };
-        } catch (err) {
-          throw new Error(err as string);
+        } catch (err: any) {
+          throw new Error(err.message);
         }
       },
     }),
@@ -60,8 +60,8 @@ export const authOptions = {
             verified: signUpWithCredAction.verified,
             id: signUpWithCredAction.id,
           };
-        }catch (err) {
-            throw new Error(err as string);
+        }catch (err: any) {
+            throw new Error(err.message);
           }
       },
     }),

@@ -21,8 +21,8 @@ interface ResetPasswordTokenLayoutProps {
 export default function ResetPasswordTokenLayout({
   token,
 }: ResetPasswordTokenLayoutProps) {
-  const t = useTranslations(resetPasswordTokenRoute)
-  const e = useTranslations("error")
+  const translate = useTranslations("reset.password#token")
+  const translateError = useTranslations("messages.error")
 
   const router = useRouter();
 
@@ -47,10 +47,10 @@ export default function ResetPasswordTokenLayout({
 
   return (
     <AuthLayoutStyle>
-        <Header content={t("title")} caption={t("titleCaption")} />
+        <Header content={translate("title")} caption={translate("titleCaption")} />
         {isError && (
           <Alert type="error" className="lg:w-1/3">
-            <ShieldAlert /> {e(error.message)}
+            <ShieldAlert /> {translateError(error.message)}
           </Alert>
         )}
         <AuthForm
@@ -61,10 +61,10 @@ export default function ResetPasswordTokenLayout({
             {
               name: "newPassword",
               type: "password",
-              placeholder: t("passwordPlaceholder"),
+              placeholder: translate("passwordPlaceholder"),
             },
           ]}
-          submitBtnText={t("submitBtnText")}
+          submitBtnText={translate("submitBtnText")}
         />
     </AuthLayoutStyle>
   );

@@ -1,6 +1,6 @@
 "use server";
 
-import error from "@/services/error";
+import AppError from "@/services/error";
 import sendEmail from "@/services/sendEmail";
 import VerificationEmailTemplate, {
   subject,
@@ -29,7 +29,7 @@ async function sendVerificationEmail({
 
     return null;
   } catch (err) {
-    throw new Error(error("VERIFICATION_FAILED_EMAIL_CANNOT_BE_SENT"));
+    throw new AppError("VERIFICATION_FAILED_EMAIL_CANNOT_BE_SENT");
   }
 }
 

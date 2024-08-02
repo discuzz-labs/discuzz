@@ -8,49 +8,37 @@ export const verifyTokenRoute = "/verify/token";
 export const resetPasswordRoute = "/reset/password";
 export const resetPasswordTokenRoute = "/reset/password/token";
 export const userRoute = "/user";
-export const settingsRoute = "/settings"
-export const notificationsRoute = "/notifications"
-export const newPostRoute = "/post/new"
-export const historyRoute = "/history"
-export const leaderboardRoute = "/leaderboard"
+export const settingsRoute = "/settings";
+export const notificationsRoute = "/notifications";
+export const newPostRoute = "/post/new";
+export const historyRoute = "/history";
+export const leaderboardRoute = "/leaderboard";
 
 const routes = {
   auth: {
-    signIn: { index: { path: signInRoute, translation: `${signInRoute}.json` } },
-    signUp: { index: { path: signUpRoute, translation: `${signUpRoute}.json` } },
+    signIn: { index: { path: signInRoute } },
+    signUp: { index: { path: signUpRoute } },
     verify: {
-      index: { path: verifyRoute, translation: `${verifyRoute}.json` },
-      token: { path: verifyTokenRoute, translation: null },
+      index: { path: verifyRoute },
+      token: { path: verifyTokenRoute },
     },
-    signOut: { index: { path: signOutRoute, translation: `${signOutRoute}.json` } },
+    signOut: { index: { path: signOutRoute } },
     reset: {
       password: {
-        index: { path: resetPasswordRoute, translation: `${resetPasswordRoute}.json` },
-        token: { path: resetPasswordTokenRoute, translation: `${resetPasswordTokenRoute}.json`  },
+        index: { path: resetPasswordRoute },
+        token: { path: resetPasswordTokenRoute },
       },
     },
   },
   user: {
-    index: {
-      path: userRoute, translation: null,
-    },
-    settings : {
-      path: settingsRoute, translation: null,
-    },
-    notifications : {
-      path: notificationsRoute, translation: null,
-    },
-    history : {
-      path: historyRoute, translation: null,
-    },
-    leaderboard : {
-      path: leaderboardRoute, translation: null,
-    }
+    index: { path: userRoute },
+    settings: { path: settingsRoute },
+    notifications: { path: notificationsRoute },
+    history: { path: historyRoute },
+    leaderboard: { path: leaderboardRoute },
   },
-  post : {
-    new: {
-      path: newPostRoute, translation: null,
-    },
+  post: {
+    new: { path: newPostRoute },
   },
   redirects: {
     onUnAuthenticated: signInRoute,

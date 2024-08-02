@@ -1,6 +1,6 @@
 import { Follow, Role, User } from "@prisma/client";
 import prisma from "@/lib/prisma";
-import bcrypt from "bcrypt";
+import bcrypt from "bcryptjs";
 import { DatabaseResponse, UserWithCounts } from "@/types/types";
 
 // Define the ProfileConstructor interface

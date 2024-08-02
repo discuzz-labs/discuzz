@@ -1,4 +1,4 @@
-import error from "@/services/error";
+import AppError from "@/services/error";
 import type { UserSessionInterface } from "@/providers/AuthProvider";
 import log from "@/lib/log";
 import Profile from "@/database/Profile";
@@ -28,9 +28,10 @@ async function signUpWithOauth({
       verified: true,
       id: saveOAuth.data?.id as string,
     };
-  } catch (err) {
+  } catch (err : any) {
+    if(err instanceof AppError) throw err
     log("actions", err, `ACTIONS ${__filename}`);
-    throw new Error(error("SERVER_ERROR"));
+    throw new AppError("SERVER_ERROR");
   }
 }
 

@@ -3,7 +3,7 @@
 import { generatetoken } from "@/services/token";
 import Profile from "@/database/Profile";
 import log from "@/lib/log";
-import error from "@/services/error";
+import AppError from "@/services/error";
 
 interface createResetTokenArgs {
   email: string;
@@ -14,7 +14,7 @@ async function createToken({ email }: createResetTokenArgs): Promise<string> {
     const tokenGenerate = generatetoken(email, Date.now() + 600000);
 
     if (tokenGenerate.success === false || !tokenGenerate.payload) {
-      throw new Error(error("IDENTIFICATION_FAILED_TOKEN_CANNOT_BE_CREATED"));
+      throw new AppError("IDENTIFICATION_FAILED_TOKEN_CANNOT_BE_CREATED");
     }
 
     const profileUpdate = await new Profile({
@@ -25,13 +25,14 @@ async function createToken({ email }: createResetTokenArgs): Promise<string> {
     }).updateProfile();
 
     if (profileUpdate.success === false) {
-      throw new Error(error("IDENTIFICATION_FAILED_TOKEN_CANNOT_BE_CREATED"));
+      throw new AppError("IDENTIFICATION_FAILED_TOKEN_CANNOT_BE_CREATED");
     }
 
     return tokenGenerate.payload.token;
-  } catch (err) {
+  } catch (err : any) {
+    if(err instanceof AppError) throw err
     log("actions", err, `ACTIONS ${__filename}`);
-    throw new Error(error("SERVER_ERROR"));
+    throw new AppError("SERVER_ERROR");
   }
 }
 

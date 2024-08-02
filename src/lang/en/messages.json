@@ -3,11 +3,11 @@
     "SERVER_ERROR": "Server error 500. Try again later.",
 
     "USER_FETCH_FAILED_NOT_FOUND": "Unable to find a user with the provided email address. Please contact our support for assistance.",
-   
+
     "POST_FETCH_FAILED": "Failed to fetch posts. Please try again later.",
     "POST_DELETE_FAILED": "Failed to delete the post. Please try again later.",
-    "POST_BOOKMARK_FAILED" : "Failed to bookmark the post. Please try again later.",
-    "POST_UNBOOKMARK_FAILED" : "Failed to unbokkmark the post. Please try again later.",
+    "POST_BOOKMARK_FAILED": "Failed to bookmark the post. Please try again later.",
+    "POST_UNBOOKMARK_FAILED": "Failed to unbokkmark the post. Please try again later.",
 
     "REGISTRATION_FAILED_EMAIL_ALREADY_EXISTS": "An account with this email already exists. Please log in.",
     "REGISTRATION_FAILED_PASSWORD_TOO_SMALL": "Password is too short. Please ensure it is 8 chars long.",
@@ -36,5 +36,13 @@
     "IDENTIFICATION_FAILED_TOKEN_INVALID": "Invalid identification token. Please check and try again.",
     "IDENTIFICATION_FAILED_TOKEN_CANNOT_BE_VERIFIED": "We cannot verify your identification token at the moment. Try again later.",
     "IDENTIFICATION_FAILED": "Identification failed."
+  },
+  "success": {
+    "VERIFICATION_SUCCESS_EMAIL_SENT": "A verification email has been sent. Please check your inbox and spam folder.",
+    "VERIFICATION_SUCCESS_VERIFIED": "Email verified successfully.",
+    "RESETPASSWORD_SUCCESS_EMAIL_SENT": "A reset password email has been sent. Please check your inbox and spam folder."
+  },
+  "pending": {
+    "VERIFICATION_VERIFYING_EMAIL": "Verifying your email."
   }
 }

@@ -26,5 +26,5 @@
     }
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "src/types/next-auth.d.ts", "global.d.ts", "prisma/seed.js"],
-  "exclude": ["./cypress.config.ts", "node_modules", "cypress", "**/*.cy.tsx"]
+  "exclude": ["node_modules", "./src/stories"]
 }

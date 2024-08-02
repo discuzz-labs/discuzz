@@ -1,6 +1,6 @@
 "use server";
 
-import error from "@/services/error";
+import AppError from "@/services/error";
 import log from "@/lib/log";
 import Posts from "@/database/Posts";
 
@@ -17,12 +17,13 @@ async function bookmarkUserPost({
     const postBookmark = await new Posts({ postId, userId }).bookmarkPost();
 
     if (postBookmark.success === false)
-      throw new Error(error("POST_BOOKMARK_FAILED"));
+      throw new AppError("POST_BOOKMARK_FAILED");
 
     return null
-  } catch (err) {
+  } catch (err: any) {
+    if(err instanceof AppError) throw err
     log("actions", err, `ACTIONS ${__filename}`);
-    throw new Error(error("SERVER_ERROR"));
+    throw new AppError("SERVER_ERROR");
   }
 }
 

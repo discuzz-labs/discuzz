@@ -1,6 +1,6 @@
 "use server";
 
-import error from "@/services/error";
+import AppError from "@/services/error";
 import type { UserSessionInterface } from "@/providers/AuthProvider";
 import log from "@/lib/log";
 import Profile from "@/database/Profile";
@@ -21,7 +21,7 @@ async function signInWithCred({
     }).login();
 
     if (login.success === false) {
-      throw new Error(error("LOGIN_FAILED_INVALID_CREDENTIALS"));
+      throw new AppError("LOGIN_FAILED_INVALID_CREDENTIALS");
     }
 
     return {
@@ -31,9 +31,10 @@ async function signInWithCred({
       verified: login.data?.verified as boolean,
       id: login.data?.id as string,
     };
-  } catch (err) {
+  } catch (err : any) {
+    if(err instanceof AppError) throw err
     log("actions", err, `ACTIONS ${__filename}`);
-    throw new Error(error("SERVER_ERROR"));
+    throw new AppError("SERVER_ERROR");
   }
 }
 

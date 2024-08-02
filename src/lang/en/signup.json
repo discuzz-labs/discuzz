@@ -1,5 +1,5 @@
 {
-    "/signup": {
+
         "title": "Sign Up",
         "titleCaption": "Create a new account.",
         "emailPlaceholder" : "Email - you can use gravater",
@@ -8,5 +8,5 @@
         "submitBtnText" : "Create a new account",
         "disclaimerText" : "By clicking 'Create a new account', you agree to our",
         "termsOfService" : "Terms of Service"
-      }
+
 }

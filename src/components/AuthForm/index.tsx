@@ -1,3 +1,5 @@
+"use client"
+
 import { z } from "zod";
 import { Form } from "@/components/ui/form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -22,11 +24,11 @@ export default function AuthForm<T extends z.ZodType<any, any>>({
   fields,
   submitBtnText
 }: FormProps<T>) {
-  const t = useTranslations("error")
+  const translateError = useTranslations("messages.error")
   
   const form = useForm<z.infer<ReturnType<typeof schema>>>({
     mode: "onSubmit",
-    resolver: zodResolver(schema(t)),
+    resolver: zodResolver(schema(translateError)),
   });
 
   return (

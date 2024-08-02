@@ -1,6 +1,6 @@
 "use server";
 
-import error from "@/services/error";
+import AppError from "@/services/error";
 import type { UserSessionInterface } from "@/providers/AuthProvider";
 import log from "@/lib/log";
 import Profile from "@/database/Profile";
@@ -27,7 +27,7 @@ async function signUpWithCred({
     }).save();
 
     if (save.success === false) {
-      throw new Error(error("REGISTRATION_FAILED_EMAIL_ALREADY_EXISTS"));
+      throw new AppError("REGISTRATION_FAILED_EMAIL_ALREADY_EXISTS");
     }
     return {
       email,
@@ -36,9 +36,10 @@ async function signUpWithCred({
       verified: false,
       id: save.data?.id as string,
     };
-  } catch (err) {
+  } catch (err : any) {
+    if(err instanceof AppError) throw err
     log("actions", err, `ACTIONS ${__filename}`);
-    throw new Error(error("SERVER_ERROR"));
+    throw new AppError("SERVER_ERROR");
   }
 }
 

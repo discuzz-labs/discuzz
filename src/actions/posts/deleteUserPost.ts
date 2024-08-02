@@ -1,8 +1,8 @@
 "use server";
 
-import error from "@/services/error";
 import log from "@/lib/log";
 import Posts from "@/database/Posts";
+import AppError from "@/services/error";
 
 export interface deleteUserPostArgs {
   postId: string;
@@ -17,12 +17,13 @@ async function deleteUserPost({ postId, userId }: deleteUserPostArgs): Promise<n
     }).deletePost();
 
     if (postDeletion.success === false)
-      throw new Error(error("POST_DELETE_FAILED"));
+      throw new AppError("POST_DELETE_FAILED");
 
     return null;
-  } catch (err) {
+  } catch (err: any) {
+    if(err instanceof AppError) throw err
     log("actions", err, `ACTIONS ${__filename}`);
-    throw new Error(error("SERVER_ERROR"));
+    throw new AppError("SERVER_ERROR");
   }
 }
 

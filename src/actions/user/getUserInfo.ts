@@ -1,6 +1,6 @@
 "use server";
 
-import error from "@/services/error";
+import AppError from "@/services/error";
 import type { UserWithCounts } from "@/types/types";
 import log from "@/lib/log";
 import Profile from "@/database/Profile";
@@ -16,13 +16,14 @@ async function getUserInfo({ id }: getUserInfoArgs): Promise<UserWithCounts> {
     }).find();
 
     if (userWithCounts.success === false || !userWithCounts.data) {
-      throw new Error(error("USER_FETCH_FAILED_NOT_FOUND"));
+      throw new AppError("USER_FETCH_FAILED_NOT_FOUND");
     }
 
     return userWithCounts.data;
-  } catch (err) {
+  } catch (err : any) {
+    if(err instanceof AppError) throw err
     log("actions", err, `ACTIONS ${__filename}`);
-    throw new Error(error("SERVER_ERROR"));
+    throw new AppError("SERVER_ERROR");
   }
 }
 

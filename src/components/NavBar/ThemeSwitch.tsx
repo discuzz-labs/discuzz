@@ -13,7 +13,7 @@ import { useEffect, useState } from "react";
 import { useTranslations } from "next-intl";
 
 export default function ThemeSwitch() {
-  const t = useTranslations("NavBar")
+  const translate = useTranslations("common.components.NavBar")
   const { resolvedTheme, setTheme } = useTheme();
   const [mounted, setMounted] = useState(false);
   useEffect(() => {
@@ -40,7 +40,7 @@ export default function ThemeSwitch() {
               className="flex items-center gap-2"
             >
               <Sun />
-              {t("light")}
+              {translate("light")}
             </DropdownMenuCheckboxItem>
             <DropdownMenuCheckboxItem
               checked={resolvedTheme === "dark"}
@@ -50,7 +50,7 @@ export default function ThemeSwitch() {
               className="flex items-center gap-2"
             >
               <Moon />
-              {t("dark")}
+              {translate("dark")}
             </DropdownMenuCheckboxItem>
             <DropdownMenuCheckboxItem
               checked={resolvedTheme === "system"}
@@ -60,7 +60,7 @@ export default function ThemeSwitch() {
               className="flex items-center gap-2"
             >
               <Monitor />
-              {t("system")}
+              {translate("system")}
             </DropdownMenuCheckboxItem>
           </DropdownMenuContent>
         </DropdownMenu>

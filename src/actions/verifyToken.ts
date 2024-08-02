@@ -2,7 +2,7 @@
 
 import Profile from "@/database/Profile";
 import log from "@/lib/log";
-import error from "@/services/error";
+import AppError from "@/services/error";
 import { checktoken } from "@/services/token";
 
 interface verifyUserResetTokenArgs {
@@ -16,7 +16,7 @@ async function verifyToken({
     const tokenCheck = checktoken(token);
 
     if (tokenCheck.success === false || !tokenCheck.payload) {
-      throw new Error(error("IDENTIFICATION_FAILED_TOKEN_INVALID"));
+      throw new AppError("IDENTIFICATION_FAILED_TOKEN_INVALID");
     }
 
     const profile = new Profile({
@@ -28,19 +28,20 @@ async function verifyToken({
     const userFind = await profile.find();
 
     if (userFind.success === false) {
-      throw new Error(error("IDENTIFICATION_FAILED_TOKEN_CANNOT_BE_VERIFIED"));
+      throw new AppError("IDENTIFICATION_FAILED_TOKEN_CANNOT_BE_VERIFIED");
     }
 
     const deleteTokenResult = await profile.updateProfile();
     if (deleteTokenResult.success === false && deleteTokenResult.error) {
-      throw new Error(error("IDENTIFICATION_FAILED_TOKEN_CANNOT_BE_VERIFIED"));
+      throw new AppError("IDENTIFICATION_FAILED_TOKEN_CANNOT_BE_VERIFIED");
     }
 
     return tokenCheck.payload.token.email;
-  } catch (err) {
+  } catch (err : any) {
+    if(err instanceof AppError) throw err
     log("actions", err, `ACTIONS ${__filename}`);
     console.log(err);
-    throw new Error(error("SERVER_ERROR"));
+    throw new AppError("SERVER_ERROR");
   }
 }
 

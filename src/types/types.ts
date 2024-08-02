@@ -1,4 +1,4 @@
-import errorMessages from "../../lang/english/error.json";
+import messages from "../../lang/en/messages.json";
 import { ProviderName } from "@/OAuthProviders/OAuthProviders";
 import { Bookmark, Post, User } from "@prisma/client";
 
@@ -45,4 +45,4 @@ export type PostsWithCounts = Post & {
   isBookmarked: boolean; 
 };
 
-export type ErrorCodes = keyof typeof errorMessages.error;
+export type ErrorCodes = keyof typeof messages.error;

@@ -14,9 +14,9 @@ import { useTranslations } from "next-intl";
 import { verifyRoute } from "@/services/routes";
 
 export default function VerifyLayout() {
-  const t = useTranslations(verifyRoute);
-  const e = useTranslations("error");
-  const s = useTranslations("success");
+  const translate = useTranslations("verify");
+  const translateError = useTranslations("messages.error");
+  const translateSuccess = useTranslations("messages.success");
 
   const { data: userSession } = useSession();
 
@@ -40,11 +40,11 @@ export default function VerifyLayout() {
 
   return (
     <AuthLayoutStyle>
-      <Header content={t("title")} caption={t("titleCaption")} />
-      {isError && <Alert message={e(error.message)} type="error" />}
+      <Header content={translate("title")} caption={translate("titleCaption")} />
+      {isError && <Alert message={translateError(error.message)} type="error" />}
       {isSuccess && (
         <p className="flex items-center gap-5">
-          <Check /> {s("VERIFICATION_SUCCESS_EMAIL_SENT")}{" "}
+          <Check /> {translateSuccess("VERIFICATION_SUCCESS_EMAIL_SENT")}{" "}
         </p>
       )}
       <AuthForm
@@ -52,7 +52,7 @@ export default function VerifyLayout() {
         formSubmitted={isPending}
         fields={[]}
         callbackFn={() => mutate()}
-        submitBtnText={t("submitBtnText")}
+        submitBtnText={translate("submitBtnText")}
       />
     </AuthLayoutStyle>
   );
