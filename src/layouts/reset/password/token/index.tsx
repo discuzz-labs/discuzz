@@ -1,18 +1,19 @@
 "use client";
 
 import Header from "@/components/Header";
-import Alert from "@/components/Alert";
-import { useRouter } from "next/navigation";
-import { ShieldAlert } from "lucide-react";
-import verifyToken from "@/actions/verifyToken";
-import routes, { resetPasswordTokenRoute } from "@/services/routes";
-import { useMutation } from "@tanstack/react-query";
+import AuthForm from "@/components/AuthForm";
+import AuthLayoutStyle from "@/styles/AuthLayoutStyle";
 import { ResetPasswordFormSchemaSecondStep } from "@/services/schemas";
 import { z } from "zod";
-import AuthForm from "@/components/AuthForm";
-import resetPassword from "@/actions/verify/password/resetPassword";
-import AuthLayoutStyle from "@/styles/AuthLayoutStyle";
+import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
+import SuccessBoundary from "@/components/SuccessBoundary";
+import ErrorBoundary from "@/components/ErrorBoundary";
+import Spinner from "@/components/Spinner";
+import useResetPasswordToken from "@/hooks/useResetPasswordToken";
+import { Check, ShieldAlert } from "lucide-react";
+import routes from "@/services/routes";
+import Alert from "@/components/Alert";
 
 interface ResetPasswordTokenLayoutProps {
   token: string;
@@ -21,51 +22,45 @@ interface ResetPasswordTokenLayoutProps {
 export default function ResetPasswordTokenLayout({
   token,
 }: ResetPasswordTokenLayoutProps) {
-  const translate = useTranslations("reset.password#token")
-  const translateError = useTranslations("messages.error")
+  const translate = useTranslations("reset.password#token");
+  const translateError = useTranslations("messages.error");
+  const translateSuccess = useTranslations("messages.success");
 
-  const router = useRouter();
-
-  const { isError, error, isPending, mutate } = useMutation<
-    void,
-    Error,
-    z.infer<ReturnType<typeof ResetPasswordFormSchemaSecondStep>>
-  >({
-    mutationFn: async (values:  z.infer<ReturnType<typeof ResetPasswordFormSchemaSecondStep>>) => {
-      const email = await verifyToken({
-        token,
-      });
-      const resetPasswordAction = await resetPassword({
-        email,
-        password: values.newPassword,
-      });
-    },
-    onSuccess: () => {
-      router.push(routes.redirects.onAfterResetPassword);
-    },
-  });
+  const { isError, error, isSuccess, isPending, mutate } =
+    useResetPasswordToken(token);
 
   return (
     <AuthLayoutStyle>
-        <Header content={translate("title")} caption={translate("titleCaption")} />
-        {isError && (
-          <Alert type="error" className="lg:w-1/3">
-            <ShieldAlert /> {translateError(error.message)}
-          </Alert>
-        )}
-        <AuthForm
-          schema={ResetPasswordFormSchemaSecondStep}
-          formSubmitted={isPending}
-          callbackFn={mutate}
-          fields={[
-            {
-              name: "newPassword",
-              type: "password",
-              placeholder: translate("passwordPlaceholder"),
-            },
-          ]}
-          submitBtnText={translate("submitBtnText")}
-        />
+      <Header
+        content={translate("title")}
+        caption={translate("titleCaption")}
+      />
+      {isError && <Alert type="error" className="lg:w-1/3">
+        {translateError(error?.message || "An error occurred")}
+      </Alert>}
+
+      <SuccessBoundary
+        isSuccess={isSuccess}
+        message={translateSuccess("RESET_PASSWORD_SUCCESS")}
+      />
+      {isPending && (
+        <div className="flex gap-2">
+          <Spinner /> {translate("pending")}
+        </div>
+      )}
+      <AuthForm
+        schema={ResetPasswordFormSchemaSecondStep}
+        formSubmitted={isPending}
+        callbackFn={mutate}
+        fields={[
+          {
+            name: "newPassword",
+            type: "password",
+            placeholder: translate("passwordPlaceholder"),
+          },
+        ]}
+        submitBtnText={translate("submitBtnText")}
+      />
     </AuthLayoutStyle>
   );
 }

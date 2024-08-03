@@ -2,16 +2,14 @@
 
 import Header from "@/components/Header";
 import Alert from "@/components/Alert";
-import { useRouter } from "next/navigation";
 import Spinner from "@/components/Spinner";
-import verifyToken from "@/actions/verifyToken";
-import verifyUser from "@/actions/verify/verifyUser";
-import routes from "@/services/routes";
+import { useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
-import { useQuery } from "@tanstack/react-query";
-import { useEffect } from "react";
 import AuthLayoutStyle from "@/styles/AuthLayoutStyle";
 import { useTranslations } from "next-intl";
+import useVerifyUserEmail from "@/hooks/useVerifyUserEmail";
+import { useEffect } from "react";
+import routes from "@/services/routes";
 
 interface VerifyTokenLayoutProps {
   token: string;
@@ -23,44 +21,27 @@ export default function VerifyTokenLayout({ token }: VerifyTokenLayoutProps) {
   const translatePending = useTranslations("messages.pending");
 
   const { data: userSession, update } = useSession();
-
-  const { isError, isSuccess, isPending, data, error } = useQuery({
-    queryKey: ["verifyUserEmail"],
-    queryFn: async () => {
-      const email = await verifyToken({
-        token,
-      });
-      await verifyUser({
-        email,
-      })
-      return true
-    },
-  });
+  const { isError, isSuccess, isFetching, error } = useVerifyUserEmail(token);
 
   useEffect(() => {
     const handleUpdateSession = async () => {
-      if (isSuccess) {
-        if (userSession) {
-          await update({ verified: true });
-          router.push(
-            `${routes.redirects.onAfterVerify}/${userSession.user.id}`
-          );
-        }
+      if (isSuccess && userSession) {
+        await update({ verified: true });
+        router.push(`${routes.redirects.onAfterVerify}/${userSession.user.id}`);
       }
     };
     handleUpdateSession();
-  }, [isSuccess]);
-  console.log(error)
+  }, [isSuccess, userSession, update, router]);
+
   return (
     <AuthLayoutStyle>
       <Header content="Verification" caption="Verify your email." />
       {isError && (
         <Alert type="error" className="lg:w-1/3">
-          {translateError(error.message)}
+          {translateError(error?.message || "An error occurred")}
         </Alert>
       )}
-
-      {isPending === true && (
+      {isFetching && (
         <div className="flex gap-2">
           <Spinner /> {translatePending("VERIFICATION_VERIFYING_EMAIL")}
         </div>

@@ -5,6 +5,7 @@ import {
     ThumbsDown,
     Share,
   } from "lucide-react";
+  import StatItem from "./StateItem";
   
   interface PostStatsProps {
     viewsNumber: number;
@@ -22,22 +23,13 @@ import {
     return (
       <div className="flex items-center w-full mt-5">
         <div className="flex-grow flex justify-evenly mr-20 items-center gap-5">
-          <div className="flex items-center gap-2">
-            {commentsCount}
-            <MessageCircle className="w-4 h-4" />
-          </div>
-          <div className="flex items-center gap-2">
-            <p>{viewsNumber}</p>
-            <BarChart2 className="w-4 h-4" />
-          </div>
-          <div className="flex items-center gap-2">
-            {likes}
-            <ThumbsUp className="w-4 h-4" />
-          </div>
-          <div className="flex items-center gap-2">
-            {disLikes}
-            <ThumbsDown className="w-4 h-4" />
-          </div>
+          <StatItem
+            value={commentsCount}
+            icon={<MessageCircle className="w-4 h-4" />}
+          />
+          <StatItem value={viewsNumber} icon={<BarChart2 className="w-4 h-4" />} />
+          <StatItem value={likes} icon={<ThumbsUp className="w-4 h-4" />} />
+          <StatItem value={disLikes} icon={<ThumbsDown className="w-4 h-4" />} />
           <Share className="w-4 h-4" />
         </div>
       </div>

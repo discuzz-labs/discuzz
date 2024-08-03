@@ -6,22 +6,22 @@ export default withAuth(
   async function middleware(req) {
     const { nextUrl: { pathname }, nextauth: { token } } = req;
 
-    // // Caution: if-statements order matters
-    // if (routes.isAuth(pathname) && token && token.verified === false) {
-    //   return NextResponse.redirect(new URL(routes.redirects.onUnVerified, req.url));
-    // }
+    // Caution: if-statements order matters
+    if (routes.isAuth(pathname) && token && token.verified === false) {
+      return NextResponse.redirect(new URL(routes.redirects.onUnVerified, req.url));
+    }
 
-    // if (routes.isAuth(pathname) && token) {
-    //   return NextResponse.redirect(new URL(routes.redirects.onAuthenticated, req.url));
-    // }
+    if (routes.isAuth(pathname) && token) {
+      return NextResponse.redirect(new URL(routes.redirects.onAuthenticated, req.url));
+    }
 
-    // if (routes.isProtected(pathname) && !token) {
-    //   return NextResponse.redirect(new URL(routes.redirects.onUnAuthenticated, req.url));
-    // }
+    if (routes.isProtected(pathname) && !token) {
+      return NextResponse.redirect(new URL(routes.redirects.onUnAuthenticated, req.url));
+    }
 
-    // if (routes.isVerifyRoute(pathname) && token && token.verified === true) {
-    //   return NextResponse.redirect(new URL(routes.redirects.onVerified, req.url));
-    // }
+    if (routes.isVerifyRoute(pathname) && token && token.verified === true) {
+      return NextResponse.redirect(new URL(routes.redirects.onVerified, req.url));
+    }
 
   },
   {
@@ -39,5 +39,5 @@ export default withAuth(
 );
 
 export const config = {
-  matcher: ["/signin", "/signuo" , "/user" , "/verify" , "/"],
+  matcher: ["/signin", "/signup" , "/user/:path*" , "/verify" , "/reset/:path*", "/"],
 };

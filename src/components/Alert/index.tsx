@@ -1,6 +1,6 @@
 import { cn } from "@/lib/utils";
-import { Info, TriangleAlert, X, Ban } from "lucide-react";
-import { useRef, useState, ReactNode } from "react";
+import { getAlertStyles, getAlertIcon } from "./alertUtils";
+import { ReactNode } from "react";
 
 interface AlertProps {
   children?: ReactNode;
@@ -21,17 +21,11 @@ export default function Alert({
         "cy-alert",
         "w-2/3 items-center justify-between p-5 shadow-md border-l-8 rounded-md",
         className,
-        `${type == "error" && "border-red-800 bg-destructive text-destructive-foreground"}
-        ${type == "info" && "border-zinc-700 bg-muted text-muted-foreground"}
-        ${type == "warning" && "border-yellow-700 bg-warning text-warning-foreground"}`
+        getAlertStyles(type)
       )}
     >
       <div className="flex items-center gap-2">
-          <>
-            {type == "info" && <Info />}
-            {type == "error" && <Ban />}
-            {type == "warning" && <TriangleAlert />}
-          </>
+        {getAlertIcon(type)}
         {message && (
           <p className="font-bold text-pretty leading-tight">{message}</p>
         )}

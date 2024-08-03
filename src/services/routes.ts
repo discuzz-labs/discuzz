@@ -53,7 +53,7 @@ const routes = {
   isProtected: (route: string) => [userRoute].includes(route),
   isVerifyRoute: (route: string) => [verifyRoute].includes(route),
   isAuth: (route: string) =>
-    [signInRoute, signUpRoute, resetRoute, verifyRoute].some((authRoute) =>
+    [signInRoute, signUpRoute, resetRoute].some((authRoute) =>
       route.startsWith(authRoute)
     ),
 };

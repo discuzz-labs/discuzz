@@ -1,4 +1,4 @@
-import messages from "../../lang/en/messages.json";
+import messages from "../lang/en/messages.json";
 import { ProviderName } from "@/OAuthProviders/OAuthProviders";
 import { Bookmark, Post, User } from "@prisma/client";
 
@@ -22,6 +22,7 @@ export type OAuthProviderConfig = {
   provider: any;
   name: ProviderName;
   logo: string;
+  providerDisplayName: string;
 };
 
 export type UserWithCounts = User & {

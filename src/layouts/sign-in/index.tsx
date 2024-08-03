@@ -1,58 +1,41 @@
 "use client";
 
-import Alert from "@/components/Alert";
-import { SignInFormSchema } from "@/services/schemas";
 import { z } from "zod";
-import { signIn } from "next-auth/react";
-import { useRouter } from "next/navigation";
-import routes, { signInRoute } from "@/services/routes";
-import { Separator } from "@/components/ui/separator";
+import { useTranslations } from 'next-intl';
+import Alert from "@/components/Alert";
 import AuthForm from "@/components/AuthForm";
 import Link from "next/link";
 import Header from "@/components/Header";
-import { useMutation } from "@tanstack/react-query";
+import { Separator } from "@/components/ui/separator";
 import OAuthProviders from "@/OAuthProviders/OAuthProviders";
 import OAuthButton from "@/OAuthProviders/OAuthButton";
 import AuthLayoutStyle from "@/styles/AuthLayoutStyle";
-import { useTranslations } from 'next-intl';
+import useSignIn from "@/hooks/useSignIn";
+import { SignInFormSchema } from "@/services/schemas";
 
 interface SignInLayoutProps {
-  errorParam: string | undefined;
+  errorParam?: string;
 }
 
-export default function SignInLayout({ errorParam }: SignInLayoutProps) {
-  const translate = useTranslations("signin")
-  const translateError = useTranslations("messages.error")
+const SignInLayout = ({ errorParam }: SignInLayoutProps) => {
+  const translate = useTranslations("signin");
+  const translateError = useTranslations("messages.error");
 
-  const router = useRouter();
-
-  const login = async (values: z.infer<ReturnType<typeof SignInFormSchema>>): Promise<boolean> => {
-    const signInRequest = await signIn("login", {
-      email: values.email,
-      password: values.password,
-      redirect: false,
-    });
-    if (!signInRequest?.ok) {
-      throw new Error(signInRequest?.error as string);
-    }
-    return true;
-  };
-
-  const { isError, error, isPending, mutate } = useMutation<boolean, Error, z.infer<ReturnType<typeof SignInFormSchema>>>({
-    mutationFn: login,
-    onSuccess: () => {
-      router.push(routes.redirects.onAfterSignIn);
-    },
-  });
+  const { isError, error, isPending, mutate } = useSignIn();
 
   return (
     <AuthLayoutStyle>
-      {isError && <Alert message={translateError(error.message)} type="error" />}
-      {errorParam && <Alert message={errorParam} type="error" />}
+      {(isError || errorParam) && (
+        <Alert
+          message={translateError(isError ? error?.message : errorParam!)}
+          type="error"
+        />
+      )}
       <Header content={translate("title")} caption={translate("titleCaption")} />
       {OAuthProviders.map((OAuthProvider) => (
         <OAuthButton
           key={OAuthProvider.name}
+          providerDisplayName={OAuthProvider.name}
           name={OAuthProvider.name}
           logo={OAuthProvider.logo}
         />
@@ -81,4 +64,6 @@ export default function SignInLayout({ errorParam }: SignInLayoutProps) {
       </Link>
     </AuthLayoutStyle>
   );
-}
+};
+
+export default SignInLayout;

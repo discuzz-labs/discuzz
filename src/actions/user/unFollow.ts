@@ -7,17 +7,17 @@ import { pointsSystem } from "@/services/points";
 
 export interface unFollowArgs {
   id: string;
-  unFollowingUserId: string;
+  followingUserId: string;
 }
 
-async function unFollow({ id, unFollowingUserId }: unFollowArgs): Promise<null> {
+async function unFollow({ id, followingUserId }: unFollowArgs): Promise<null> {
   try {
     const user = await new Profile({
       id,
-    }).unfollow(unFollowingUserId);
+    }).unfollow(followingUserId);
 
     const followingUser = await new Profile({
-      id: unFollowingUserId,
+      id: followingUserId,
       valuesToUpdate: {
           points: {
             increment: -pointsSystem.follower,

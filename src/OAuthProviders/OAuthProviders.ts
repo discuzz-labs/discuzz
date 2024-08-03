@@ -40,6 +40,7 @@ const OAuthProviders: OAuthProviderConfig[] = [
       },
     }),
     name: "github",
+    providerDisplayName: "Github",
     logo: "/assets/github.svg",
   },
 ];

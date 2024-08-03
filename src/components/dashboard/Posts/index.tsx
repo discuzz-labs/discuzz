@@ -37,7 +37,7 @@ export default function DashboardPosts({
     error,
     data,
   } = useInfiniteQuery({
-    queryKey: ["userPosts", userId, activeTab, filter, order],
+    queryKey: ["userPosts", userId, activeTab],
     queryFn: async ({ pageParam }) => {
       const t = await getUserPosts({
         userId,

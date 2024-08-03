@@ -1,20 +1,16 @@
-"use client"
+"use client";
 
 import { useState } from "react";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { useToast } from "@/components/ui/use-toast";
-import config from "@/lib/config";
+import { useSession } from "next-auth/react";
 import LoadingBoundary from "@/components/LoadingBoundary";
 import ErrorBoundary from "../../ErrorBoundary";
-import deleteUserPost, { deleteUserPostArgs } from "@/actions/posts/deleteUserPost";
-import bookmarkUserPost, { bookmarkUserPostArgs } from "@/actions/posts/bookmarkUserPost";
-import unBookmarkUserPost, { unBookmarkUserPostArgs } from "@/actions/posts/unBookmarkUserPost";
-import ProfileHeader from "./ProfileHeader";
-import PostActions from "./PostActions";
+import { usePostMutations } from "@/hooks/usePostMutation";
+import { useCombinedMutationState } from "@/hooks/useCombinedMutationState";
+import PostHeader from "@/components/dashboard/PostHeader";
+import PostActions from "@/components/dashboard/PostActions";
 import PostContent from "./PostContent";
-import PostStats from "./PostStats";
+import PostStats from "@/components/dashboard/PostStates";
 import { TABS } from "@/app/(user)/user/[userId]/routeType";
-import { useSession } from "next-auth/react";
 
 interface DashboardPostCardProps {
   postId: string;
@@ -33,7 +29,7 @@ interface DashboardPostCardProps {
   reason: string;
   image: string;
   activeTab: keyof typeof TABS;
-  isOwner: boolean
+  isOwner: boolean;
 }
 
 export default function DashboardPostCard({
@@ -53,118 +49,58 @@ export default function DashboardPostCard({
   reason,
   activeTab,
   image,
-  isOwner
+  isOwner,
 }: DashboardPostCardProps) {
-  const queryClient = useQueryClient();
-  const { toast } = useToast();
-  const { data: userSession } = useSession()
+  const { data: userSession } = useSession();
   const [bookmarked, setBookmarked] = useState<boolean>(isBookMarked);
-
-  const deletePostMutation = useMutation<null, Error, deleteUserPostArgs>({
-    mutationFn: deleteUserPost,
-    onSuccess: () => {
-      toast({
-        variant: "default",
-        title: "Post deleted successfully",
-        description: "All related activity to this post is deleted!",
-      });
-      queryClient.invalidateQueries({ queryKey: ["userPosts", userId, TABS.POSTS] });
-      queryClient.invalidateQueries({ queryKey: ["userPosts", userId, TABS.BOOKMARKED] });
-    },
-    onError: () => {
-      toast({
-        variant: "destructive",
-        title: "Post cannot be deleted",
-        description: `Contact our support ${config.site.supportEmail}.`,
-      });
-    },
-  });
-  
-  const bookmarkMutation = useMutation<null, Error, bookmarkUserPostArgs>({
-    mutationFn: bookmarkUserPost,
-    onSuccess: () => {
-      setBookmarked(true);
-      toast({
-        variant: "default",
-        title: "Post bookmarked successfully",
-      });
-      queryClient.invalidateQueries({ queryKey: ["userPosts", userId, TABS.POSTS] });
-      queryClient.invalidateQueries({ queryKey: ["userPosts", userId, TABS.BOOKMARKED] });
-      queryClient.invalidateQueries({ queryKey: ["userPosts", userId, TABS.FOLLOWING] });
-    },
-    onError: () => {
-      toast({
-        variant: "destructive",
-        title: "Failed to bookmark post",
-        description: `Contact our support ${config.site.supportEmail}.`,
-      });
-    },
-  });
-
-  const unBookmarkMutation = useMutation<null, Error, unBookmarkUserPostArgs>({
-    mutationFn: unBookmarkUserPost,
-    onSuccess: () => {
-      setBookmarked(false);
-      toast({
-        variant: "default",
-        title: "Post unbookmarked successfully",
-      });
-      queryClient.invalidateQueries({ queryKey: ["userPosts", userId, TABS.POSTS] });
-      queryClient.invalidateQueries({ queryKey: ["userPosts", userId, TABS.BOOKMARKED] });
-      queryClient.invalidateQueries({ queryKey: ["userPosts", userId, TABS.FOLLOWING] });
-    },
-    onError: () => {
-      toast({
-        variant: "destructive",
-        title: "Failed to unbookmark post",
-        description: `Contact our support ${config.site.supportEmail}.`,
-      });
-    },
-  });
+  const { deletePostMutation, bookmarkMutation, unBookmarkMutation } = usePostMutations(userId, postId, activeTab);
+  const { isLoading, isError, error } = useCombinedMutationState(
+    deletePostMutation,
+    bookmarkMutation,
+    unBookmarkMutation
+  );
 
   const toggleBookmark = () => {
-    if(userSession)
+    if (userSession) {
       if (bookmarked) {
-        unBookmarkMutation.mutate({ userId: userSession?.user.id, postId });
+        unBookmarkMutation.mutate({ userId: userSession.user.id, postId });
+        setBookmarked(false)
       } else {
-        bookmarkMutation.mutate({ userId: userSession?.user.id, postId });
+        bookmarkMutation.mutate({ userId: userSession.user.id, postId });
+        setBookmarked(true)
       }
+    }
   };
 
   return (
     <div className="px-5 pb-20" ref={ref}>
-      {(deletePostMutation.isPending || bookmarkMutation.isPending || unBookmarkMutation.isPending) && <LoadingBoundary />}
+      {isLoading && <LoadingBoundary />}
       <ErrorBoundary
-        isError={deletePostMutation.isError || bookmarkMutation.isError || unBookmarkMutation.isError}
-        errorComponent={
-          deletePostMutation.isError ? (
-            <p>{deletePostMutation.error?.message}</p>
-          ) : bookmarkMutation.isError ? (
-            <p>{bookmarkMutation.error?.message}</p>
-          ) : unBookmarkMutation.isError ? (
-            <p>{unBookmarkMutation.error?.message}</p>
-          ) : null
-        }
+        isError={isError}
+        errorComponent={<p>{error?.message}</p>}
       >
-      {(!deletePostMutation.isPending || !bookmarkMutation.isPending || !unBookmarkMutation.isPending) && (
+        {!isLoading && (
           <div className={`flex flex-col gap-2 justify-center ${isRestricted ? "bg-destructive/20 p-2 rounded-sm" : ""}`}>
             <div className="flex items-center gap-5">
-            <ProfileHeader userId={userId} image={image} name={name} email={email} createdAt={createdAt} reason={reason} isRestricted={isRestricted}/>
-            <PostActions
-            isOwner={isOwner}
-              isBookMarked={bookmarked}
-              onToggleBookmark={toggleBookmark}
-              onDelete={() => deletePostMutation.mutate({ postId, userId })}
-              activeTab={activeTab}
-            />
+              <PostHeader
+                userId={userId}
+                image={image}
+                name={name}
+                email={email}
+                createdAt={createdAt}
+                reason={reason}
+                isRestricted={isRestricted}
+              />
+              <PostActions
+                isOwner={isOwner}
+                isBookMarked={bookmarked}
+                onToggleBookmark={toggleBookmark}
+                onDelete={() => deletePostMutation.mutate({ postId, userId })}
+                activeTab={activeTab}
+              />
             </div>
             <PostContent content={content} />
-            <PostStats
-              viewsNumber={viewsNumber}
-              likes={likes}
-              disLikes={disLikes}
-              commentsCount={commentsCount}
-            />
+            <PostStats viewsNumber={viewsNumber} likes={likes} disLikes={disLikes} commentsCount={commentsCount} />
           </div>
         )}
       </ErrorBoundary>
