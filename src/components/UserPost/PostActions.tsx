@@ -2,6 +2,8 @@ import { Bookmark, Edit, Trash } from "lucide-react";
 import useBookmark from "@/hooks/useBookmark";
 import useUnbookmark from "@/hooks/useUnbookmark";
 import useDeletePost from "@/hooks/useDeletePost";
+import routes from "@/services/routes";
+import Link from "next/link";
 
 interface PostActionsProps {
   viewerId: string;
@@ -45,12 +47,16 @@ const PostActions: React.FC<PostActionsProps> = ({
         className={`w-5 transition-colors hover:fill-blue-500 ${isBookmarked ? "fill-blue-500" : ""}`}
       />
       {isOwner && (
+        <>
         <Trash
           onClick={handleDelete}
           className="w-5 hover:fill-destructive transition-colors"
         />
+      <Link href={`${routes.post.edit.path}/${viewerId}`}>
+        <Edit className="w-5 hover:fill-muted-background" />
+      </Link>
+      </>
       )}
-      <Edit className="w-5 hover:fill-muted-background" />
     </div>
   );
 };

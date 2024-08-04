@@ -10,8 +10,9 @@ export const resetPasswordTokenRoute = "/reset/password/token";
 export const userRoute = "/user";
 export const settingsRoute = "/settings";
 export const notificationsRoute = "/notifications";
-export const postRoute = "post/"
+export const postRoute = "/post"
 export const newPostRoute = "/post/new";
+export const editPostRoute = "/post/edit";
 export const historyRoute = "/history";
 export const leaderboardRoute = "/leaderboard";
 export const searchRoute = "/search";
@@ -42,7 +43,8 @@ const routes = {
   },
   post: {
     new: { path: newPostRoute },
-    index: {path: postRoute}
+    index: {path: postRoute},
+    edit: {path: editPostRoute}
   },
   search:{
     index: { path : searchRoute}
