@@ -15,14 +15,14 @@ export default function SideBar() {
         <CategoryItem colorClass="yellow-600" text="@stitches/react" />
       </CollapsibleSection>
 
-      <CollapsibleSection title="Resources">
-        <ResourceItem icon={<Rss className="h-4 w-4" />} text="Website" href="" />
-        <ResourceItem icon={<BookOpen className="h-4 w-4" />} text="@stitches/react" />
-      </CollapsibleSection>
-
       <CollapsibleSection title="Tags">
         <TagItem text="@radix-ui/colors" />
         <TagItem text="@stitches/react" />
+      </CollapsibleSection>
+
+      <CollapsibleSection title="Resources">
+        <ResourceItem icon={<Rss className="h-4 w-4" />} text="Website" href="" />
+        <ResourceItem icon={<BookOpen className="h-4 w-4" />} text="@stitches/react" />
       </CollapsibleSection>
     </div>
   );

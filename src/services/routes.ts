@@ -14,6 +14,7 @@ export const postRoute = "post/"
 export const newPostRoute = "/post/new";
 export const historyRoute = "/history";
 export const leaderboardRoute = "/leaderboard";
+export const searchRoute = "/search";
 
 const routes = {
   auth: {
@@ -41,6 +42,9 @@ const routes = {
   post: {
     new: { path: newPostRoute },
     index: {path: postRoute}
+  },
+  search:{
+    index: { path : ""}
   },
   redirects: {
     onUnAuthenticated: signInRoute,

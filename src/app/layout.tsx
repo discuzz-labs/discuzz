@@ -78,7 +78,7 @@ export default async function RootLayout({
   // side is the easiest way to get started
   const messages = await getMessages();
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html lang="en-GB" suppressHydrationWarning>
       <body className={`${inter.className}`}>
         <QueryProvider>
           <AuthProvider>

@@ -6,6 +6,9 @@ import { Badge } from "@/components/ui/badge";
 import getUserLevel, { minPointsToBeVerified } from "@/services/points";
 import { UserWithCounts } from "@/types/types";
 import routes from "@/services/routes";
+import { formatDate } from "@/lib/utils";
+import { useLocale } from 'next-intl';
+import type { availableLocales } from '@/i18n.settings';
 
 interface UserProfileProps {
  user: UserWithCounts;
@@ -50,7 +53,7 @@ export default function UserProfile({
           <div className="flex items-center gap-5">
             <p className="flex items-center text-muted-foreground text-sm gap-2">
               <CalendarDays className="h-4 w-4" />
-              <span>Joined on {user.createdAt.toLocaleDateString()}</span>
+              <span>Joined on {formatDate(user.createdAt, useLocale() as availableLocales)}</span>
             </p>
             {user.links &&
               user.links.map((link, index) => (

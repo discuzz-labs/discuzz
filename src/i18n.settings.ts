@@ -1,6 +1,7 @@
 export const translationFolder = "../public/lang/"
-export const availableLocales = ["en", "de"]
-export const defaultLocale = "en"
+export type availableLocales = 'en-GB' | 'fr-FR' | 'de-DE'
+export const availableLocales = ["en-GB", "de-De"]
+export const defaultLocale = "en-GB"
 
 export const translationPath = [
     '/verify.json',

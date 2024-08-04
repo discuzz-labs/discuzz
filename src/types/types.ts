@@ -1,4 +1,4 @@
-import messages from "../lang/en/messages.json";
+import messages from "../lang/en-GB/messages.json";
 import { ProviderName } from "@/OAuthProviders/OAuthProviders";
 import { Bookmark, Post, Prisma, User } from "@prisma/client";
 
