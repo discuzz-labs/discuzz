@@ -1,6 +1,6 @@
 import messages from "../lang/en/messages.json";
 import { ProviderName } from "@/OAuthProviders/OAuthProviders";
-import { Bookmark, Post, User } from "@prisma/client";
+import { Bookmark, Post, Prisma, User } from "@prisma/client";
 
 export type DatabaseResponse<T = null> = {
   error: any;
@@ -25,25 +25,32 @@ export type OAuthProviderConfig = {
   providerDisplayName: string;
 };
 
-export type UserWithCounts = User & {
-  _count: {
-    followers: number;
-    following: number;
-  }
-};
+export type UserWithCounts = Prisma.UserGetPayload<{
+  include: {
+    _count: {
+      select: {
+        posts: true;
+      };
+    };
+  };
+}>;
 
-export type PostsWithCounts = Post & {
-  author: {
-    name: string;
-    email: string;
-    image: string;
-    id: string;
+export type PostWithAuthor = Prisma.PostGetPayload<{
+  include: {
+    author: {
+      select: {
+        id: true;
+        email: true;
+        image: true;
+        name: true;
+      };
+    },
+    _count: {
+      select: {
+        comments: true,
+      }
+    }
   };
-  _count: {
-    comments: number;
-  };
-  bookmarks: Bookmark[];
-  isBookmarked: boolean; 
-};
+}>;
 
 export type ErrorCodes = keyof typeof messages.error;

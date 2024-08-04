@@ -1,4 +1,4 @@
-import { Button } from "../ui/button";
+import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import routes from "@/services/routes";
 import { useTranslations } from "next-intl";

@@ -4,16 +4,11 @@ import Header from "@/components/Header";
 import AuthForm from "@/components/AuthForm";
 import AuthLayoutStyle from "@/styles/AuthLayoutStyle";
 import { ResetPasswordFormSchemaSecondStep } from "@/services/schemas";
-import { z } from "zod";
-import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
 import SuccessBoundary from "@/components/SuccessBoundary";
-import ErrorBoundary from "@/components/ErrorBoundary";
-import Spinner from "@/components/Spinner";
-import useResetPasswordToken from "@/hooks/useResetPasswordToken";
-import { Check, ShieldAlert } from "lucide-react";
-import routes from "@/services/routes";
+import useResetPassword from "@/hooks/useResetPassword";
 import Alert from "@/components/Alert";
+import LoadingBoundary from "@/components/LoadingBoundary";
 
 interface ResetPasswordTokenLayoutProps {
   token: string;
@@ -27,7 +22,7 @@ export default function ResetPasswordTokenLayout({
   const translateSuccess = useTranslations("messages.success");
 
   const { isError, error, isSuccess, isPending, mutate } =
-    useResetPasswordToken(token);
+  useResetPassword(token);
 
   return (
     <AuthLayoutStyle>
@@ -43,11 +38,7 @@ export default function ResetPasswordTokenLayout({
         isSuccess={isSuccess}
         message={translateSuccess("RESET_PASSWORD_SUCCESS")}
       />
-      {isPending && (
-        <div className="flex gap-2">
-          <Spinner /> {translate("pending")}
-        </div>
-      )}
+      {isPending && <LoadingBoundary />}
       <AuthForm
         schema={ResetPasswordFormSchemaSecondStep}
         formSubmitted={isPending}

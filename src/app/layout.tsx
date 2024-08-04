@@ -14,7 +14,7 @@ import QueryProvider from "@/providers/QueryProvider";
 
 const inter = Montserrat({
   subsets: ["latin"],
-  weight: ["100", "300", "400", "800"],
+  weight: ["100", "300", "400","500", "800"],
 });
 
 export const metadata: Metadata = {

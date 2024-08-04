@@ -21,7 +21,7 @@ import ProfileImage from "../ProfileImage";
 import { useSession, signOut } from "next-auth/react";
 import routes from "@/services/routes";
 import Link from "next/link";
-import { Button } from "../ui/button";
+import { Button } from "@/components/ui/button";
 
 interface UserActionsProps {
   userName: string;

@@ -141,13 +141,11 @@ export default class Profile {
         updatedAt: true,
         _count: {
           select: {
-            followers: true,
-            following: true,
+            posts: true
           },
         },
       },
     });
-
     return {
       data: user,
       success: true,
@@ -202,71 +200,5 @@ export default class Profile {
     };
   }
 
-  public async following(): Promise<DatabaseResponse<Partial<Follow>[]>> {
-    const following = await prisma.follow.findMany({
-      where: { followerId: this.id as string },
-      select: { followingId: true },
-    });
-    return {
-      success: true,
-      data: following,
-      error: null,
-    };
-  }
-
-  public async followers(): Promise<DatabaseResponse<Partial<Follow>[]>> {
-    const followers = await prisma.follow.findMany({
-      where: { followerId: this.id as string },
-      select: { followerId: true },
-    });
-    return {
-      success: true,
-      data: followers,
-      error: null,
-    };
-  }
-
-  public async isFollowing(followingId: string): Promise<boolean> {
-    const existingFollow = await prisma.follow.findUnique({
-      where: {
-        followerId_followingId: {
-          followerId: this.id as string,
-          followingId,
-        },
-      },
-    });
-  
-    return !!existingFollow;
-  }
-
-  public async follow(followingId: string): Promise<DatabaseResponse<Follow>> {
-      const newFollow = await prisma.follow.create({
-        data: {
-          followerId: this.id as string,
-          followingId,
-        },
-      });
-  
-      return {
-        success: true,
-        data: newFollow,
-        error: null,
-      };
-  }
-
-  public async unfollow(followingId: string): Promise<DatabaseResponse<null>> {
-    await prisma.follow.deleteMany({
-      where: {
-          followerId: this.id as string,
-          followingId,
-        },
-      });
-  
-      return {
-        success: true,
-        data: null,
-        error: null,
-      };
-  }
   
 }

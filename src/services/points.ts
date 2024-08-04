@@ -1,23 +1,27 @@
+// Interfaces and Types
 interface PointsSystem {
   newPost: number;
   newComment: number;
   likeOnPost: number;
   likeOnComment: number;
-  follower: number;
 }
-
-export const pointsSystem: PointsSystem = {
-  newPost: 100,
-  newComment: 10,
-  likeOnPost: 200,
-  likeOnComment: 50,
-  follower: 50000,
-};
 
 interface Level {
   name: string;
   minPoints: number;
 }
+
+// Constants
+export const pointsSystem: PointsSystem = {
+  newPost: 100,
+  newComment: 10,
+  likeOnPost: 200,
+  likeOnComment: 50,
+};
+
+export const minPointsToBeVerified = 500;
+export const minPointsToCreateCategory = minPointsToBeVerified;
+export const minPointsToCreateKeywords = minPointsToBeVerified;
 
 const levels: Level[] = [
   { name: "BRONZE", minPoints: 0 },
@@ -28,7 +32,12 @@ const levels: Level[] = [
   { name: "LEGENDARY", minPoints: 50000 },
 ];
 
-// Function to determine user level based on points
+/**
+ * Determines the user level based on the provided points.
+ *
+ * @param points - The total points of the user.
+ * @returns The corresponding user level.
+ */
 export default function getUserLevel(points: number): Level {
   return (
     levels

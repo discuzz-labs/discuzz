@@ -1,21 +1,15 @@
-import { useMutation } from "@tanstack/react-query";
-import sendVerificationEmail from "@/actions/verify/sendVerificationEmail";
-import createToken from "@/actions/createToken";
+import { useQuery } from "@tanstack/react-query";
+import verifyToken from "@/actions/verifyToken";
+import verifyUser from "@/actions/verify/verifyUser";
 
-const useVerifyEmail = (email: string | undefined) => {
-  return useMutation<void, Error, void>({
-    mutationFn: async () => {
-      if (!email) {
-        throw new Error("Email is required for verification.");
-      }
-
-      const token = await createToken({ email });
-      await sendVerificationEmail({
-        email,
-        userName: "",
-        token,
-      });
-    },
+const useVerifyEmail = (token: string) => {
+  return useQuery({
+    queryKey: ["verifyUserEmail", token],
+    queryFn: async () => {
+      const email = await verifyToken({ token });
+      await verifyUser({ email });
+      return email;
+    }
   });
 };
 

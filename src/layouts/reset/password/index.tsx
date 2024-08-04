@@ -7,7 +7,7 @@ import Alert from "@/components/Alert";
 import AuthLayoutStyle from "@/styles/AuthLayoutStyle";
 import { useTranslations } from "next-intl";
 import { ResetPasswordFormSchemaFirstStep } from "@/services/schemas";
-import useResetPassword from "@/hooks/useResetPassword";
+import useResetPasswordRequest from "@/hooks/useResetPasswordRequest";
 import SuccessBoundary from "@/components/SuccessBoundary";
 import ErrorBoundary from "@/components/ErrorBoundary";
 import Spinner from "@/components/Spinner";
@@ -17,7 +17,7 @@ export default function ResetPasswordLayout() {
   const translateError = useTranslations("messages.error");
   const translateSuccess = useTranslations("messages.success");
 
-  const { isError, error, isSuccess, isPending, mutate } = useResetPassword();
+  const { isError, error, isSuccess, isPending, mutate } = useResetPasswordRequest();
 
   return (
     <AuthLayoutStyle>

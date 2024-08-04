@@ -2,14 +2,14 @@
 
 import Header from "@/components/Header";
 import Alert from "@/components/Alert";
-import Spinner from "@/components/Spinner";
 import { useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
 import AuthLayoutStyle from "@/styles/AuthLayoutStyle";
 import { useTranslations } from "next-intl";
-import useVerifyUserEmail from "@/hooks/useVerifyUserEmail";
+import useVerifyEmail from "@/hooks/useVerifyEmail";
 import { useEffect } from "react";
 import routes from "@/services/routes";
+import LoadingBoundary from "@/components/LoadingBoundary";
 
 interface VerifyTokenLayoutProps {
   token: string;
@@ -18,10 +18,9 @@ interface VerifyTokenLayoutProps {
 export default function VerifyTokenLayout({ token }: VerifyTokenLayoutProps) {
   const router = useRouter();
   const translateError = useTranslations("messages.error");
-  const translatePending = useTranslations("messages.pending");
 
   const { data: userSession, update } = useSession();
-  const { isError, isSuccess, isFetching, error } = useVerifyUserEmail(token);
+  const { isError, isSuccess, isFetching, error } = useVerifyEmail(token);
 
   useEffect(() => {
     const handleUpdateSession = async () => {
@@ -41,11 +40,7 @@ export default function VerifyTokenLayout({ token }: VerifyTokenLayoutProps) {
           {translateError(error?.message || "An error occurred")}
         </Alert>
       )}
-      {isFetching && (
-        <div className="flex gap-2">
-          <Spinner /> {translatePending("VERIFICATION_VERIFYING_EMAIL")}
-        </div>
-      )}
+      {isFetching && <LoadingBoundary />}
     </AuthLayoutStyle>
   );
 }

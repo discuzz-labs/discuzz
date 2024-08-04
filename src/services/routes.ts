@@ -10,6 +10,7 @@ export const resetPasswordTokenRoute = "/reset/password/token";
 export const userRoute = "/user";
 export const settingsRoute = "/settings";
 export const notificationsRoute = "/notifications";
+export const postRoute = "post/"
 export const newPostRoute = "/post/new";
 export const historyRoute = "/history";
 export const leaderboardRoute = "/leaderboard";
@@ -39,6 +40,7 @@ const routes = {
   },
   post: {
     new: { path: newPostRoute },
+    index: {path: postRoute}
   },
   redirects: {
     onUnAuthenticated: signInRoute,

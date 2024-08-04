@@ -8,22 +8,50 @@ generator client {
 }
 
 model Post {
-  id          String     @id @default(auto()) @map("_id") @db.ObjectId
+  id          String        @id @default(auto()) @map("_id") @db.ObjectId
   title       String
   content     String
-  createdAt   DateTime   @default(now())
+  createdAt   DateTime      @default(now())
   viewsNumber Int
   likes       Int
   disLikes    Int
   language    String
-  isRestricted Boolean
   reason      ReportType
-  updatedAt   DateTime   @updatedAt
-  author      User       @relation("UserPosts", fields: [authorId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  authorId    String     @db.ObjectId
-  comments    Comment[]  @relation("PostComments")
-  bookmarks   Bookmark[] @relation("PostBookmarks")
+  status      PostStatus
+  updatedAt   DateTime      @updatedAt
+  author      User          @relation("UserPosts", fields: [authorId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  authorId    String        @db.ObjectId
+  comments    Comment[]     @relation("PostComments")
+  bookmarks   Bookmark[]    @relation("PostBookmarks")
+  category    Category      @relation("CategoryPosts", fields: [categoryId], references: [id])
+  categoryId  String        @db.ObjectId
+  postKeywords PostKeyword[] // Join table for Post and Keywords relationship
 }
+
+model Keywords {
+  id    String        @id @default(auto()) @map("_id") @db.ObjectId
+  name  String        @unique
+  postKeywords PostKeyword[] // Join table for Keywords and Post relationship
+}
+
+model PostKeyword {
+  id         String   @id @default(auto()) @map("_id") @db.ObjectId
+  postId     String   @db.ObjectId
+  keywordId  String   @db.ObjectId
+  post       Post     @relation(fields: [postId], references: [id])
+  keyword    Keywords @relation(fields: [keywordId], references: [id])
+
+  @@unique([postId, keywordId])
+}
+
+
+model Category {
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  name        String   @unique
+  description String?
+  posts       Post[]   @relation("CategoryPosts")
+}
+
 
 model Report {
   id                   String     @id @default(auto()) @map("_id") @db.ObjectId
@@ -70,8 +98,6 @@ model User {
   updatedAt     DateTime     @updatedAt
   posts         Post[]       @relation("UserPosts")
   comments      Comment[]    @relation("UserComments")
-  following     Follow[]     @relation("Following")
-  followers     Follow[]     @relation("Followers")
   reportedBy    Report[]     @relation("ReportingModerator")
   reports       Report[]     @relation("ReportedUser")
   preferences   Preferences?
@@ -95,17 +121,6 @@ model Preferences {
   userId               String  @unique @db.ObjectId
   theme                String?
   notificationsEnabled Boolean @default(true)
-}
-
-model Follow {
-  id          String   @id @default(auto()) @map("_id") @db.ObjectId
-  follower    User     @relation("Followers", fields: [followerId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  followerId  String   @db.ObjectId
-  following   User     @relation("Following", fields: [followingId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  followingId String   @db.ObjectId
-  createdAt   DateTime @default(now())
-
-  @@unique([followerId, followingId])
 }
 
 enum ReportType {
@@ -134,4 +149,11 @@ enum Role {
   USER
   MODERATOR
   ADMIN
+}
+
+enum PostStatus {
+  ANSWERED
+  RESTRICTED
+  OPEN
+  CLOSED
 }

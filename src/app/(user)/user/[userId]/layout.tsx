@@ -1,5 +1,5 @@
 export const metadata = {
-  title: `Dashboard`,
+  title: `User`,
 };
 
 export default function RootLayout({
