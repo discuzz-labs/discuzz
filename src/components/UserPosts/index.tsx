@@ -1,6 +1,7 @@
 import useUserPosts from "@/hooks/useUserPosts";
 import UserPost from "@/components/UserPost";
 import usePostFilter from "@/hooks/useFilter";
+import LoadingBoundary from "../LoadingBoundary";
 
 interface UserPostsProps {
   userId: string;
@@ -13,7 +14,7 @@ export default function UserPosts({
   isOwner,
 }: UserPostsProps) {
   const { currentFilters } = usePostFilter();
-  const { ref, posts } = useUserPosts({
+  const { ref, posts, isPending, isFetchingNextPage } = useUserPosts({
     userId,
     isOwner,
     filter: currentFilters,
@@ -21,6 +22,7 @@ export default function UserPosts({
 
   return (
     <div>
+      {(isPending || isFetchingNextPage) && <LoadingBoundary />}
       <div className="flex flex-col items-center justify-center gap-10 space-2 mt-10">
         {posts &&
           posts.pages.map((page) => {

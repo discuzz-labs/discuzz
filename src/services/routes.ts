@@ -17,6 +17,7 @@ export const leaderboardRoute = "/leaderboard";
 export const searchRoute = "/search";
 
 const routes = {
+  home: homeRoute,
   auth: {
     signIn: { index: { path: signInRoute } },
     signUp: { index: { path: signUpRoute } },
@@ -44,7 +45,7 @@ const routes = {
     index: {path: postRoute}
   },
   search:{
-    index: { path : ""}
+    index: { path : searchRoute}
   },
   redirects: {
     onUnAuthenticated: signInRoute,

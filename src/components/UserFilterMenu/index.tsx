@@ -3,13 +3,14 @@ import { Button } from "@/components/ui/button";
 import { Route } from "@/app/(user)/user/[userId]/routeType";
 import useFilter from "@/hooks/useFilter";
 import FilterSelect, { filterOptions, orderOptions, statusOptions } from "./FilterSelect";
+import { FilterX } from "lucide-react";
 
 interface UserFilterMenuProps {
   filters: z.infer<typeof Route.searchParams>;
 }
 
 export default function UserFilterMenu() {
-  const { setFilter, currentFilters } = useFilter();
+  const { setFilter, currentFilters, clearFilters } = useFilter();
 
   // Function to handle filter change and toggle bookmarked filter
   const handleFilterChange = (filterType: keyof UserFilterMenuProps["filters"], value: string) => {
@@ -29,7 +30,7 @@ export default function UserFilterMenu() {
           onClick={toggleBookmarkFilter}
           variant="outline"
           size="sm"
-          className="h-7 gap-1 text-sm"
+          className="h-7 text-sm"
         >
           {currentFilters.bookmarked === true ? "Show All" : "Bookmarked"}
         </Button>
@@ -39,9 +40,6 @@ export default function UserFilterMenu() {
           onChange={(value) => handleFilterChange("status", value)}
           label="Status"
         />
-      </div>
-
-      <div className="flex items-center gap-2">
         <FilterSelect
           options={filterOptions}
           onChange={(value) => handleFilterChange("filter", value)}
@@ -53,6 +51,16 @@ export default function UserFilterMenu() {
           onChange={(value) => handleFilterChange("order", value)}
           label="Order By"
         />
+      </div>
+      <div className="flex items-center gap-2">
+      <Button
+          onClick={() => clearFilters()}
+          variant="outline"
+          size="sm"
+          className="flex items-center h-7 gap-1 text-sm"
+        >
+          <FilterX className="w-4 h-4"/> Clear filter
+        </Button>
       </div>
     </div>
   );

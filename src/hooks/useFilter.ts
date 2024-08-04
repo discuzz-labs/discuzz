@@ -43,5 +43,9 @@ export default function useFilter() {
     router.push(`?${currentParams.toString()}`, { scroll: false });
   }, [router, searchParams]);
 
-  return { currentFilters, setFilter };
+  const clearFilters = useCallback(() => {
+    router.push(`?`, { scroll: false });
+  }, [router]);
+
+  return { currentFilters, setFilter, clearFilters };
 }

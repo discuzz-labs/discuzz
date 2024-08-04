@@ -19,7 +19,7 @@ export default function ProfileImage({
 
   return (
     <div className={className}>
-      <Avatar className={`border-4 border-input`}>
+      <Avatar>
         <AvatarImage
           className={`h-${size} w-${size}`}
           src={
