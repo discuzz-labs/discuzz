@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import config from "@/lib/config";
+import config from "@/config";
 import { useTheme } from "next-themes";
 import Link from "next/link";
 import { useEffect, useState } from "react";
@@ -19,11 +19,11 @@ export default function Logo() {
         <Link href="/">
           <Image
             src={
+                ? (config.theme.lightLogo)
               resolvedTheme === "light"
-                ? (config.theme.lightLogo as string)
-                : (config.theme.darkLogo as string)
+                : (config.theme.darkLogo)
             }
-            alt={`${config.metadata.title}`}
+            alt={`${config.title}`}
             width={0}
             height={0}
             className="min-w-[100px]"

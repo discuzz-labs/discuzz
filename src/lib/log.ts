@@ -1,6 +1,5 @@
 "use server"
 
-
 const logger = require("log-to-file");
 
 // Define the logs directory

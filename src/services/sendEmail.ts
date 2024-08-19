@@ -1,7 +1,7 @@
 import nodemailer from "nodemailer";
 import Mail from "nodemailer/lib/mailer";
 import { render } from "@react-email/components";
-import config from "@/lib/config";
+import config from "@/config";
 import { JSXElementConstructor, ReactElement } from "react";
 import { log } from "console";
 
@@ -39,7 +39,7 @@ const sendEmail = ({
     from: config.email.sender,
     to: email,
     // cc: config.email.sender, (uncomment this line if you want to send a copy to the sender)
-    subject: `${subject} - ${config.metadata.name}`,
+    subject: `${subject} - ${config.name}`,
     html: emailHtml,
   };
 

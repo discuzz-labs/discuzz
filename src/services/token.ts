@@ -1,4 +1,4 @@
-import config from "@/lib/config";
+import config from "@/config";
 import log from "@/lib/log";
 const jwt = require("jsonwebtoken");
 
@@ -12,7 +12,7 @@ function generatetoken(
   } | null;
 } {
   try {
-    var token = jwt.sign({ email }, config.site.appKey, {
+    var token = jwt.sign({ email }, config.appKey, {
       algorithm: "HS512",
       expiresIn: expirationDate,
     });
@@ -38,7 +38,7 @@ function checktoken(token: string): {
   } | null;
 } {
   try {
-    var decodedToken = jwt.verify(token, config.site.appKey, {
+    var decodedToken = jwt.verify(token, config.appKey, {
       algorithms: ["HS512"],
     });
     return {

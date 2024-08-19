@@ -1,4 +1,4 @@
-import config from "@/lib/config";
+import config from "@/config";
 import routes from "@/services/routes";
 export const subject = "Reset password";
 import {
@@ -26,15 +26,15 @@ const ResetPasswordEmailTemplate = ({
   return (
     <Html>
       <Head />
-      <Preview>{config.metadata.title as string} verify your email</Preview>
+      <Preview>{config.name} verify your email</Preview>
       <Body style={main}>
         <Container style={container}>
           <div style={{ padding: "45px" }}>
             <Img
-              src={`${config.site.url}/${config.metadata.logo}`}
+              src={`${config.url}/${config.logo}`}
               width="100"
               height=""
-              alt={config.metadata.name}
+              alt={config.name}
             />
 
             <Section>
@@ -43,15 +43,15 @@ const ResetPasswordEmailTemplate = ({
               <Text>click the button below to reset your password:</Text>
               <Button
                 style={button}
-                href={`${config.site.url}${routes.auth.reset.password.token.path}/${token}`}
+                href={`${config.url}${routes.auth.reset.password.token.path}/${token}`}
               >
                 Reset Password.
               </Button>
               <Text>or click the link below:</Text>
               <Link
-                href={`${config.site.url}${routes.auth.reset.password.token.path}/${token}`}
+                href={`${config.url}${routes.auth.reset.password.token.path}/${token}`}
               >
-                {`${config.site.url}${routes.auth.reset.password.token.path}/${token}`}
+                {`${config.url}${routes.auth.reset.password.token.path}/${token}`}
               </Link>
               <Text style={text}>
                 To keep your account secure, please don&apos;t forward this

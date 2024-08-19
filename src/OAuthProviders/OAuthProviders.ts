@@ -1,14 +1,13 @@
 import GithubProvider, { GithubProfile } from "next-auth/providers/github";
 import { OAuthProviderConfig, OAuthUserProfile } from "@/types/types";
 import signUpWithOauth from "@/actions/sign-up/signUpWithOauth";
-
-export type ProviderName = "github";
+import { getEnvVar } from "@/lib/utils";
 
 const OAuthProviders: OAuthProviderConfig[] = [
   {
     provider: GithubProvider({
-      clientId: process.env.GITHUB_CLIENT_ID as string,
-      clientSecret: process.env.GITHUB_CLIENT_SECRET as string,
+      clientId: getEnvVar("GITHUB_CLIENT_ID"),
+      clientSecret: getEnvVar("GITHUB_CLIENT_SECRET"),
       async profile(profile: GithubProfile) {
         try {
           const signUpWithOauthAction = await signUpWithOauth({

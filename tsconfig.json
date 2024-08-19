@@ -25,6 +25,6 @@
       "@/components": ["src/components"]
     }
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "src/types/next-auth.d.ts", "global.d.ts", "prisma/seed.js"],
-  "exclude": ["node_modules", "./src/stories"]
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "src/types/next-auth.d.ts", "global.d.ts", "start.ts"],
+  "exclude": ["node_modules"]
 }

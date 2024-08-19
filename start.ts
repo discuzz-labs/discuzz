@@ -1,20 +1,10 @@
 const url = require("is-url");
 
+
 const build = async () => {
   if (process.env.NODE_ENV === "development") {
     // CHECK REQUIRED ENV VARIABELS
     const requiredEnvVariables = [
-      "NEXT_PUBLIC_METADATA_NAME",
-      "NEXT_PUBLIC_METADATA_TITLE",
-      "NEXT_URL",
-      "NEXT_PUBLIC_SENDER_EMAIL",
-      "NEXT_PUBLIC_SENDER_EMAIL_PASSWORD",
-      "NEXT_PUBLIC_SENDER_EMAIL_PROVIDER",
-      "APP_KEY",
-      "DATABASE_URL",
-      "NEXTAUTH_URL",
-      "NEXT_PUBLIC_SUPPORT_EMAIL"
-    ];
 
     const missingEnvVariables = requiredEnvVariables.filter(
       (envVar) => !process.env[envVar] || process.env[envVar]?.trim() === ""

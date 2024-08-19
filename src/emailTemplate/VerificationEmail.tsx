@@ -1,4 +1,4 @@
-import config from "@/lib/config";
+import config from "@/config";
 import routes from "@/services/routes";
 export const subject = "Verificationation Email";
 import {
@@ -22,12 +22,12 @@ const VerificationEmailTemplate = ({ userName, token }: VerificationEmailTemplat
   return (
     <Html>
       <Head />
-      <Preview>{config.metadata.title as string} - verify your email</Preview>
+      <Preview>{config.name as string} - verify your email</Preview>
       <Body style={main}>
         <Container style={container}>
           <div style={{  padding: "45px" }}>
           <Img
-            src={`${config.site.url}/${config.metadata.logo}`}
+            src={`${config.url}/${config.logo}`}
             width="100"
             height=""
             alt={config.metadata.name}
@@ -37,12 +37,12 @@ const VerificationEmailTemplate = ({ userName, token }: VerificationEmailTemplat
             <Text style={text}>Hello {userName},</Text>
             <Button
               style={button}
-              href={`${config.site.url}${routes.auth.verify.token.path}/${token}`}
+              href={`${config.url}${routes.auth.verify.token.path}/${token}`}
               >
               Verify your email
             </Button>
               <Text>
-              Verification Link: {`${config.site.url}${routes.auth.verify.token.path}/${token}`}
+              Verification Link: {`${config.url}${routes.auth.verify.token.path}/${token}`}
               </Text>
             <Text style={text}>
               To keep your account secure, please don&apos;t forward this email
