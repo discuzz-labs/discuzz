@@ -1,0 +1,20 @@
+run = "pnpm run dev"
+entrypoint = "index.js"
+modules = ["nodejs-20:v9-20231020-a3526c9"]
+hidden = [".config", "package-lock.json", ".next", ".swc"]
+
+[nix]
+channel = "stable-23_05"
+
+[env]
+NEXT_TELEMETRY_DISABLED = "1"
+PRISMA_CLI_QUERY_ENGINE_TYPE = "binary"
+
+[deployment]
+build = ["pnpm", "run", "build"]
+run = ["pnpm", "run", "start"]
+deploymentTarget = "cloudrun"
+
+[[ports]]
+localPort = 3000
+externalPort = 80

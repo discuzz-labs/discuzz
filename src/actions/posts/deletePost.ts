@@ -21,9 +21,6 @@ async function deletePost({ postId, userId }: deletePostArgs): Promise<null> {
 
     return null;
   } catch (err: any) {
-    console.log(
-      err
-    )
     if(err instanceof AppError) throw err
     log("actions", err, `ACTIONS ${__filename}`);
     throw new AppError("SERVER_ERROR");

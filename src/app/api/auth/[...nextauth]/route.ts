@@ -21,7 +21,6 @@ export const authOptions = {
             email: credentials?.email as string,
             password: credentials?.password as string,
           });
-
           return {
             email: signInWithCredAction.email,
             name: signInWithCredAction.name,
@@ -67,7 +66,7 @@ export const authOptions = {
     }),
     OAuthProviders.map((providerConfig) => providerConfig.provider),
   ],
-  // debug: process.env.NODE_ENV === "development",
+  debug: process.env.NODE_ENV === "development",
   secret: process.env.APP_KEY,
   session: {
     strategy: "jwt",
@@ -111,7 +110,6 @@ export const authOptions = {
     signOut: routes.auth.signOut.index.path,
     error: routes.auth.signIn.index.path,
   },
-  debug: true,
 };
 
 // @ts-ignore

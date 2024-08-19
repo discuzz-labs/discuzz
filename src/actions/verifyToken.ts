@@ -40,7 +40,6 @@ async function verifyToken({
   } catch (err : any) {
     if(err instanceof AppError) throw err
     log("actions", err, `ACTIONS ${__filename}`);
-    console.log(err);
     throw new AppError("SERVER_ERROR");
   }
 }

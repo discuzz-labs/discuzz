@@ -22,7 +22,7 @@ const SignInLayout = ({ errorParam }: SignInLayoutProps) => {
   const translateError = useTranslations("messages.error");
 
   const { isError, error, isPending, mutate } = useSignIn();
-
+  
   return (
     <AuthLayoutStyle>
       {(isError || errorParam) && (
