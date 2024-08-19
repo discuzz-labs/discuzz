@@ -1,6 +1,5 @@
 import { BadgeAlert } from "lucide-react";
 import { ReactNode } from "react";
-import config from "@/lib/config";
 
 interface ErrorBoundaryProps {
   children?: ReactNode;

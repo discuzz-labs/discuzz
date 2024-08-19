@@ -1,0 +1,43 @@
+{
+  "owner": "Discuzz NPF OSS",
+  "name": "Discuzz",
+  "title": "Discuzz - where the world asks!",
+  "logo": "/logos/logo.jpg",
+  "url" : "http://localhost:3000",
+  "metadata": {
+    "keywords": [],
+    "description": "Discuzz forum",
+    "category": "Blog, Forum"
+  },
+  "icons": {
+    "icon": "/logos/logo.jpg";
+    "apple": "/logos/logo.jpg";
+  },
+  "og": {
+    "url": "http://localhost:3000",
+    "images": "/logos/logo.jpg",
+    "title": "Discuzz",
+    "description": "Discuzz - The fully opensource blog project.",
+    "siteName": "Discuzz",
+    "locale": "en_GB"
+  },
+  "theme": {
+    "lightLogo": "/logos/logo.svg",
+    "darkLogo": "/logos/logo-dark.svg",
+    "defaultTheme": "light"
+  },
+  "email": {
+    "sender": "discuzz@outlook.de",
+    "provider": "outlook"
+  },
+  "contact": {
+    "address": "Germany 37431",
+    "supportEmail": "support@discuzz.com",
+  },
+  "twitter": {
+    "card": "summary_large_image",
+    "description": "Discuzz forum",
+    "images": "/logos/logo.jpg",
+  },
+  "resources" : {},
+}

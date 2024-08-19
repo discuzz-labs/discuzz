@@ -1,7 +1,7 @@
 "use client";
 
 import { homeRoute } from "@/services/routes";
-import config from "@/lib/config";
+import config from "@/config";
 import Link from "next/link";
 import { Separator } from "@/components/ui/separator";
 import { Headset, LayoutPanelLeft, Wifi } from "lucide-react";
@@ -24,7 +24,7 @@ export default function NotFound() {
           <Wifi /> Check your connection.
         </div>
         <div className="flex items-center gap-2">
-          <Headset /> Contact our support {config.site.supportEmail}
+          <Headset /> Contact our support {config.contact.supportEmail}
         </div>
         <div className="flex items-center gap-2">
           <LayoutPanelLeft /> <Link href={homeRoute}>Home</Link>
