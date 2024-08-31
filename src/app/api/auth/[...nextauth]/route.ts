@@ -4,6 +4,7 @@ import CredentialsProvider from "next-auth/providers/credentials";
 import signUpWithCred from "@/actions/sign-up/signUpWithCred";
 import routes from "@/services/routes";
 import OAuthProviders from "@/OAuthProviders/OAuthProviders";
+import { env } from "@/env"
 
 export const authOptions = {
   // Configure one or more authentication providers
@@ -67,7 +68,7 @@ export const authOptions = {
     OAuthProviders.map((providerConfig) => providerConfig.provider),
   ],
   debug: process.env.NODE_ENV === "development",
-  secret: process.env.APP_KEY,
+  secret: env.APP_KEY,
   session: {
     strategy: "jwt",
   },
@@ -75,7 +76,7 @@ export const authOptions = {
     // @ts-ignore
     async signIn({ profile, account }) {
       if (
-        OAuthProviders.map((providerConfig) => providerConfig.name).includes(
+        OAuthProviders.map((providerConfig) => providerConfig.provider.name).includes(
           account.provider
         ) &&
         profile.success === false

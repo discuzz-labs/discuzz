@@ -1,6 +1,7 @@
 import { withAuth } from "next-auth/middleware";
 import { NextResponse } from "next/server";
 import routes from "@/services/routes";
+import { env } from "@/env"
 
 export default withAuth(
   async function middleware(req) {
@@ -31,7 +32,7 @@ export default withAuth(
         return (!token && routes.isAuth(pathname)) || !!token;
       },
     },
-    secret: process.env.APP_KEY,
+    secret: env.APP_KEY,
     pages: {
       signIn: routes.auth.signIn.index.path,
     },

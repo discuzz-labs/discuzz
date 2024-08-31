@@ -1,6 +1,5 @@
 import messages from "../lang/en-GB/messages.json";
-import { ProviderName } from "@/OAuthProviders/OAuthProviders";
-import { Bookmark, Post, Prisma, User } from "@prisma/client";
+import { Prisma } from "@prisma/client";
 
 export type DatabaseResponse<T = null> = {
     error: any;
@@ -20,9 +19,6 @@ export type OAuthUserProfile = {
 
 export type OAuthProviderConfig = {
     provider: any;
-    name: ProviderName;
-    logo: string;
-    providerDisplayName: string;
 };
 
 export type UserWithCounts = Prisma.UserGetPayload<{
@@ -55,10 +51,7 @@ export type PostWithAuthor = Prisma.PostGetPayload<{
 
 export type ErrorCodes = keyof typeof messages.error;
 
-type ThemeType = "dark" | "light" | "system" | undefined;
-
 export type SiteConfig = {
-    appKey: string;
     name: string;
     logo: string;
     url: string;
@@ -85,24 +78,27 @@ export type SiteConfig = {
     theme: {
         lightLogo: string | undefined;
         darkLogo: string | undefined;
-        defaultTheme: ThemeType;
+        defaultTheme: string;
     };
     contact: {
         address: string;
         supportEmail: string;
     };
-
     resources: {
-        [string]: string;
+        [key: string] : string;
     };
     email: {
         provider: string;
         sender: string;
-        password: string;
     };
-
     icons: {
         icon: string;
         apple: string;
     };
+    OAuthProviders : 
+        {
+            name: string;
+            displayName: string;
+            logo: string;
+        }[]
 };

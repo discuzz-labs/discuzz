@@ -1,9 +1,7 @@
 import { SiteConfig } from "@/types/types";
-import { getEnvVar } from "@/lib/utils";
 import site from "../site.config.json";
 
-const config: SiteConfig = {
-    appKey: getEnvVar("APP_KEY")
+const config : SiteConfig = {
     name: site.name,
     logo: site.logo,
     url: site.url,
@@ -40,12 +38,12 @@ const config: SiteConfig = {
     email: {
         provider: site.email.provider,
         sender: site.email.sender,
-        password: getEnvVar("SENDER_EMAIL_PASSWORD")
     },
     icons: {
         icon: site.icons.icon,
         apple: site.icons.apple
     },
+    OAuthProviders : site.OAuthProviders
 };
 
 export default config;

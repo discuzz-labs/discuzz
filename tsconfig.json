@@ -25,6 +25,6 @@
       "@/components": ["src/components"]
     }
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "src/types/next-auth.d.ts", "global.d.ts", "start.ts"],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "src/types/next-auth.d.ts", "global.d.ts", "start.ts", "next.config.mjs", "src/env.js"],
   "exclude": ["node_modules"]
 }

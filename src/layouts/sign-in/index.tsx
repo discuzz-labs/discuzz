@@ -1,13 +1,12 @@
 "use client";
 
-import { z } from "zod";
+import config from "@/config"
 import { useTranslations } from 'next-intl';
 import Alert from "@/components/Alert";
 import AuthForm from "@/components/AuthForm";
 import Link from "next/link";
 import Header from "@/components/Header";
 import { Separator } from "@/components/ui/separator";
-import OAuthProviders from "@/OAuthProviders/OAuthProviders";
 import OAuthButton from "@/OAuthProviders/OAuthButton";
 import AuthLayoutStyle from "@/styles/AuthLayoutStyle";
 import useSignIn from "@/hooks/useSignIn";
@@ -32,10 +31,10 @@ const SignInLayout = ({ errorParam }: SignInLayoutProps) => {
         />
       )}
       <Header content={translate("title")} caption={translate("titleCaption")} />
-      {OAuthProviders.map((OAuthProvider) => (
+      {config.OAuthProviders.map((OAuthProvider) => (
         <OAuthButton
           key={OAuthProvider.name}
-          providerDisplayName={OAuthProvider.name}
+          providerDisplayName={OAuthProvider.displayName}
           name={OAuthProvider.name}
           logo={OAuthProvider.logo}
         />

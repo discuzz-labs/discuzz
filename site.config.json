@@ -10,8 +10,8 @@
     "category": "Blog, Forum"
   },
   "icons": {
-    "icon": "/logos/logo.jpg";
-    "apple": "/logos/logo.jpg";
+    "icon": "/logos/logo.jpg",
+    "apple": "/logos/logo.jpg"
   },
   "og": {
     "url": "http://localhost:3000",
@@ -32,12 +32,20 @@
   },
   "contact": {
     "address": "Germany 37431",
-    "supportEmail": "support@discuzz.com",
+    "supportEmail": "support@discuzz.com"
   },
   "twitter": {
+    "title":"Discuzz - where the world asks!",
     "card": "summary_large_image",
     "description": "Discuzz forum",
-    "images": "/logos/logo.jpg",
+    "images": "/logos/logo.jpg"
   },
-  "resources" : {},
+  "OAuthProviders": [
+    {
+      "name" : "github",
+      "displayName": "Github",
+      "logo": "/assets/github.svg"
+    }
+  ],
+  "resources" : {}
 }
