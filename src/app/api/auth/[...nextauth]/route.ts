@@ -22,6 +22,7 @@ export const authOptions = {
             email: credentials?.email as string,
             password: credentials?.password as string,
           });
+          console.log(signInWithCredAction)
           return {
             email: signInWithCredAction.email,
             name: signInWithCredAction.name,
@@ -30,6 +31,7 @@ export const authOptions = {
             id: signInWithCredAction.id,
           };
         } catch (err: any) {
+          console.log(err)
           throw new Error(err.message);
         }
       },
@@ -83,7 +85,7 @@ export const authOptions = {
       ) {
         throw new Error(profile.error);
       }
-      return true;
+      return false;
     },
 
     // @ts-ignore

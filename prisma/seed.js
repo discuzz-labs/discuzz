@@ -3,7 +3,8 @@ import { faker } from '@faker-js/faker';
 import bcrypt from "bcryptjs";
 
 const prisma = new PrismaClient();
-const password = "Npmnpmnpmnpm123$";
+const password = "Npmnpmnpmnpm123$"; // These arenot real at all
+const mainEmail = "admin@discuzz.com";
 
 async function main() {
   // Clear existing data
@@ -20,7 +21,7 @@ async function main() {
     {
       id: mainUserId,
       name: faker.person.fullName(),
-      email: faker.internet.email(),
+      email: mainEmail,
       emailVerified: faker.date.past(),
       image: faker.image.avatar(),
       password: bcrypt.hashSync(password, 10),

@@ -37,4 +37,4 @@ export default async function RootLayout({
   );
 }
 
-export metadata;
+export {metadata};

@@ -19,7 +19,7 @@ async function signInWithCred({
       email,
       password,
     }).login();
-    
+    console.log(login)
     if (login.success === false) {
       throw new AppError("LOGIN_FAILED_INVALID_CREDENTIALS");
     }

@@ -24,7 +24,7 @@ model Post {
   authorId    String        @db.ObjectId
   comments    Comment[]     @relation("PostComments")
   bookmarks   Bookmark[]    @relation("PostBookmarks")
-  category    Category      @relation("CategoryPosts", fields: [categoryId], references: [id])
+  category    Category      @relation("CategoryPosts", fields: [categoryId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   categoryId  String        @db.ObjectId
   postKeywords PostKeyword[] // Join table for Post and Keywords relationship
 }

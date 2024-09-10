@@ -3,7 +3,7 @@
   "name": "Discuzz",
   "title": "Discuzz - where the world asks!",
   "logo": "/logos/logo.jpg",
-  "url" : "http://localhost:3000",
+  "url" : "https://bca0569d-d434-4e0a-b9fc-c3620f8305df-00-3k7kmsl745hws.janeway.replit.dev/",
   "metadata": {
     "keywords": [],
     "description": "Discuzz forum",
@@ -22,8 +22,8 @@
     "locale": "en_GB"
   },
   "theme": {
-    "lightLogo": "/logos/logo.svg",
-    "darkLogo": "/logos/logo-dark.svg",
+    "lightLogo": "/logos/logo.jpg",
+    "darkLogo": "/logos/logo-dark.jpg",
     "defaultTheme": "light"
   },
   "email": {

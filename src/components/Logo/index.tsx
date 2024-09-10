@@ -19,9 +19,9 @@ export default function Logo() {
         <Link href="/">
           <Image
             src={
-                ? (config.theme.lightLogo)
-              resolvedTheme === "light"
-                : (config.theme.darkLogo)
+              resolvedTheme === "light" 
+              ? (config.theme.lightLogo) as string
+              : (config.theme.darkLogo) as string
             }
             alt={`${config.title}`}
             width={0}

@@ -20,6 +20,7 @@ const useSignIn = () => {
     if (!signInRequest?.ok) {
       throw new Error(signInRequest?.error as string);
     }
+    
     return true;
   };
 
@@ -29,7 +30,7 @@ const useSignIn = () => {
       router.push(routes.redirects.onAfterSignIn);
     },
   });
-
+  
   return { isError, error, isPending, mutate };
 };
 

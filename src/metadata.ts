@@ -1,5 +1,6 @@
 import { Montserrat } from "next/font/google";
 import type { Metadata } from "next";
+import config from "@/config"
 
 export const inter = Montserrat({
   subsets: ["latin"],
